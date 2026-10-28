@@ -94,7 +94,7 @@ export default function UserDashboardPage() {
           <Card variant="default" className="p-5 space-y-2">
             <div className="flex items-center justify-between text-slate-400 text-xs">
               <span>Verified Documents</span>
-              <FileText className="w-4 h-4 text-purple-400" />
+              <FileText className="w-4 h-4 text-sky-400" />
             </div>
             <div className="text-3xl font-extrabold text-white font-mono">{MOCK_DOCUMENTS.length}</div>
             <div className="text-[11px] text-slate-400 font-mono">Sec 63 BSA Hash Compliant</div>
@@ -191,7 +191,7 @@ export default function UserDashboardPage() {
                 </Link>
                 <Link href="/video-courtroom">
                   <button className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-amber-500/50 text-left space-y-1 transition-all group">
-                    <Video className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform" />
+                    <Video className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
                     <div className="text-xs font-bold text-slate-200">Video Court</div>
                   </button>
                 </Link>

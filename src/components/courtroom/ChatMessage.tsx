@@ -16,19 +16,19 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
   // Role-specific border & background styles
   const cardContainerStyle = isJudge
-    ? 'bg-slate-900/95 border-l-4 border-l-amber-500 border-y border-r border-slate-800 shadow-lg gold-glow'
+    ? 'bg-[#0f0f0f] border-l-4 border-l-white border-y border-r border-zinc-800 shadow-xl shadow-black/80'
     : isPetitioner
-    ? 'bg-slate-900/80 border-l-4 border-l-blue-500 border-y border-r border-slate-800/80'
+    ? 'bg-[#080808] border-l-4 border-l-zinc-300 border-y border-r border-zinc-850 border-zinc-800/90 shadow-md shadow-black/50'
     : isRespondent
-    ? 'bg-slate-900/80 border-l-4 border-l-emerald-500 border-y border-r border-slate-800/80'
-    : 'bg-slate-900/60 border border-slate-800';
+    ? 'bg-[#060606] border-l-4 border-l-zinc-500 border-y border-r border-zinc-850 border-zinc-800/90 shadow-md shadow-black/50'
+    : 'bg-[#080808] border border-zinc-800 shadow-sm';
 
   const badgeVariant = isJudge
     ? 'gold'
     : isPetitioner
-    ? 'blue'
+    ? 'court'
     : isRespondent
-    ? 'emerald'
+    ? 'slate'
     : 'slate';
 
   return (
@@ -37,12 +37,12 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2.5">
           {isJudge ? (
-            <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400">
+            <div className="w-8 h-8 rounded-lg bg-white text-black flex items-center justify-center font-bold shadow-md">
               <Gavel className="w-4 h-4" />
             </div>
           ) : (
             <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${
-              isPetitioner ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+              isPetitioner ? 'bg-zinc-800 text-white border border-zinc-500' : 'bg-zinc-900 text-zinc-300 border border-zinc-700'
             }`}>
               <User className="w-4 h-4" />
             </div>
@@ -50,14 +50,14 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-slate-100">{message.sender}</span>
+              <span className="text-sm font-extrabold text-white">{message.sender}</span>
               <Badge variant={badgeVariant} size="sm">
                 {message.senderRole}
               </Badge>
             </div>
             {isJudge && (
-              <span className="text-[11px] text-amber-400 font-mono flex items-center gap-1">
-                <Scale className="w-3 h-3" /> Presiding Judicial Officer
+              <span className="text-[11px] text-zinc-400 font-mono flex items-center gap-1">
+                <Scale className="w-3 h-3 text-white" /> Presiding Judicial Officer
               </span>
             )}
           </div>
@@ -80,14 +80,14 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
       {/* Statutory & Precedent Citations Footer */}
       {message.legalReferences && message.legalReferences.length > 0 && (
-        <div className="pt-2 border-t border-slate-800/80 flex items-center gap-2 flex-wrap text-xs">
-          <span className="text-slate-400 font-semibold flex items-center gap-1">
-            <Bookmark className="w-3 h-3 text-amber-400" /> Citations & Authorities:
+        <div className="pt-2 border-t border-zinc-800 flex items-center gap-2 flex-wrap text-xs">
+          <span className="text-zinc-400 font-semibold flex items-center gap-1">
+            <Bookmark className="w-3 h-3 text-white" /> Citations & Authorities:
           </span>
           {message.legalReferences.map((ref, idx) => (
             <span 
               key={idx} 
-              className="px-2 py-0.5 rounded bg-slate-950 text-amber-300/90 font-mono text-[11px] border border-amber-900/40 hover:border-amber-500/50 transition-colors cursor-pointer"
+              className="px-2 py-0.5 rounded bg-black text-white font-mono text-[11px] border border-zinc-700 hover:border-white transition-colors cursor-pointer"
             >
               {ref}
             </span>

@@ -5,23 +5,23 @@ import { Disclaimer } from './Disclaimer';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="w-full bg-slate-950 border-t border-slate-800 text-slate-400 text-sm mt-auto">
+    <footer className="w-full bg-[#000000] border-t border-zinc-800 text-zinc-400 text-sm mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Brand Column */}
           <div className="space-y-4 md:col-span-1">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-amber-600/20 border border-amber-500/40 flex items-center justify-center">
-                <Gavel className="w-5 h-5 text-amber-400" />
+              <div className="w-9 h-9 rounded-lg bg-white text-black flex items-center justify-center font-bold shadow-md">
+                <Gavel className="w-5 h-5 text-black" />
               </div>
-              <span className="text-lg font-bold text-white tracking-tight">AI JUDGE</span>
+              <span className="text-lg font-black text-white tracking-tight">AI JUDGE</span>
             </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              An advanced virtual courtroom platform designed around Indian legal principles, facilitating structured digital hearings, evidence management, and automated judicial decree synthesis.
+            <p className="text-xs text-zinc-400 leading-relaxed font-sans">
+              An autonomous digital courtroom platform modeled after the iconic black-and-white traditions of the Indian Bar & Judiciary. Facilitating structured digital trials, evidence verification under Section 63 BSA, and enforceable decree synthesis.
             </p>
-            <div className="flex items-center gap-2 text-xs font-mono text-amber-400/90 bg-amber-950/30 px-3 py-1.5 rounded border border-amber-800/40 w-fit">
-              <Scale className="w-3.5 h-3.5" />
-              <span>Aligned with Bharatiya Nyaya Sanhita (BNS)</span>
+            <div className="flex items-center gap-2 text-xs font-mono text-white bg-zinc-900 px-3 py-1.5 rounded border border-zinc-700 w-fit">
+              <Scale className="w-3.5 h-3.5 text-white" />
+              <span>Bharatiya Sakshya Adhiniyam (BSA) & BNS</span>
             </div>
           </div>
 

@@ -1,13 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #090d16;
-  --foreground: #f1f5f9;
-  --card: #111827;
-  --card-border: #1e293b;
-  --accent-gold: #d97706;
-  --accent-blue: #2563eb;
+  /* Iconic Indian Judiciary Black & White Palette */
+  --background: #000000;
+  --foreground: #fcfcfc;
+  --advocate-black: #0a0a0a;
+  --robe-black: #121212;
+  --court-border: #262626;
+  --court-border-light: #404040;
+  --collar-white: #ffffff;
+  --parchment-white: #f8fafc;
   --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
 body {
@@ -20,43 +24,50 @@ body {
 
 /* Custom scrollbar for courtroom chat and legal documents */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #000000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 4px;
+  background: #262626;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #404040;
 }
 
-/* Legal Document Styles */
+/* Legal Document Styles (Order XX CPC Order Sheet) */
 .judicial-document {
-  background-color: #fcfbf7;
-  color: #1a1a1a;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  font-family: 'Times New Roman', Times, serif;
+  background-color: #ffffff;
+  color: #0a0a0a;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-/* Subtle glow utility for AI Judge elements */
-.ai-glow {
-  box-shadow: 0 0 20px rgba(37, 99, 235, 0.25);
+/* Crisp Courtroom Monochrome Card */
+.court-monochrome-card {
+  background-color: #0d0d0d;
+  border: 1px solid #262626;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
 }
 
-.gold-glow {
-  box-shadow: 0 0 15px rgba(217, 119, 6, 0.2);
+.collar-band {
+  background-color: #ffffff;
+  color: #000000;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.15);
 }
 
-/* Custom glass effect for top nav & courtroom bar */
+/* High Court Chamber Glass Header */
 .legal-glass {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid #262626;
 }
+
+

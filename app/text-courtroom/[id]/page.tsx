@@ -244,7 +244,7 @@ export default function TextCourtroomSessionPage() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-[#090d16] text-slate-100 overflow-hidden">
+    <div className="h-screen flex flex-col bg-[#080c14] text-slate-100 overflow-hidden">
       {/* Top Bar Header */}
       <CourtroomHeader caseData={caseData} mode="Text" />
 
@@ -252,7 +252,7 @@ export default function TextCourtroomSessionPage() {
       <div className="flex-1 flex min-h-0 relative">
         
         {/* Left Courtroom Chat Stream & Input Area */}
-        <div className="flex-1 flex flex-col min-w-0 bg-[#0b0f19]">
+        <div className="flex-1 flex flex-col min-w-0 bg-[#0a0f1c]">
           
           {/* Top Bar Control for Mobile Sidebar */}
           <div className="lg:hidden flex items-center justify-between px-4 py-2 bg-slate-950 border-b border-slate-800 text-xs text-slate-400">
@@ -268,12 +268,12 @@ export default function TextCourtroomSessionPage() {
           </div>
 
           {/* Courtroom AI Action & Simulation Bar */}
-          <div className="px-4 py-2.5 bg-slate-950/90 border-b border-slate-800 flex items-center justify-between gap-3 text-xs flex-wrap">
+          <div className="px-4 py-2.5 bg-[#0a0a0a] border-b border-zinc-800 flex items-center justify-between gap-3 text-xs flex-wrap">
             <div className="flex items-center gap-2">
               <Button
                 size="sm"
                 variant="gold"
-                icon={isSimulatingDebate ? <Square className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                icon={isSimulatingDebate ? <Square className="w-3.5 h-3.5 text-black" /> : <Play className="w-3.5 h-3.5 text-black" />}
                 onClick={handleRunAdversarialTrial}
                 loading={isSimulatingDebate}
               >
@@ -283,7 +283,7 @@ export default function TextCourtroomSessionPage() {
               <Button
                 size="sm"
                 variant="court"
-                icon={<Eye className="w-3.5 h-3.5 text-amber-400" />}
+                icon={<Eye className="w-3.5 h-3.5 text-white" />}
                 onClick={() => {
                   const demoEv: Evidence = {
                     id: 'ev-court-01',
@@ -305,20 +305,20 @@ export default function TextCourtroomSessionPage() {
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono text-emerald-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-900 border border-zinc-700 text-[10px] font-mono text-zinc-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                 Modal Serverless Engine: Online
               </span>
 
               <Button
                 size="sm"
-                variant="ghost"
-                icon={<Gavel className="w-3.5 h-3.5 text-amber-400" />}
+                variant="court"
+                icon={<Gavel className="w-3.5 h-3.5 text-white" />}
                 onClick={handleOpenDecreeModal}
                 loading={isSynthesizingDecree}
-                className="text-amber-400 hover:text-amber-300 border border-amber-500/20"
+                className="text-white hover:text-zinc-200 border border-zinc-600 hover:border-white"
               >
-                Synthesize Decree (Muse Wonder & Modal)
+                Synthesize Decree (Order XX CPC)
               </Button>
             </div>
           </div>

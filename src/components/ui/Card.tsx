@@ -13,16 +13,16 @@ export const Card: React.FC<CardProps> = ({
   className = '',
   ...props
 }) => {
-  const baseStyles = "rounded-xl p-5 transition-all duration-200";
+  const baseStyles = "rounded-xl p-6 transition-all duration-200";
   
   const variantStyles = {
-    default: "bg-slate-900/90 border border-slate-800/80 shadow-lg shadow-black/20",
-    bordered: "bg-slate-950/60 border border-slate-700/60 shadow-md",
-    court: "bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-950 border border-slate-800/90 shadow-xl shadow-slate-950/50",
-    gold: "bg-slate-900/95 border border-amber-500/30 gold-glow shadow-xl",
+    default: "bg-[#0a0a0a] border border-zinc-800 shadow-md shadow-black/80",
+    bordered: "bg-[#050505] border border-zinc-800 shadow-sm",
+    court: "bg-gradient-to-b from-[#111111] to-[#070707] border border-zinc-800 shadow-2xl shadow-black",
+    gold: "bg-gradient-to-b from-[#141414] to-[#090909] border border-zinc-500/80 shadow-2xl shadow-black",
   };
 
-  const hoverStyle = hoverEffect ? "hover:-translate-y-1 hover:border-slate-600 hover:shadow-slate-900/50 cursor-pointer" : "";
+  const hoverStyle = hoverEffect ? "hover:-translate-y-0.5 hover:border-zinc-400 hover:shadow-black cursor-pointer" : "";
 
   return (
     <div className={`${baseStyles} ${variantStyles[variant]} ${hoverStyle} ${className}`} {...props}>

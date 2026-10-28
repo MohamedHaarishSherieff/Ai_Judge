@@ -27,13 +27,13 @@ export const Button: React.FC<ButtonProps> = ({
   };
 
   const variantStyles = {
-    primary: "bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-900/20 focus:ring-blue-500 border border-blue-500/30",
-    secondary: "bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 focus:ring-slate-500",
-    outline: "bg-transparent hover:bg-slate-800/60 text-slate-200 border border-slate-700 hover:border-slate-500 focus:ring-slate-500",
-    court: "bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 hover:border-amber-500/40 focus:ring-amber-500",
-    gold: "bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-amber-50 font-semibold shadow-md shadow-amber-950/40 focus:ring-amber-500 border border-amber-500/40",
-    ghost: "bg-transparent hover:bg-slate-800/50 text-slate-300 hover:text-white focus:ring-slate-500",
-    danger: "bg-red-600/90 hover:bg-red-600 text-white shadow-md shadow-red-950/30 focus:ring-red-500 border border-red-500/30",
+    primary: "bg-white hover:bg-zinc-200 text-black font-extrabold shadow-sm border border-white focus:ring-white",
+    secondary: "bg-zinc-900 hover:bg-zinc-800 text-zinc-100 border border-zinc-750 border-zinc-800 focus:ring-zinc-400",
+    outline: "bg-transparent hover:bg-zinc-900 text-zinc-200 hover:text-white border border-zinc-700 hover:border-zinc-400 focus:ring-zinc-400",
+    court: "bg-[#0d0d0d] hover:bg-[#181818] text-white border border-zinc-700 hover:border-white focus:ring-white",
+    gold: "bg-white hover:bg-zinc-100 text-black font-extrabold shadow-md border border-white focus:ring-white",
+    ghost: "bg-transparent hover:bg-zinc-900 text-zinc-400 hover:text-white focus:ring-zinc-400",
+    danger: "bg-zinc-950 hover:bg-zinc-900 text-red-400 hover:text-red-300 shadow-sm focus:ring-red-500 border border-red-800/80",
   };
 
   return (

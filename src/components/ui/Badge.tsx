@@ -3,7 +3,7 @@ import { CaseStatus } from '@/types';
 
 interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'blue' | 'emerald' | 'amber' | 'purple' | 'rose' | 'slate' | 'gold';
+  variant?: 'blue' | 'emerald' | 'amber' | 'court' | 'rose' | 'slate' | 'gold';
   size?: 'sm' | 'md';
   className?: string;
 }
@@ -20,17 +20,17 @@ export const Badge: React.FC<BadgeProps> = ({
   };
 
   const variantStyles = {
-    blue: 'bg-blue-500/10 text-blue-400 border border-blue-500/20',
-    emerald: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',
-    amber: 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
-    purple: 'bg-purple-500/10 text-purple-400 border border-purple-500/20',
-    rose: 'bg-rose-500/10 text-rose-400 border border-rose-500/20',
-    slate: 'bg-slate-800 text-slate-300 border border-slate-700',
-    gold: 'bg-amber-500/15 text-amber-300 border border-amber-500/40 shadow-sm shadow-amber-950/50',
+    blue: 'bg-zinc-100 text-zinc-950 font-bold border border-zinc-300',
+    emerald: 'bg-zinc-950 text-emerald-400 border border-emerald-800/80 font-mono',
+    amber: 'bg-white text-black font-extrabold border border-zinc-300',
+    court: 'bg-white text-black font-extrabold border border-zinc-200 shadow-sm',
+    rose: 'bg-zinc-950 text-red-400 border border-red-800/80 font-mono',
+    slate: 'bg-zinc-900 text-zinc-300 border border-zinc-700',
+    gold: 'bg-white text-black font-extrabold border border-zinc-200 shadow-sm',
   };
 
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full ${sizeStyles[size]} ${variantStyles[variant]} ${className}`}>
+    <span className={`inline-flex items-center gap-1 rounded-md tracking-wide ${sizeStyles[size]} ${variantStyles[variant]} ${className}`}>
       {children}
     </span>
   );
@@ -47,9 +47,9 @@ export const CaseStatusBadge: React.FC<{ status: CaseStatus }> = ({ status }) =>
     case 'Judgment':
       return <Badge variant="emerald">Judgment Passed</Badge>;
     case 'Appealed':
-      return <Badge variant="purple">Appealed</Badge>;
+      return <Badge variant="court">Under Appeal Review</Badge>;
     case 'Closed':
-      return <Badge variant="slate">Closed</Badge>;
+      return <Badge variant="slate">Disposed / Closed</Badge>;
     default:
       return <Badge variant="slate">{status}</Badge>;
   }

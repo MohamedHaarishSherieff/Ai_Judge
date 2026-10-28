@@ -91,13 +91,13 @@ export const ForensicEvidenceViewer: React.FC<ForensicEvidenceViewerProps> = ({
   };
 
   return (
-    <div className="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+    <div className="bg-[#0a0a0a] border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
       {/* Top Bar Header */}
-      <div className="px-5 py-3.5 bg-slate-900/90 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
+      <div className="px-5 py-3.5 bg-black border-b border-zinc-800 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <Badge variant="gold" className="font-mono">{evidence.evidenceCode || 'EXHIBIT-P01'}</Badge>
-          <span className="font-bold text-slate-100 text-sm">{evidence.title}</span>
-          <span className="text-xs text-slate-400 font-mono">({evidence.category})</span>
+          <span className="font-bold text-white text-sm">{evidence.title}</span>
+          <span className="text-xs text-zinc-400 font-mono">({evidence.category})</span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -105,8 +105,8 @@ export const ForensicEvidenceViewer: React.FC<ForensicEvidenceViewerProps> = ({
             onClick={() => setShowMasks(!showMasks)}
             className={`px-3 py-1 text-xs rounded-lg font-medium border transition-colors flex items-center gap-1.5 ${
               showMasks
-                ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
-                : 'bg-slate-800 text-slate-400 border-slate-700'
+                ? 'bg-white text-black font-bold border-white'
+                : 'bg-zinc-900 text-zinc-400 border-zinc-700'
             }`}
           >
             <Layers className="w-3.5 h-3.5" /> {showMasks ? 'Hide SAM 3.1 Masks' : 'Show SAM 3.1 Masks'}
@@ -114,8 +114,8 @@ export const ForensicEvidenceViewer: React.FC<ForensicEvidenceViewerProps> = ({
 
           <Button
             size="sm"
-            variant="court"
-            icon={<Sparkles className="w-3.5 h-3.5 text-amber-400" />}
+            variant="gold"
+            icon={<Sparkles className="w-3.5 h-3.5 text-black" />}
             onClick={handleRunAnalysis}
             loading={isInspecting}
           >
@@ -128,39 +128,39 @@ export const ForensicEvidenceViewer: React.FC<ForensicEvidenceViewerProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[420px]">
         
         {/* Left: Interactive Canvas / Document View */}
-        <div className="lg:col-span-8 p-6 flex flex-col items-center justify-center bg-[#070b12] relative overflow-hidden border-b lg:border-b-0 lg:border-r border-slate-800">
+        <div className="lg:col-span-8 p-6 flex flex-col items-center justify-center bg-[#050505] relative overflow-hidden border-b lg:border-b-0 lg:border-r border-zinc-800">
           
-          {/* Mock Document Canvas with SAM Overlay */}
-          <div className="relative w-full max-w-lg aspect-[3/4] bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-700/80 rounded-xl p-6 shadow-2xl overflow-hidden font-serif select-none">
+          {/* Authentic Judicial Affidavit Canvas with SAM Overlay */}
+          <div className="relative w-full max-w-lg aspect-[3/4] bg-white border border-zinc-400 rounded-lg p-6 shadow-2xl overflow-hidden font-serif select-none text-zinc-950">
             
             {/* Document Decorative Content */}
-            <div className="space-y-4 opacity-80 pointer-events-none">
-              <div className="text-center border-b border-slate-800 pb-3 space-y-1">
-                <div className="text-[11px] tracking-widest uppercase text-amber-400/90 font-mono">Republic of India • Judicial Record</div>
-                <div className="text-sm font-bold text-slate-200">COMMERCIAL AGREEMENT & UNDERTAKING</div>
-                <div className="text-[10px] text-slate-500 font-mono">Sec 63 Bharatiya Sakshya Adhiniyam Registered Document</div>
+            <div className="space-y-4 opacity-90 pointer-events-none">
+              <div className="text-center border-b border-zinc-300 pb-3 space-y-1">
+                <div className="text-[11px] tracking-widest uppercase text-zinc-800 font-mono font-bold">Republic of India • Judicial Record</div>
+                <div className="text-sm font-extrabold text-black font-serif">COMMERCIAL AGREEMENT & UNDERTAKING</div>
+                <div className="text-[10px] text-zinc-600 font-mono">Sec 63 Bharatiya Sakshya Adhiniyam Registered Document</div>
               </div>
 
-              <div className="space-y-2 text-[10px] text-slate-400 leading-relaxed font-sans">
+              <div className="space-y-2 text-[10px] text-zinc-800 leading-relaxed font-serif">
                 <p>This Indenture made this day witnesseth that the Petitioner and the Respondent agree to the execution of statutory obligations, penalties, and covenants set forth herein.</p>
                 <p>Clause 4.1: Any monetary default shall attract compounding interest at 18% per annum under Section 74 of the Indian Contract Act, subject to penal adjudication.</p>
                 <p>Clause 7.2: Both parties acknowledge the jurisdiction of the High Court Bench in the event of dispute.</p>
               </div>
 
-              <div className="pt-12 grid grid-cols-2 gap-6 text-[10px] text-slate-400">
-                <div className="border-t border-slate-800 pt-2 space-y-2">
-                  <div className="text-[9px] text-slate-500 font-mono">SEAL & ATTESTATION:</div>
-                  <div className="w-16 h-16 rounded-full border border-dashed border-amber-500/40 flex items-center justify-center text-[8px] text-amber-400 font-mono text-center p-1">
+              <div className="pt-12 grid grid-cols-2 gap-6 text-[10px] text-zinc-800">
+                <div className="border-t border-zinc-300 pt-2 space-y-2">
+                  <div className="text-[9px] text-zinc-600 font-mono font-bold">SEAL & ATTESTATION:</div>
+                  <div className="w-16 h-16 rounded-full border-2 border-dashed border-zinc-800 flex items-center justify-center text-[8px] text-black font-mono font-bold text-center p-1">
                     NOTARY PUBLIC SEAL 2026
                   </div>
                 </div>
 
-                <div className="border-t border-slate-800 pt-2 space-y-2 text-right">
-                  <div className="text-[9px] text-slate-500 font-mono">EXECUTED SIGNATURE:</div>
-                  <div className="italic text-slate-300 font-serif text-sm tracking-wider">
+                <div className="border-t border-zinc-300 pt-2 space-y-2 text-right">
+                  <div className="text-[9px] text-zinc-600 font-mono font-bold">EXECUTED SIGNATURE:</div>
+                  <div className="italic text-zinc-900 font-serif text-sm tracking-wider font-bold">
                     K. R. V. Sharma
                   </div>
-                  <div className="text-[8px] text-slate-500">Managing Director</div>
+                  <div className="text-[8px] text-zinc-600">Managing Director</div>
                 </div>
               </div>
             </div>
@@ -210,83 +210,83 @@ export const ForensicEvidenceViewer: React.FC<ForensicEvidenceViewerProps> = ({
         </div>
 
         {/* Right: Forensic Analysis Panel */}
-        <div className="lg:col-span-4 p-5 flex flex-col justify-between bg-slate-950 space-y-4">
+        <div className="lg:col-span-4 p-5 flex flex-col justify-between bg-[#0a0a0a] space-y-4">
           <div className="space-y-4">
             
             {/* Overview Card */}
-            <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+            <div className="p-3.5 rounded-xl bg-[#111111] border border-zinc-800 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono text-slate-400">Forensic Engine:</span>
-                <span className="text-xs font-semibold text-amber-400 font-mono">Meta SAM 3.1 Vision</span>
+                <span className="text-xs font-mono text-zinc-400">Forensic Engine:</span>
+                <span className="text-xs font-extrabold text-white font-mono">Meta SAM 3.1 Vision</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono text-slate-400">Tamper Status:</span>
+                <span className="text-xs font-mono text-zinc-400">Tamper Status:</span>
                 <span className="text-xs font-bold text-red-400 flex items-center gap-1 font-mono">
                   <AlertTriangle className="w-3.5 h-3.5" /> Alteration Detected
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono text-slate-400">Model Confidence:</span>
-                <span className="text-xs font-bold text-slate-200 font-mono">
+                <span className="text-xs font-mono text-zinc-400">Model Confidence:</span>
+                <span className="text-xs font-bold text-white font-mono">
                   {(analysis.tamperConfidence * 100).toFixed(1)}%
                 </span>
               </div>
-              <p className="text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">
+              <p className="text-xs text-zinc-300 pt-2 border-t border-zinc-800 leading-relaxed font-sans">
                 {analysis.summary}
               </p>
             </div>
 
             {/* Active Segment Detail */}
             {activeSegment ? (
-              <div className="p-3.5 rounded-xl bg-slate-900/60 border border-amber-500/30 space-y-2.5">
+              <div className="p-3.5 rounded-xl bg-[#141414] border border-zinc-750 border-zinc-700 space-y-2.5">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-white" />
                     {activeSegment.label}
                   </span>
-                  <Badge variant={activeSegment.severity === 'Critical' ? 'rose' : 'amber'}>
+                  <Badge variant={activeSegment.severity === 'Critical' ? 'rose' : 'court'}>
                     {activeSegment.severity} Severity
                   </Badge>
                 </div>
 
-                <div className="text-[11px] text-slate-400 font-mono">
+                <div className="text-[11px] text-zinc-400 font-mono">
                   Confidence Score: {(activeSegment.confidence * 100).toFixed(1)}%
                 </div>
 
-                <div className="p-2.5 bg-slate-950 rounded-lg border border-slate-800 text-xs text-slate-300 leading-relaxed">
-                  <strong className="text-amber-300 block mb-1">SAM 3.1 Morphological Finding:</strong>
+                <div className="p-2.5 bg-black rounded-lg border border-zinc-800 text-xs text-zinc-200 leading-relaxed">
+                  <strong className="text-white block mb-1 font-mono">SAM 3.1 Morphological Finding:</strong>
                   {activeSegment.findings}
                 </div>
               </div>
             ) : (
-              <div className="p-6 text-center text-xs text-slate-500 border border-dashed border-slate-800 rounded-xl">
+              <div className="p-6 text-center text-xs text-zinc-500 border border-dashed border-zinc-800 rounded-xl">
                 Select an identified region on the exhibit to view detailed segment breakdown.
               </div>
             )}
           </div>
 
           {/* Action Button: Admit into Court Record */}
-          <div className="pt-4 border-t border-slate-800 space-y-2">
+          <div className="pt-4 border-t border-zinc-800 space-y-2">
             {liveCert && (
-              <div className="p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-xs font-mono space-y-1">
-                <div className="flex items-center justify-between text-emerald-400 font-bold">
+              <div className="p-2.5 rounded-lg bg-black border border-zinc-700 text-xs font-mono space-y-1">
+                <div className="flex items-center justify-between text-white font-bold">
                   <span>Modal Certified ({liveCert.certificate_id})</span>
-                  <span className="text-[10px] text-emerald-300">Sec 63 Valid</span>
+                  <span className="text-[10px] text-zinc-400">Sec 63 Valid</span>
                 </div>
-                <div className="text-[10px] text-slate-400 truncate">SHA256: {liveCert.hash}</div>
-                <div className="text-[10px] text-slate-300 italic">{liveCert.admissibility_notes}</div>
+                <div className="text-[10px] text-zinc-400 truncate">SHA256: {liveCert.hash}</div>
+                <div className="text-[10px] text-zinc-300 italic">{liveCert.admissibility_notes}</div>
               </div>
             )}
 
             <Button
               variant="gold"
               className="w-full"
-              icon={<Shield className="w-4 h-4" />}
+              icon={<Shield className="w-4 h-4 text-black" />}
               onClick={() => onAdmitToSession && onAdmitToSession(evidence)}
             >
               Admit SAM 3.1 Report to Court Bench
             </Button>
-            <div className="text-[10px] text-slate-500 text-center font-mono">
+            <div className="text-[10px] text-zinc-500 text-center font-mono">
               {liveCert ? `Digest: ${liveCert.hash.slice(0, 16)}...` : 'Sec 63 BSA Checksum Hash: 0x9f81...a34e'}
             </div>
           </div>
