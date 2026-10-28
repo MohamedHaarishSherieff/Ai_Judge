@@ -21,21 +21,31 @@ export const Navbar: React.FC = () => {
   ];
 
   return (
-    <>
-      <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 legal-glass">
+      <header className="sticky top-0 z-40 w-full border-b border-zinc-800 legal-glass">
+        {/* Official Government Top Bar */}
+        <div className="bg-black/90 border-b border-zinc-900 px-4 sm:px-8 py-1 flex items-center justify-between text-[11px] font-mono text-zinc-400">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            <span>Government of India • E-Courts Mission Mode Project</span>
+          </div>
+          <span className="hidden sm:inline text-zinc-500">Ministry of Law and Justice • National Judicial Portal</span>
+        </div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-white p-0.5 shadow-lg shadow-white/5 group-hover:scale-105 transition-transform duration-200">
-              <div className="w-full h-full bg-black rounded-[9px] flex items-center justify-center">
-                <Gavel className="w-5 h-5 text-white group-hover:rotate-12 transition-transform duration-300" />
-              </div>
+          {/* Brand Logo with Official Ashoka Emblem */}
+          <Link href="/" className="flex items-center gap-3.5 group">
+            <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/80 bg-black flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform duration-200">
+              <img 
+                src="/images/ashoka_emblem.jpg" 
+                alt="State Emblem of India" 
+                className="w-full h-full object-cover grayscale contrast-125"
+              />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-black tracking-tight text-white flex items-center gap-2 font-sans">
-                AI JUDGE <span className="text-[10px] uppercase font-extrabold px-1.5 py-0.2 bg-white text-black rounded tracking-widest">Bharat Bench</span>
+              <span className="text-base sm:text-lg font-black tracking-tight text-white flex items-center gap-2 font-sans">
+                AI JUDGE <span className="text-[10px] uppercase font-extrabold px-1.5 py-0.5 bg-white text-black rounded tracking-widest font-mono">BHARAT BENCH</span>
               </span>
-              <span className="text-[10px] text-zinc-400 tracking-widest uppercase font-mono font-medium">Virtual Courtroom Platform</span>
+              <span className="text-[10px] text-zinc-400 tracking-wider uppercase font-mono font-medium">Digital Dispute Tribunal • Order XX CPC</span>
             </div>
           </Link>
 

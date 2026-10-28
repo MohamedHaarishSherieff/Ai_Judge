@@ -33,6 +33,9 @@ export const CourtroomHeader: React.FC<CourtroomHeaderProps> = ({
           </Link>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
+              <div className="w-6 h-6 rounded-full overflow-hidden border border-white/60 bg-black flex items-center justify-center shrink-0">
+                <img src="/images/ashoka_emblem.jpg" alt="State Emblem" className="w-full h-full object-cover grayscale" />
+              </div>
               <span className="text-xs font-mono font-extrabold text-black px-2 py-0.5 rounded bg-white border border-zinc-200">
                 {displayId}
               </span>

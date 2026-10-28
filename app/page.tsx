@@ -43,8 +43,16 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative pt-16 pb-20 md:pt-24 md:pb-28 overflow-hidden border-b border-zinc-800">
-        {/* Subtle architectural judicial grid background */}
-        <div className="absolute inset-0 bg-[radial-gradient(#262626_1px,transparent_1px)] [background-size:28px_28px] opacity-40 pointer-events-none" />
+        {/* Authentic Indian Courtroom Chamber Architectural Background */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <img 
+            src="/images/courtroom_chamber.jpg" 
+            alt="Supreme Court Chamber" 
+            className="w-full h-full object-cover opacity-15 grayscale contrast-125 filter blur-[0.4px]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black" />
+          <div className="absolute inset-0 bg-[radial-gradient(#262626_1px,transparent_1px)] [background-size:28px_28px] opacity-30" />
+        </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -105,24 +113,34 @@ export default function LandingPage() {
 
             {/* Right Hero Institutional Card */}
             <div className="lg:col-span-5">
-              <Card variant="court" className="p-7 relative overflow-hidden bg-[#0c0c0c] border-zinc-700 text-center space-y-6 shadow-2xl">
-                <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-600 flex items-center justify-center text-white mx-auto shadow-lg">
-                  <Scale className="w-8 h-8" />
+              <Card variant="court" className="p-6 relative overflow-hidden bg-[#0c0c0c] border-zinc-700 text-center space-y-5 shadow-2xl">
+                {/* Court in Session Photo Banner */}
+                <div className="relative w-full h-36 rounded-xl overflow-hidden border border-zinc-700/80">
+                  <img 
+                    src="/images/justice_scales.jpg" 
+                    alt="Indian Law Reports & Scales" 
+                    className="w-full h-full object-cover grayscale contrast-125" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+                  <div className="absolute bottom-2.5 left-3 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                    <span className="text-[11px] font-mono text-white font-bold tracking-wider">High Court Bench In Session</span>
+                  </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1.5 text-left">
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-white text-xs font-mono">
                     <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                     <span>Modal Cloud Engine Operational</span>
                   </div>
-                  <h3 className="text-2xl font-extrabold text-white font-serif">Live Courtroom Docket</h3>
+                  <h3 className="text-xl font-extrabold text-white font-serif">Live Courtroom Docket</h3>
                   <p className="text-xs text-zinc-300 leading-relaxed font-sans">
                     Petitioner and Respondent counsels present cross-examination, challenge forged evidence with SAM 3.1, and receive binding summary decrees.
                   </p>
                 </div>
 
                 {/* Entry Action */}
-                <div className="space-y-3 pt-2">
+                <div className="space-y-2.5 pt-1">
                   <Link href="/text-courtroom" className="block">
                     <Button variant="gold" size="lg" className="w-full justify-between" icon={<MessageSquare className="w-5 h-5 text-black" />}>
                       <span>Enter Chat Courtroom</span>

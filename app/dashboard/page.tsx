@@ -31,38 +31,44 @@ export default function UserDashboardPage() {
   const pendingDocsCount = MOCK_DOCUMENTS.filter(d => d.status === 'Pending Verification').length + 2;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090d16] text-slate-100">
+    <div className="min-h-screen flex flex-col bg-black text-zinc-100 relative">
+      {/* Background Architectural Chamber Watermark */}
+      <div 
+        className="fixed inset-0 bg-cover bg-center opacity-10 pointer-events-none grayscale contrast-125"
+        style={{ backgroundImage: `url('/images/courtroom_chamber.jpg')` }}
+      />
+
       <Navbar />
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 relative z-10 w-full">
         
         {/* Welcome Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950/40 border border-slate-800 rounded-2xl shadow-xl">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 bg-zinc-950/90 backdrop-blur-md border border-zinc-800 rounded-2xl shadow-xl">
           <div className="flex items-center gap-4">
             <img 
               src={CURRENT_USER.avatarUrl} 
               alt={CURRENT_USER.name}
-              className="w-14 h-14 rounded-full object-cover border-2 border-amber-500/50 shadow-md"
+              className="w-14 h-14 rounded-full object-cover border-2 border-zinc-600 shadow-md"
             />
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl font-bold text-white">Welcome back, {CURRENT_USER.name}</h1>
+                <h1 className="text-2xl font-bold text-white">Chambers of {CURRENT_USER.name}</h1>
                 <Badge variant="gold">{CURRENT_USER.role}</Badge>
               </div>
-              <p className="text-xs text-slate-400 font-mono mt-0.5">
-                Chambers: {CURRENT_USER.organization} • Bar Registration: {CURRENT_USER.barId}
+              <p className="text-xs text-zinc-400 font-mono mt-0.5">
+                Bar Council of India Enrolment: {CURRENT_USER.barId} • {CURRENT_USER.organization}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             <Link href="/cases/new">
-              <Button variant="gold" icon={<Plus className="w-4 h-4" />}>
-                File New Case
+              <Button variant="gold" icon={<Plus className="w-4 h-4 text-black" />}>
+                File Petition
               </Button>
             </Link>
             <Link href="/text-courtroom">
-              <Button variant="secondary" icon={<MessageSquare className="w-4 h-4 text-amber-400" />}>
+              <Button variant="court" icon={<MessageSquare className="w-4 h-4 text-white" />}>
                 Enter Courtroom
               </Button>
             </Link>

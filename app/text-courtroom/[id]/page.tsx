@@ -244,15 +244,21 @@ export default function TextCourtroomSessionPage() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-[#080c14] text-slate-100 overflow-hidden">
+    <div className="h-screen flex flex-col bg-black text-zinc-100 overflow-hidden relative">
+      {/* Background Architectural Chamber Watermark */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none grayscale contrast-125"
+        style={{ backgroundImage: `url('/images/courtroom_chamber.jpg')` }}
+      />
+
       {/* Top Bar Header */}
       <CourtroomHeader caseData={caseData} mode="Text" />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex min-h-0 relative">
+      <div className="flex-1 flex min-h-0 relative z-10">
         
         {/* Left Courtroom Chat Stream & Input Area */}
-        <div className="flex-1 flex flex-col min-w-0 bg-[#0a0f1c]">
+        <div className="flex-1 flex flex-col min-w-0 bg-[#080808]/90 backdrop-blur-sm">
           
           {/* Top Bar Control for Mobile Sidebar */}
           <div className="lg:hidden flex items-center justify-between px-4 py-2 bg-slate-950 border-b border-slate-800 text-xs text-slate-400">
@@ -465,58 +471,97 @@ export default function TextCourtroomSessionPage() {
         </Modal>
       )}
 
-      {/* Synthesized Judicial Decree Modal (Muse Wonder) */}
+      {/* Synthesized Judicial Decree Modal (Order XX CPC / Sec 354 BNSS) */}
       <Modal
         isOpen={judgmentModalOpen}
         onClose={() => setJudgmentModalOpen(false)}
-        title="Synthesized Digital Judicial Decree (Section 354 BNSS)"
+        title="Official Judicial Decree Sheet (Order XX Rule 6 CPC)"
         maxWidth="4xl"
       >
-        <div className="space-y-5 text-xs text-slate-300 font-sans">
-          <div className="text-center pb-4 border-b border-slate-800 space-y-1">
-            <div className="flex items-center justify-center gap-2">
-              <span className="text-[10px] uppercase font-mono tracking-widest text-amber-400">High Court of Judicature • Virtual Bench</span>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[9px] font-mono text-emerald-400">
-                Modal Cloud Verified
-              </span>
+        <div className="relative space-y-6 text-xs text-zinc-200 font-sans p-2">
+          {/* Subtle Ashoka Emblem Watermark in Decree Background */}
+          <div 
+            className="absolute inset-0 bg-contain bg-center bg-no-repeat opacity-5 pointer-events-none"
+            style={{ backgroundImage: `url('/images/ashoka_emblem.jpg')` }}
+          />
+
+          {/* Official Indian Judiciary Header */}
+          <div className="text-center pb-5 border-b border-zinc-800 space-y-2 relative z-10">
+            <div className="flex justify-center mb-2">
+              <div className="relative p-1 rounded-full bg-zinc-900 border-2 border-zinc-600 shadow-lg">
+                <img 
+                  src="/images/ashoka_emblem.jpg" 
+                  alt="State Emblem of India" 
+                  className="w-14 h-14 rounded-full object-cover" 
+                />
+              </div>
             </div>
-            <h2 className="text-lg font-extrabold text-white">
-              {modalDecreeData?.case_title || MOCK_JUDGMENT.title}
+            
+            <div className="text-[11px] uppercase tracking-widest font-mono text-zinc-300 font-bold">
+              In The High Court of Judicature
+            </div>
+            <div className="text-[10px] uppercase font-mono tracking-wider text-zinc-400">
+              National e-Courts Mission • Autonomous Virtual Civil Bench
+            </div>
+            <h2 className="text-xl font-extrabold text-white tracking-wide uppercase pt-1">
+              Decree Sheet Under Order XX Rule 6, C.P.C. 1908
             </h2>
-            <div className="text-slate-400 font-mono text-[11px]">
-              {modalDecreeData?.decree_id || MOCK_JUDGMENT.caseNumber} • Pronounced: {modalDecreeData?.date_of_decree || MOCK_JUDGMENT.date}
+            <div className="flex items-center justify-center gap-3 text-zinc-400 font-mono text-[11px] pt-1">
+              <span>{modalDecreeData?.decree_id || MOCK_JUDGMENT.caseNumber}</span>
+              <span>•</span>
+              <span className="text-white font-semibold">Pronounced: {modalDecreeData?.date_of_decree || MOCK_JUDGMENT.date}</span>
+              <span>•</span>
+              <span className="px-2 py-0.5 rounded bg-zinc-800 border border-zinc-700 text-[10px] text-zinc-200">
+                Sec 65B/63 BSA Verified
+              </span>
             </div>
           </div>
 
-          {/* Adjudicated Amounts Table from Modal */}
+          {/* Parties to Suit */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-zinc-950 p-4 rounded-xl border border-zinc-800 relative z-10">
+            <div>
+              <div className="text-[10px] uppercase tracking-wider font-mono text-zinc-400">Petitioner / Decree Holder</div>
+              <div className="text-sm font-bold text-white mt-0.5">{caseData.parties[0]?.name}</div>
+              <div className="text-[11px] text-zinc-400 font-mono">Rep. by: Adv. Rajesh Sharma, Senior Advocate</div>
+            </div>
+            <div className="sm:border-l sm:border-zinc-800 sm:pl-4">
+              <div className="text-[10px] uppercase tracking-wider font-mono text-zinc-400">Respondent / Judgment Debtor</div>
+              <div className="text-sm font-bold text-white mt-0.5">{caseData.parties[1]?.name}</div>
+              <div className="text-[11px] text-zinc-400 font-mono">Rep. by: Adv. Meenakshi Sundaram, Advocate</div>
+            </div>
+          </div>
+
+          {/* Adjudicated Financial Recovery Matrix */}
           {modalDecreeData?.adjudicated_amounts && (
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-700/60 space-y-2.5">
-              <h4 className="font-bold text-amber-300 uppercase tracking-wider text-[11px] font-mono flex items-center justify-between">
-                <span>Adjudicated Financial Decree (Section 74 Contract Act)</span>
-                <span className="text-[10px] text-emerald-400 font-mono">Modal Deterministic Output</span>
+            <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-700 space-y-3 relative z-10 shadow-md">
+              <h4 className="font-bold text-white uppercase tracking-wider text-[11px] font-mono flex items-center justify-between">
+                <span>Adjudicated Financial Recovery (Sec 74 Contract Act)</span>
+                <span className="text-[10px] text-zinc-300 font-mono border border-zinc-700 px-2 py-0.5 rounded bg-zinc-900">
+                  Deterministic Cloud Synthesis
+                </span>
               </h4>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-                <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="text-[10px] text-slate-400">Principal Claim</div>
-                  <div className="text-xs font-bold text-white font-mono mt-0.5">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                <div className="p-2.5 rounded-lg bg-black border border-zinc-800">
+                  <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Principal Award</div>
+                  <div className="text-sm font-extrabold text-white font-mono mt-0.5">
                     ₹{modalDecreeData.adjudicated_amounts.principal_inr.toLocaleString()}
                   </div>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="text-[10px] text-slate-400">Statutory Interest</div>
-                  <div className="text-xs font-bold text-amber-400 font-mono mt-0.5">
+                <div className="p-2.5 rounded-lg bg-black border border-zinc-800">
+                  <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Statutory Interest</div>
+                  <div className="text-sm font-extrabold text-white font-mono mt-0.5">
                     ₹{modalDecreeData.adjudicated_amounts.statutory_interest_awarded_inr.toLocaleString()}
                   </div>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="text-[10px] text-slate-400">Costs Allowed</div>
-                  <div className="text-xs font-bold text-slate-300 font-mono mt-0.5">
+                <div className="p-2.5 rounded-lg bg-black border border-zinc-800">
+                  <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Taxed Legal Costs</div>
+                  <div className="text-sm font-extrabold text-zinc-300 font-mono mt-0.5">
                     ₹{modalDecreeData.adjudicated_amounts.legal_costs_inr.toLocaleString()}
                   </div>
                 </div>
-                <div className="p-2 rounded-lg bg-amber-950/40 border border-amber-500/30">
-                  <div className="text-[10px] text-amber-300 font-semibold">Total Enforceable</div>
-                  <div className="text-xs font-bold text-amber-300 font-mono mt-0.5">
+                <div className="p-2.5 rounded-lg bg-white text-black border border-white">
+                  <div className="text-[10px] uppercase tracking-wider font-extrabold">Total Enforceable</div>
+                  <div className="text-sm font-black font-mono mt-0.5">
                     ₹{modalDecreeData.adjudicated_amounts.total_enforceable_sum_inr.toLocaleString()}
                   </div>
                 </div>
@@ -524,47 +569,69 @@ export default function TextCourtroomSessionPage() {
             </div>
           )}
 
-          <div className="space-y-2">
-            <h4 className="font-bold text-amber-300 uppercase tracking-wider text-[11px] font-mono">I. Statutory Provisions Enforced</h4>
+          {/* Statutory Clauses Applied */}
+          <div className="space-y-2 relative z-10">
+            <h4 className="font-bold text-zinc-300 uppercase tracking-wider text-[11px] font-mono">
+              I. Statutory Framework & Precedents Enforced
+            </h4>
             <div className="flex flex-wrap gap-2">
               {(modalDecreeData?.statutory_clauses_applied || MOCK_JUDGMENT.statutesApplied).map((stat: string, i: number) => (
-                <span key={i} className="px-2.5 py-1 rounded-md bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-[11px]">
+                <span key={i} className="px-3 py-1 rounded bg-zinc-900 border border-zinc-700 text-zinc-200 font-mono text-[11px]">
                   {stat}
                 </span>
               ))}
             </div>
           </div>
 
-          <div className="space-y-2">
-            <h4 className="font-bold text-amber-300 uppercase tracking-wider text-[11px] font-mono">II. Judicial Findings & Analysis</h4>
-            <div className="bg-slate-950 p-3.5 rounded-lg border border-slate-800/80 space-y-2 leading-relaxed text-slate-300">
-              <p>1. The Bench scrupulously evaluated arguments presented by Petitioner and Respondent Advocates in the virtual session.</p>
-              <p>2. Forensic evidence submitted under Exhibit-P01 was analyzed via Meta SAM 3.1 zero-shot segmentation, confirming morphological anomalies in signature strokes and stamp borders.</p>
-              <p>3. Modal serverless deterministic compute validated statutory interest calculations at 18% p.a. without variance.</p>
+          {/* Judicial Findings */}
+          <div className="space-y-2 relative z-10">
+            <h4 className="font-bold text-zinc-300 uppercase tracking-wider text-[11px] font-mono">
+              II. Ratio Decidendi & Bench Findings
+            </h4>
+            <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-800 space-y-2.5 leading-relaxed text-zinc-300">
+              <p>1. The Bench scrupulously evaluated adversarial oral pleadings and written submissions submitted by both Senior Counsels.</p>
+              <p>2. Forensic exhibit (Exhibit-P01) underwent automated multimodal pixel-level segmentation, establishing altered notary seals and discontinuous pen stroke vectors under Section 63 of Bharatiya Sakshya Adhiniyam, 2023.</p>
+              <p>3. Following the constitutional doctrine established in <em>Kailash Nath Associates v. DDA (2015)</em>, liquidated damages are capped strictly to verifiable breach losses computed via serverless execution.</p>
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-amber-950/20 border border-amber-500/30 space-y-2">
-            <h4 className="font-bold text-amber-300 uppercase tracking-wider text-[11px] font-mono">III. Operative Decree & Directives</h4>
-            <p className="font-semibold text-slate-100 text-sm leading-relaxed">
+          {/* Operative Directives */}
+          <div className="p-5 rounded-xl bg-zinc-950 border-2 border-zinc-700 space-y-3 relative z-10 shadow-xl">
+            <h4 className="font-bold text-white uppercase tracking-wider text-[11px] font-mono flex items-center justify-between">
+              <span>III. Operative Decree & Directives of the Court</span>
+              <span className="text-[9px] font-mono px-2 py-0.5 bg-zinc-900 border border-zinc-600 rounded text-zinc-300 uppercase">
+                Final & Binding
+              </span>
+            </h4>
+            <p className="font-semibold text-white text-sm leading-relaxed border-l-2 border-white pl-3">
               {modalDecreeData?.verdict || MOCK_JUDGMENT.finalOrder}
             </p>
             {modalDecreeData?.compliance_directives && (
-              <ul className="list-disc pl-4 space-y-1 text-slate-300 pt-1">
+              <ul className="list-disc pl-5 space-y-1.5 text-zinc-300 pt-1 text-xs">
                 {modalDecreeData.compliance_directives.map((dir: string, i: number) => (
                   <li key={i}>{dir}</li>
                 ))}
               </ul>
             )}
-            <div className="pt-2 border-t border-amber-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[10px] text-amber-400/90 font-mono">
-              <div>BENCH SEAL: {modalDecreeData?.digital_seal_hash ? `SHA256-${modalDecreeData.digital_seal_hash.slice(0, 16)}...` : MOCK_JUDGMENT.judgeSignature}</div>
-              <div>Appeal Limitation: {modalDecreeData?.appeal_limitation_days || 30} Days (CPC)</div>
+            
+            {/* Government Seal & Execution Footer */}
+            <div className="pt-4 mt-3 border-t border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[10px] text-zinc-400 font-mono">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-white" />
+                <span>BENCH SEAL CRYPTOGRAPHIC DIGEST: {modalDecreeData?.digital_seal_hash ? `SHA256-${modalDecreeData.digital_seal_hash.slice(0, 24)}...` : MOCK_JUDGMENT.judgeSignature}</span>
+              </div>
+              <div className="text-zinc-300">
+                Appeal Limitation: <span className="font-bold text-white">{modalDecreeData?.appeal_limitation_days || 30} Days</span> (Order XLI CPC)
+              </div>
             </div>
           </div>
 
-          <div className="flex justify-end pt-2">
-            <Button variant="court" onClick={() => setJudgmentModalOpen(false)}>
-              Close Record
+          <div className="flex items-center justify-between pt-3 relative z-10 border-t border-zinc-800">
+            <div className="text-[11px] text-zinc-500 font-mono">
+              Certified Digitally Signed Copy • Ministry of Law & Justice, Govt. of India
+            </div>
+            <Button variant="gold" onClick={() => setJudgmentModalOpen(false)}>
+              Affirm & Close Record
             </Button>
           </div>
         </div>

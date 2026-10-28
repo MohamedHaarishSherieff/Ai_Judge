@@ -44,33 +44,39 @@ export default function CasesDashboardPage() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090d16] text-slate-100">
+    <div className="min-h-screen flex flex-col bg-black text-zinc-100 relative">
+      {/* Background Architectural Chamber Watermark */}
+      <div 
+        className="fixed inset-0 bg-cover bg-center opacity-10 pointer-events-none grayscale contrast-125"
+        style={{ backgroundImage: `url('/images/courtroom_chamber.jpg')` }}
+      />
+
       <Navbar />
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 relative z-10 w-full">
         
         {/* Page Title & Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-zinc-800">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <Badge variant="gold">Chambers Repository</Badge>
-              <span className="text-xs text-slate-400 font-mono">{filteredCases.length} Cases Listed</span>
+              <Badge variant="gold">National Judicial Data Grid • Chambers Repository</Badge>
+              <span className="text-xs text-zinc-400 font-mono">{filteredCases.length} Causes Listed</span>
             </div>
-            <h1 className="text-3xl font-extrabold text-white">My Cases</h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
-              Search, filter, and manage digital petitions, hearing schedules, and statutory decrees.
+            <h1 className="text-3xl font-extrabold text-white">Chambers Cause List & Case Vault</h1>
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
+              Search, filter, and litigate electronic petitions, automated hearing transcripts, and certified decrees.
             </p>
           </div>
 
           <Link href="/cases/new">
-            <Button variant="gold" icon={<Plus className="w-4 h-4" />}>
-              Create New Case
+            <Button variant="gold" icon={<Plus className="w-4 h-4 text-black" />}>
+              File Digital Petition
             </Button>
           </Link>
         </div>
 
         {/* Filter & Search Toolbar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 bg-slate-950 rounded-xl border border-slate-800 text-xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 bg-zinc-950/90 backdrop-blur-md rounded-xl border border-zinc-800 text-xs">
           
           {/* Search Input */}
           <div className="relative flex-1 max-w-md">
@@ -151,44 +157,44 @@ export default function CasesDashboardPage() {
         ) : viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCases.map((c) => (
-              <Card key={c.id} variant="court" hoverEffect className="p-6 space-y-4 flex flex-col justify-between border-slate-800 hover:border-amber-500/40">
+              <Card key={c.id} variant="court" hoverEffect className="p-6 space-y-4 flex flex-col justify-between border-zinc-800 hover:border-zinc-500 bg-zinc-950/80 backdrop-blur-sm">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold text-amber-400 px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/40">
+                    <span className="text-xs font-mono font-bold text-white px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700">
                       {c.id}
                     </span>
                     <CaseStatusBadge status={c.status} />
                   </div>
 
                   <h3 className="text-base font-bold text-white line-clamp-2">{c.title}</h3>
-                  <div className="text-xs text-slate-400 font-mono">{c.caseNumber} • {c.courtLevel}</div>
+                  <div className="text-xs text-zinc-400 font-mono">{c.caseNumber} • {c.courtLevel}</div>
 
-                  <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">{c.summary}</p>
+                  <p className="text-xs text-zinc-300 line-clamp-2 leading-relaxed">{c.summary}</p>
 
-                  <div className="p-3 bg-slate-950/80 rounded-lg border border-slate-800 text-xs space-y-1">
-                    <div className="text-[11px] text-slate-400">
-                      Petitioner: <span className="text-slate-200 font-semibold">{c.parties[0]?.name}</span>
+                  <div className="p-3 bg-black/70 rounded-lg border border-zinc-800 text-xs space-y-1">
+                    <div className="text-[11px] text-zinc-400">
+                      Petitioner: <span className="text-zinc-200 font-semibold">{c.parties[0]?.name}</span>
                     </div>
-                    <div className="text-[11px] text-slate-400">
-                      Respondent: <span className="text-slate-200 font-semibold">{c.parties[1]?.name}</span>
+                    <div className="text-[11px] text-zinc-400">
+                      Respondent: <span className="text-zinc-200 font-semibold">{c.parties[1]?.name}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
-                  <div className="text-[11px] text-slate-400 font-mono">
-                    Next: <span className="text-amber-400">{c.nextHearing || 'TBD'}</span>
+                <div className="pt-4 border-t border-zinc-800 flex items-center justify-between">
+                  <div className="text-[11px] text-zinc-400 font-mono">
+                    Cause List: <span className="text-white font-semibold">{c.nextHearing || 'TBD'}</span>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <Link href={`/text-courtroom/${c.id}`}>
-                      <Button variant="ghost" size="sm" icon={<MessageSquare className="w-3.5 h-3.5 text-amber-400" />}>
+                      <Button variant="ghost" size="sm" icon={<MessageSquare className="w-3.5 h-3.5 text-white" />}>
                         Court
                       </Button>
                     </Link>
                     <Link href={`/cases/${c.id}`}>
-                      <Button variant="outline" size="sm" icon={<ArrowRight className="w-3.5 h-3.5" />}>
-                        Details
+                      <Button variant="court" size="sm" icon={<ArrowRight className="w-3.5 h-3.5 text-white" />}>
+                        Record
                       </Button>
                     </Link>
                   </div>
@@ -198,9 +204,9 @@ export default function CasesDashboardPage() {
           </div>
         ) : (
           /* Table View */
-          <div className="overflow-x-auto bg-slate-950 rounded-xl border border-slate-800">
+          <div className="overflow-x-auto bg-zinc-950/90 rounded-xl border border-zinc-800">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-900 border-b border-slate-800 text-slate-400 uppercase font-semibold text-[11px]">
+              <thead className="bg-zinc-900 border-b border-zinc-800 text-zinc-400 uppercase font-semibold text-[11px]">
                 <tr>
                   <th className="p-4">Case ID & Number</th>
                   <th className="p-4">Title & Type</th>
@@ -210,24 +216,24 @@ export default function CasesDashboardPage() {
                   <th className="p-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60 text-slate-200">
+              <tbody className="divide-y divide-zinc-800/60 text-zinc-200">
                 {filteredCases.map((c) => (
-                  <tr key={c.id} className="hover:bg-slate-900/50 transition-colors">
-                    <td className="p-4 font-mono font-bold text-amber-400">
+                  <tr key={c.id} className="hover:bg-zinc-900/50 transition-colors">
+                    <td className="p-4 font-mono font-bold text-white">
                       <div>{c.id}</div>
-                      <div className="text-[11px] text-slate-400 font-normal">{c.caseNumber}</div>
+                      <div className="text-[11px] text-zinc-400 font-normal">{c.caseNumber}</div>
                     </td>
                     <td className="p-4">
-                      <div className="font-bold text-slate-100">{c.title}</div>
-                      <div className="text-[11px] text-slate-400">{c.type}</div>
+                      <div className="font-bold text-white">{c.title}</div>
+                      <div className="text-[11px] text-zinc-400">{c.type}</div>
                     </td>
-                    <td className="p-4 text-slate-300">{c.courtLevel}</td>
+                    <td className="p-4 text-zinc-300">{c.courtLevel}</td>
                     <td className="p-4"><CaseStatusBadge status={c.status} /></td>
-                    <td className="p-4 font-mono text-amber-300">{c.nextHearing || 'None'}</td>
+                    <td className="p-4 font-mono text-zinc-300">{c.nextHearing || 'None'}</td>
                     <td className="p-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Link href={`/text-courtroom/${c.id}`}>
-                          <Button variant="ghost" size="sm" icon={<MessageSquare className="w-3.5 h-3.5 text-amber-400" />}>
+                          <Button variant="ghost" size="sm" icon={<MessageSquare className="w-3.5 h-3.5 text-white" />}>
                             Court
                           </Button>
                         </Link>
