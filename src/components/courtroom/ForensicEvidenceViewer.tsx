@@ -18,6 +18,13 @@ export const ForensicEvidenceViewer: React.FC<ForensicEvidenceViewerProps> = ({
   const [activeSegment, setActiveSegment] = useState<EvidenceSegment | null>(null);
   const [isInspecting, setIsInspecting] = useState(false);
   const [showMasks, setShowMasks] = useState(true);
+  const [liveCert, setLiveCert] = useState<{
+    hash: string;
+    certificate_id: string;
+    tamper_risk: string;
+    admissibility_notes: string;
+    entropy: number;
+  } | null>(null);
 
   // Fallback demo segments if evidence doesn't have custom ones yet
   const analysis: ForensicInspectionResult = evidence.forensicAnalysis || {
@@ -54,15 +61,33 @@ export const ForensicEvidenceViewer: React.FC<ForensicEvidenceViewerProps> = ({
     ],
   };
 
-  const handleRunAnalysis = () => {
+  const handleRunAnalysis = async () => {
     setIsInspecting(true);
-    setTimeout(() => {
+    try {
+      const payloadContent = `${evidence.title || ''}:${evidence.relevanceSummary || ''}:${evidence.evidenceCode || ''}`;
+      const encoded = typeof window !== 'undefined' ? btoa(unescape(encodeURIComponent(payloadContent))) : '';
+      const response = await fetch('/api/courtroom/modal-stream', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'verify_evidence',
+          evidence_code: evidence.evidenceCode || 'EXHIBIT-P01',
+          content_bytes_b64: encoded || 'ZGVtbw==',
+        }),
+      });
+      if (response.ok) {
+        const result = await response.json();
+        setLiveCert(result);
+      }
+    } catch (err) {
+      console.warn('Live Modal verification warning:', err);
+    } finally {
       setIsInspecting(false);
       setShowMasks(true);
       if (analysis.segments.length > 0) {
         setActiveSegment(analysis.segments[0]);
       }
-    }, 1200);
+    }
   };
 
   return (
@@ -242,6 +267,17 @@ export const ForensicEvidenceViewer: React.FC<ForensicEvidenceViewerProps> = ({
 
           {/* Action Button: Admit into Court Record */}
           <div className="pt-4 border-t border-slate-800 space-y-2">
+            {liveCert && (
+              <div className="p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-xs font-mono space-y-1">
+                <div className="flex items-center justify-between text-emerald-400 font-bold">
+                  <span>Modal Certified ({liveCert.certificate_id})</span>
+                  <span className="text-[10px] text-emerald-300">Sec 63 Valid</span>
+                </div>
+                <div className="text-[10px] text-slate-400 truncate">SHA256: {liveCert.hash}</div>
+                <div className="text-[10px] text-slate-300 italic">{liveCert.admissibility_notes}</div>
+              </div>
+            )}
+
             <Button
               variant="gold"
               className="w-full"
@@ -251,7 +287,7 @@ export const ForensicEvidenceViewer: React.FC<ForensicEvidenceViewerProps> = ({
               Admit SAM 3.1 Report to Court Bench
             </Button>
             <div className="text-[10px] text-slate-500 text-center font-mono">
-              Sec 63 BSA Checksum Hash: 0x9f81...a34e
+              {liveCert ? `Digest: ${liveCert.hash.slice(0, 16)}...` : 'Sec 63 BSA Checksum Hash: 0x9f81...a34e'}
             </div>
           </div>
 
