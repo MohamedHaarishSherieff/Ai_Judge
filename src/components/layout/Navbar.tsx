@@ -21,6 +21,7 @@ export const Navbar: React.FC = () => {
   ];
 
   return (
+    <>
       <header className="sticky top-0 z-40 w-full border-b border-zinc-800 legal-glass">
         {/* Official Government Top Bar */}
         <div className="bg-black/90 border-b border-zinc-900 px-4 sm:px-8 py-1 flex items-center justify-between text-[11px] font-mono text-zinc-400">
