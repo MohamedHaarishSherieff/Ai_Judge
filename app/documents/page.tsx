@@ -164,7 +164,7 @@ export default function DocumentManagementPage() {
                       <div className="text-[11px] text-zinc-400 mt-0.5 line-clamp-1">{doc.description}</div>
                     )}
                   </td>
-                  <td className="p-4"><Badge variant="outline">{doc.type}</Badge></td>
+                  <td className="p-4"><Badge variant="court">{doc.type}</Badge></td>
                   <td className="p-4 text-zinc-300">{doc.uploadedBy} ({doc.uploadedRole})</td>
                   <td className="p-4 font-mono text-zinc-400">{doc.uploadedDate} • {doc.fileSize}</td>
                   <td className="p-4">

@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Message } from '@/types';
-import { Gavel, Shield, User, FileText, CheckCircle2, Bookmark, Scale } from 'lucide-react';
+import { Gavel, Shield, User, FileText, CheckCircle2, Bookmark, Scale, ChevronDown, ChevronUp, Cpu } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 
 interface ChatMessageProps {
@@ -10,6 +10,7 @@ interface ChatMessageProps {
 }
 
 export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
+  const [showReasoning, setShowReasoning] = useState(false);
   const isJudge = message.senderRole === 'AI Judge';
   const isPetitioner = message.senderRole === 'Petitioner Counsel';
   const isRespondent = message.senderRole === 'Respondent Counsel';
@@ -77,6 +78,32 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       <div className="text-sm text-slate-200 leading-relaxed font-sans pl-0.5 whitespace-pre-wrap">
         {message.content}
       </div>
+
+      {/* Chain-of-Thought Legal Deliberation (Baseten Muse Spark Open) */}
+      {message.reasoningContent && (
+        <div className="pt-1">
+          <button
+            onClick={() => setShowReasoning(!showReasoning)}
+            className="flex items-center gap-1.5 text-[11px] font-mono text-zinc-400 hover:text-white bg-zinc-900 border border-zinc-800 px-2.5 py-1 rounded transition-colors"
+          >
+            <Cpu className="w-3 h-3 text-white" />
+            <span>Muse Spark Legal Deliberation (Chain of Thought)</span>
+            {showReasoning ? <ChevronUp className="w-3 h-3 ml-1" /> : <ChevronDown className="w-3 h-3 ml-1" />}
+          </button>
+
+          {showReasoning && (
+            <div className="mt-2 p-3 rounded-lg bg-black/90 border border-zinc-800 text-[11px] font-mono text-zinc-400 space-y-1.5 whitespace-pre-wrap leading-relaxed">
+              <div className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold border-b border-zinc-850 pb-1 flex items-center justify-between">
+                <span>Autonomous Judicial Reasoning Trace (muse-spark-open-1026)</span>
+                <span className="text-white">Live Baseten Inference</span>
+              </div>
+              <div className="text-zinc-300 max-h-48 overflow-y-auto pr-1">
+                {message.reasoningContent}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Statutory & Precedent Citations Footer */}
       {message.legalReferences && message.legalReferences.length > 0 && (

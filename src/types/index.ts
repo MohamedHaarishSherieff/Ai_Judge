@@ -68,6 +68,7 @@ export interface Message {
   senderRole: SenderRole;
   avatar?: string;
   content: string;
+  reasoningContent?: string;
   timestamp: string;
   category?: 'Argument' | 'Citation' | 'Ruling' | 'Question' | 'Evidence Citation' | 'Procedural';
   legalReferences?: string[];

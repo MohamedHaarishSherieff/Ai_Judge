@@ -100,3 +100,33 @@ Run this command in PowerShell to connect the frontend UI to all these engines:
 ```powershell
 muse exec "Create a Next.js App Router API route at app/api/courtroom/stream/route.ts that exposes a Server-Sent Events (SSE) streaming endpoint. It should accept caseId and action ('simulate_turn' | 'inspect_evidence' | 'synthesize_decree'), dispatch to advocates.ts, sam.ts, or judge.ts, and stream real-time updates to the courtroom UI."
 ```
+
+---
+
+## ⚡ Step 6: Official Baseten Muse Spark Open Integration ($100 Credits, 2M Tokens/Min)
+> **Model**: `meta-models/muse-spark-open-1026`  
+> **Base URL**: `https://inference.baseten.co/v1`  
+> **Throughput**: Up to 2,000,000 tokens/minute  
+> **Capability**: Native Chain-of-Thought (CoT) Legal Deliberation & Multimodal Adjudication
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://inference.baseten.co/v1",
+    api_key=os.environ.get("BASETEN_API_KEY"),
+)
+
+response = client.chat.completions.create(
+    model="meta-models/muse-spark-open-1026",
+    messages=[
+        {"role": "system", "content": "You are an AI Presiding Judge under Order XX CPC and Section 63 BSA."},
+        {"role": "user", "content": "Adjudicate Exhibit-P01 under Section 63 BSA standards."}
+    ],
+    max_tokens=1500
+)
+
+print("Chain of Thought:", response.choices[0].message.reasoning_content)
+print("Judicial Ruling:", response.choices[0].message.content)
+```
+
