@@ -10,45 +10,28 @@ import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { Message, SenderRole, Case, Evidence } from '@/types';
 import { ForensicEvidenceViewer } from '@/components/courtroom/ForensicEvidenceViewer';
-import { MOCK_JUDGMENT } from '@/data/mockData';
+import { MOCK_CASES, MOCK_JUDGMENT } from '@/data/mockData';
 import { PanelRightOpen, Shield, FileText, Upload, Sparkles, Gavel, CheckCircle2, Users, Play, Square, Scale, Eye } from 'lucide-react';
 
 export default function TextCourtroomSessionPage() {
   const params = useParams();
-  const caseId = (params?.id as string) || 'AJ-SESSION-001';
+  const caseId = (params?.id as string) || 'SC-WP-2026-104';
 
-  // Dynamic Case state starting clean
-  const [caseData, setCaseData] = useState<Case>({
-    id: caseId,
-    caseNumber: 'WP(C) / 2026',
-    title: 'Open Virtual Courtroom Session',
-    type: 'Constitutional Law',
-    courtLevel: 'High Court of State',
-    status: 'Hearing',
-    filedDate: new Date().toLocaleDateString(),
-    summary: 'Virtual Courtroom for litigating counsel. Two advocates represent their respective clients and present arguments before the AI Bench.',
-    parties: [
-      { id: 'p1', name: 'Petitioner Client', role: 'Petitioner', advocateName: 'Advocate 1 (Petitioner Counsel)' },
-      { id: 'p2', name: 'Respondent Client', role: 'Respondent', advocateName: 'Advocate 2 (Respondent Counsel)' },
-    ],
-    statutoryActs: ['Bharatiya Nyaya Sanhita (BNS)', 'Bharatiya Sakshya Adhiniyam Sec 63'],
-    issuesForDetermination: [
-      'Determination of client claims, statutory provisions, and evidence admissibility.'
-    ],
-    benchInfo: 'AI Senior Presiding Judicial Officer',
-  });
+  // Load selected case from comprehensive Indian Law benchmark cases, or default to first
+  const selectedCase = MOCK_CASES.find((c) => c.id === caseId) || MOCK_CASES[0];
+  const [caseData, setCaseData] = useState<Case>(selectedCase);
 
   // Messages start clean with initial AI Judge opening prompt
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'msg-welcome',
       caseId: caseData.id,
-      sender: 'AI Presiding Judge',
+      sender: caseData.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Judge',
       senderRole: 'AI Judge',
-      content: 'The Virtual Courtroom is now open. This bench welcomes Petitioner Counsel and Respondent Counsel representing their respective clients. Legal advocates may now present their opening arguments or petitions.',
+      content: `The ${caseData.courtLevel} is now in formal session for ${caseData.caseNumber}: "${caseData.title}". This Bench calls Senior Counsel for the Petitioner (${caseData.parties[0]?.name}) and Learned Counsel for the Respondent (${caseData.parties[1]?.name}) to present their preliminary submissions under ${caseData.statutoryActs[0] || 'the applicable statutes'}.`,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       category: 'Procedural',
-      legalReferences: ['High Court Rules 2026', 'Section 63 Bharatiya Sakshya Adhiniyam'],
+      legalReferences: [caseData.statutoryActs[0] || 'Constitution of India', caseData.statutoryActs[1] || 'Bharatiya Sakshya Adhiniyam'],
     }
   ]);
 
@@ -112,7 +95,15 @@ export default function TextCourtroomSessionPage() {
     setIsSimulatingDebate(true);
 
     try {
-      // Turn 1: Petitioner Counsel argues (Modal Cloud)
+      const caseEvidenceSummary = caseData.type.includes('Constitutional')
+        ? 'Writ Petition Record & Union of India Guidelines'
+        : caseData.type.includes('Criminal')
+        ? 'Section 173 BNSS Police Chargesheet & Call Detail Records'
+        : caseData.type.includes('Civil')
+        ? 'Order XXXIX Injunction Application & Registered Agreement to Sell'
+        : 'Exhibit-P01 (Commercial Agreement & Section 63 BSA Digital Seal)';
+
+      // Turn 1: Petitioner Counsel / Prosecution argues (Baseten Muse Spark Open)
       const resPet = await fetch('/api/courtroom/modal-stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -120,8 +111,11 @@ export default function TextCourtroomSessionPage() {
           action: 'simulate_turn',
           caseId: caseData.id,
           caseTitle: caseData.title,
+          caseType: caseData.type,
+          courtLevel: caseData.courtLevel,
+          statutoryActs: caseData.statutoryActs,
           speakerRole: 'petitioner_counsel',
-          evidenceSummary: 'Exhibit-P01 (Disputed Contract with Altered Seal)',
+          evidenceSummary: caseEvidenceSummary,
           transcriptHistory: messages.map(m => ({ speaker: m.sender, text: m.content })),
         }),
       });
@@ -131,20 +125,20 @@ export default function TextCourtroomSessionPage() {
       const petMsg: Message = {
         id: `msg-pet-${Date.now()}`,
         caseId: caseData.id,
-        sender: petData?.speaker || 'Advocate 1 (Petitioner Counsel)',
+        sender: petData?.speaker || (caseData.type.includes('Criminal') ? 'Public Prosecutor (State)' : 'Senior Counsel (Petitioner)'),
         senderRole: 'Petitioner Counsel',
-        content: petData?.argument_text || 'May it please the Bench. Under Section 63 BSA, forensic evidence confirms breach of covenant.',
+        content: petData?.argument_text || 'May it please the Bench. Submissions presented in accordance with statutory requirements.',
         reasoningContent: petData?.reasoning_content,
         timestamp: petData?.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Argument',
-        legalReferences: petData?.precedents_cited || ['Section 63 Bharatiya Sakshya Adhiniyam', 'Section 74 Contract Act'],
+        legalReferences: petData?.precedents_cited || [caseData.statutoryActs[0] || 'Constitution of India'],
       };
       setMessages(prev => [...prev, petMsg]);
 
       // Delay 2s for courtroom pacing before Respondent rebuts
       await new Promise(r => setTimeout(r, 2000));
 
-      // Turn 2: Respondent Counsel rebuts (Modal Cloud)
+      // Turn 2: Respondent / Defense Counsel rebuts (Baseten Muse Spark Open)
       const resResp = await fetch('/api/courtroom/modal-stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -152,8 +146,11 @@ export default function TextCourtroomSessionPage() {
           action: 'simulate_turn',
           caseId: caseData.id,
           caseTitle: caseData.title,
+          caseType: caseData.type,
+          courtLevel: caseData.courtLevel,
+          statutoryActs: caseData.statutoryActs,
           speakerRole: 'respondent_counsel',
-          evidenceSummary: 'Exhibit-P01 (Contested Chain of Custody)',
+          evidenceSummary: caseEvidenceSummary,
           transcriptHistory: [...messages, petMsg].map(m => ({ speaker: m.sender, text: m.content })),
         }),
       });
@@ -163,20 +160,20 @@ export default function TextCourtroomSessionPage() {
       const respMsg: Message = {
         id: `msg-resp-${Date.now()}`,
         caseId: caseData.id,
-        sender: respData?.speaker || 'Advocate 2 (Respondent Counsel)',
+        sender: respData?.speaker || (caseData.type.includes('Constitutional') ? 'Solicitor General (Union of India)' : 'Senior Defense Counsel'),
         senderRole: 'Respondent Counsel',
-        content: respData?.argument_text || 'Objection, Your Honour! Petitioner has failed to establish actual damage under Kailash Nath.',
+        content: respData?.argument_text || 'Objection, Your Honour! The contentions are unsustainable under settled legal doctrines.',
         reasoningContent: respData?.reasoning_content,
         timestamp: respData?.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Argument',
-        legalReferences: respData?.precedents_cited || ['Maula Bux v. UOI', 'BSA Section 63(4) Electronic Certificate'],
+        legalReferences: respData?.precedents_cited || [caseData.statutoryActs[1] || 'Statutory Precedents'],
       };
       setMessages(prev => [...prev, respMsg]);
 
       // Delay 2s before Bench Magistrate issues ruling
       await new Promise(r => setTimeout(r, 2000));
 
-      // Turn 3: AI Presiding Judge Rules (Modal Cloud)
+      // Turn 3: AI Presiding Judge Rules (Baseten Muse Spark Open)
       const resJudge = await fetch('/api/courtroom/modal-stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -184,8 +181,11 @@ export default function TextCourtroomSessionPage() {
           action: 'simulate_turn',
           caseId: caseData.id,
           caseTitle: caseData.title,
+          caseType: caseData.type,
+          courtLevel: caseData.courtLevel,
+          statutoryActs: caseData.statutoryActs,
           speakerRole: 'magistrate_judge',
-          evidenceSummary: 'Admitted Exhibit-P01 Forensic Seal Discontinuity',
+          evidenceSummary: caseEvidenceSummary,
           transcriptHistory: [...messages, petMsg, respMsg].map(m => ({ speaker: m.sender, text: m.content })),
         }),
       });
@@ -195,13 +195,13 @@ export default function TextCourtroomSessionPage() {
       const judgeRuling: Message = {
         id: `msg-judge-ruling-${Date.now()}`,
         caseId: caseData.id,
-        sender: judgeData?.speaker || 'AI Presiding Judge',
+        sender: judgeData?.speaker || (caseData.courtLevel === 'Supreme Court of India' ? 'Constitution Bench Presiding Judge' : 'Presiding Judicial Magistrate'),
         senderRole: 'AI Judge',
-        content: judgeData?.argument_text || 'ORDER OF THE BENCH: Having reviewed the BSA Sec 63 digital integrity log, the objection is OVERRULED. Exhibit admitted for penal computation.',
+        content: judgeData?.argument_text || 'ORDER OF THE BENCH: Having evaluated submissions from both counsels, the Bench issues statutory directions.',
         reasoningContent: judgeData?.reasoning_content,
         timestamp: judgeData?.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Ruling',
-        legalReferences: judgeData?.precedents_cited || ['Constitution of India Art 142', 'BSA Section 63 Admissibility Standard'],
+        legalReferences: judgeData?.precedents_cited || ['Constitution of India Art 142', 'High Court Rules'],
       };
       setMessages(prev => [...prev, judgeRuling]);
     } catch (err) {
@@ -292,24 +292,36 @@ export default function TextCourtroomSessionPage() {
               <Button
                 size="sm"
                 variant="court"
-                icon={<Eye className="w-3.5 h-3.5 text-white" />}
+                icon={<FileText className="w-3.5 h-3.5 text-white" />}
                 onClick={() => {
                   const demoEv: Evidence = {
-                    id: 'ev-court-01',
-                    evidenceCode: 'EXHIBIT-P01',
+                    id: `ev-${caseData.id}`,
+                    evidenceCode: caseData.type.includes('Criminal') ? 'EXHIBIT-C01' : caseData.type.includes('Constitutional') ? 'RECORD-W01' : 'EXHIBIT-P01',
                     caseId: caseData.id,
-                    title: 'Commercial Agreement & Disputed Notary Seal',
-                    category: 'Digital Forensics',
-                    submittedBy: 'Petitioner Counsel',
+                    title: caseData.type.includes('Constitutional')
+                      ? 'Writ Petition Record & State Surveillance Guidelines'
+                      : caseData.type.includes('Criminal')
+                      ? 'Section 173 BNSS Police Chargesheet & CDR Log'
+                      : caseData.type.includes('Civil')
+                      ? 'Title Deed & Part Performance Agreement'
+                      : 'Commercial Agreement & Section 63 BSA Digital Seal',
+                    category: caseData.type.includes('Constitutional') ? 'Documentary' : caseData.type.includes('Criminal') ? 'Digital Forensics' : 'Documentary',
+                    submittedBy: caseData.parties[0]?.name || 'Petitioner Counsel',
                     submissionDate: new Date().toLocaleDateString('en-GB'),
                     status: 'Under Review',
-                    relevanceSummary: 'Disputed promissory covenant. Petitioner alleges forged managing director signature and altered seal under Sec 63 BSA.',
-                    custodyChain: 'Encrypted Extraction -> SHA-256 Hash Signed -> Vault Ingested',
+                    relevanceSummary: `Primary evidentiary record filed in ${caseData.caseNumber} for statutory adjudication by the Bench.`,
+                    custodyChain: 'Digital Verification -> SHA-256 Hash Certified -> Court Vault Admitted',
                   };
                   setActiveForensicExhibit(demoEv);
                 }}
               >
-                Inspect Exhibit (SAM 3.1)
+                {caseData.type.includes('Constitutional')
+                  ? 'Examine Writ Record (Art 32)'
+                  : caseData.type.includes('Criminal')
+                  ? 'Examine Chargesheet (BNSS 173)'
+                  : caseData.type.includes('Civil')
+                  ? 'Examine Injunction Plaint (CPC)'
+                  : 'Inspect Evidence & Seal (Sec 63 BSA)'}
               </Button>
             </div>
 
@@ -327,7 +339,11 @@ export default function TextCourtroomSessionPage() {
                 loading={isSynthesizingDecree}
                 className="text-white hover:text-zinc-200 border border-zinc-600 hover:border-white"
               >
-                Synthesize Decree (Order XX CPC)
+                {caseData.type.includes('Constitutional')
+                  ? 'Synthesize Writ Order (Art 142)'
+                  : caseData.type.includes('Criminal')
+                  ? 'Synthesize Bail Order (BNSS 480)'
+                  : 'Synthesize Decree (Order XX CPC)'}
               </Button>
             </div>
           </div>
@@ -501,13 +517,19 @@ export default function TextCourtroomSessionPage() {
             </div>
             
             <div className="text-[11px] uppercase tracking-widest font-mono text-zinc-300 font-bold">
-              In The High Court of Judicature
+              {caseData.courtLevel === 'Supreme Court of India'
+                ? 'In The Supreme Court of India • Constitution Bench'
+                : `In The High Court of Judicature • ${caseData.courtLevel}`}
             </div>
             <div className="text-[10px] uppercase font-mono tracking-wider text-zinc-400">
-              National e-Courts Mission • Autonomous Virtual Civil Bench
+              National e-Courts Mission • {caseData.type} • {caseData.benchInfo}
             </div>
             <h2 className="text-xl font-extrabold text-white tracking-wide uppercase pt-1">
-              Decree Sheet Under Order XX Rule 6, C.P.C. 1908
+              {caseData.type.includes('Constitutional')
+                ? 'Constitutional Judgment & Writ Order (Article 142)'
+                : caseData.type.includes('Criminal')
+                ? 'Judicial Order on Bail & Framing of Charges (Section 480 BNSS)'
+                : 'Decree Sheet Under Order XX Rule 6, C.P.C. 1908'}
             </h2>
             <div className="flex items-center justify-center gap-3 text-zinc-400 font-mono text-[11px] pt-1">
               <span>{modalDecreeData?.decree_id || MOCK_JUDGMENT.caseNumber}</span>

@@ -10,16 +10,30 @@ import { generateMuseSparkCourtroomTurn } from '@/lib/baseten/museClient';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { action, caseId, caseTitle, speakerRole, transcriptHistory, evidenceSummary, principalClaim } = body;
+    const {
+      action,
+      caseId,
+      caseTitle,
+      caseType,
+      courtLevel,
+      statutoryActs,
+      speakerRole,
+      transcriptHistory,
+      evidenceSummary,
+      principalClaim
+    } = body;
 
     if (action === 'simulate_turn') {
       try {
         // Primary: Official Baseten Muse Spark Open Hackathon Model
         const museTurn = await generateMuseSparkCourtroomTurn(
-          caseTitle || 'Commercial Contract Dispute',
+          caseTitle || 'Judicial Proceeding',
           speakerRole || 'petitioner_counsel',
           transcriptHistory || [],
-          evidenceSummary || 'Exhibit-P01 (Digital Forensic Certificate)'
+          evidenceSummary || 'Official Records & Electronic Pleadings',
+          caseType || 'Constitutional Law',
+          courtLevel || 'Supreme Court of India',
+          statutoryActs || []
         );
         return NextResponse.json({ success: true, data: museTurn, engine: 'baseten-muse-spark-open-1026' });
       } catch (museErr) {
