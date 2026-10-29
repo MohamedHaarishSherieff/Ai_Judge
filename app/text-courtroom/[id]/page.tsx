@@ -315,8 +315,8 @@ export default function TextCourtroomSessionPage() {
 
             <div className="flex items-center gap-2">
               <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-900 border border-zinc-700 text-[10px] font-mono text-zinc-300">
-                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                Modal Serverless Engine: Online
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Muse Spark Open (Baseten 2M/min) • Online
               </span>
 
               <Button

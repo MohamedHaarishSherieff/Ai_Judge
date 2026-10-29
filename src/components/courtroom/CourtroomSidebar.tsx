@@ -102,7 +102,7 @@ export const CourtroomSidebar: React.FC<CourtroomSidebarProps> = ({
                     </div>
                     {p.advocateName && (
                       <div className="text-[11px] text-slate-400 mt-1">
-                        Advocate: <span className="text-slate-200">{p.advocateName}</span> ({p.barCouncilNo})
+                        Advocate: <span className="text-slate-200">{p.advocateName}</span>{p.barCouncilNo ? ` (${p.barCouncilNo})` : ''}
                       </div>
                     )}
                   </div>

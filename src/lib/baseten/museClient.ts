@@ -1,4 +1,3 @@
-
 /**
  * AI Judge - Official Baseten Muse Spark Open Integration
  * =============================================================================
@@ -36,19 +35,22 @@ export async function generateMuseSparkCourtroomTurn(
     speakerName = 'Advocate 1 (Petitioner Counsel)';
     roleSystemPrompt = `You are Senior Advocate for the Petitioner in the High Court of Judicature.
 You are litigating under the Bharatiya Sakshya Adhiniyam (BSA 2023) and Indian Contract Act, 1872.
-Advance strong, assertive arguments citing statutory sections (e.g., Section 74 Contract Act, Section 63 BSA) and Supreme Court precedents (e.g., Kailash Nath Associates v. DDA, Maula Bux v. UOI).
-Keep your final oral submission within 2-3 concise, impactful sentences suitable for oral courtroom argument.`;
+Directly advance a formal oral argument in 2 to 3 powerful sentences.
+Cite statutory sections (Section 74 Contract Act, Section 63 BSA) and Supreme Court precedents (Kailash Nath Associates v. DDA, Maula Bux v. UOI).
+Provide only the final courtroom submission.`;
   } else if (speakerRole === 'respondent_counsel') {
     speakerName = 'Advocate 2 (Respondent Counsel)';
     roleSystemPrompt = `You are Senior Counsel for the Respondent (Defense) in the High Court of Judicature.
-Vigorously object to the Petitioner's submissions. Challenge their liquidated damages calculation under Section 74 of the Contract Act (arguing failure to prove actual loss under Kailash Nath) or challenge electronic certificate chain-of-custody under Section 63(4) BSA.
-Keep your oral submission within 2-3 concise, impactful sentences suitable for oral courtroom argument.`;
+Vigorously object to the Petitioner's submissions. Challenge their liquidated damages claim under Section 74 (citing Kailash Nath Associates for failure to prove actual damage) or challenge electronic certificate chain-of-custody under Section 63(4) BSA.
+Directly deliver your formal oral objection in 2 to 3 powerful sentences.
+Provide only the final courtroom submission.`;
   } else {
     speakerName = 'AI Presiding Judge';
     roleSystemPrompt = `You are the AI Presiding Judge of the Autonomous Virtual Bench under Order XX CPC and Section 63 BSA.
-Evaluate the oral arguments and forensic evidence objectively.
-Deliver an authoritative judicial ruling: either OVERRULE or SUSTAIN counsel objections, or order admission of exhibits with precise statutory references.
-Keep your bench directive within 2-3 authoritative sentences.`;
+Evaluate the arguments and forensic evidence objectively.
+Deliver an authoritative judicial ruling: either OVERRULE or SUSTAIN counsel's objection, citing statutory provisions and directions to the parties.
+Directly deliver your bench order in 2 to 3 authoritative sentences.
+Provide only the final courtroom ruling.`;
   }
 
   const messages: any[] = [
@@ -60,7 +62,7 @@ Admitted Forensic Evidence: ${evidenceSummary || 'Exhibit-P01 (Disputed Signatur
 Prior Courtroom Transcript:
 ${transcriptHistory.map((t) => `${t.speaker}: "${t.text}"`).join('\n')}
 
-Please advance your submission now.`
+Present your courtroom submission now.`
     }
   ];
 
@@ -74,7 +76,7 @@ Please advance your submission now.`
       body: JSON.stringify({
         model: BASETEN_MODEL,
         messages,
-        max_tokens: 1800,
+        max_tokens: 4000,
         temperature: 0.6
       })
     });
@@ -90,22 +92,35 @@ Please advance your submission now.`
     const content = message.content || '';
     const reasoning = message.reasoning_content || '';
 
-    // If content is empty because reasoning consumed tokens or finish_reason was hit, extract from reasoning
+    // Clean up content
     let finalArgument = content.trim();
+    if (finalArgument.startsWith('"') && finalArgument.endsWith('"')) {
+      finalArgument = finalArgument.slice(1, -1).trim();
+    }
+
+    // If content is empty because reasoning consumed tokens, extract any quoted draft from reasoning
     if (!finalArgument && reasoning) {
-      const sentences = reasoning.split('\n').filter((s: string) => s.trim().length > 20);
-      finalArgument = sentences.slice(-2).join(' ').trim();
+      const quoteMatches = reasoning.match(/"([^"]{40,})"/g);
+      if (quoteMatches && quoteMatches.length > 0) {
+        finalArgument = quoteMatches[quoteMatches.length - 1].replace(/^"|"$/g, '').trim();
+      }
     }
 
-    if (!finalArgument) {
-      finalArgument = speakerRole === 'magistrate_judge'
-        ? 'ORDER OF THE BENCH: Having reviewed the digital evidence certificate under Section 63 BSA, the objection is OVERRULED. Exhibit-P01 is admitted to record.'
-        : speakerRole === 'petitioner_counsel'
-        ? 'May it please the Bench: Under Section 74 of the Contract Act, the respondent is liable for liquidated damages as established by the admitted electronic record.'
-        : 'Objection, Your Honour! Under the doctrine established in Kailash Nath Associates, liquidated damages cannot be claimed without proof of actual legal injury.';
+    // Filter out accidental scratchpad or counting lines
+    const isScratchpad =
+      !finalArgument ||
+      /^(let's|count sentences|sentence \d|check for|that's \d|we need to|draft:)/i.test(finalArgument);
+
+    if (isScratchpad) {
+      finalArgument =
+        speakerRole === 'magistrate_judge'
+          ? 'ORDER OF THE BENCH: Having evaluated Exhibit-P01 under Section 63 of the Bharatiya Sakshya Adhiniyam, 2023, the objection is OVERRULED. The digital forensic integrity log confirms admissible chain-of-custody, and the document stands admitted for computation under Section 74 of the Contract Act.'
+          : speakerRole === 'petitioner_counsel'
+          ? 'May it please Your Lordship, Exhibit-P01 is fully admissible as an authentic electronic record under Section 63 BSA. Under Section 74 of the Indian Contract Act, the Petitioner is entitled to reasonable liquidated damages without requiring strict proof of actual loss per Kailash Nath Associates.'
+          : 'Objection, Your Honour! Under the constitutional doctrine established in Kailash Nath Associates v. DDA, liquidated damages under Section 74 require strict proof of actual loss. Furthermore, Exhibit-P01 fails the mandatory certification requirements under Section 63(4) of the Bharatiya Sakshya Adhiniyam.';
     }
 
-    // Extract citations
+    // Extract precedents
     const precedents: string[] = [];
     if (finalArgument.includes('Kailash Nath') || reasoning.includes('Kailash Nath')) {
       precedents.push('Kailash Nath Associates v. DDA (2015)');
@@ -137,4 +152,3 @@ Please advance your submission now.`
     throw err;
   }
 }
-
