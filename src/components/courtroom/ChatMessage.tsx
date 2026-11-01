@@ -57,12 +57,12 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
                   <Gavel className="w-3 h-3 text-black" /> AI Presiding Judge (Autonomous Bench)
                 </span>
               ) : message.isHumanCounsel ? (
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-500/60 text-emerald-300 font-bold flex items-center gap-1">
-                  <User className="w-3 h-3" /> Real Human Advocate
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-600 text-zinc-200 font-bold flex items-center gap-1">
+                  <User className="w-3 h-3 text-zinc-300" /> Real Human Advocate
                 </span>
               ) : (
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/80 border border-amber-500/60 text-amber-300 font-bold flex items-center gap-1">
-                  <Cpu className="w-3 h-3" /> AI Counsel (Muse Spark)
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-950 border border-zinc-700 text-zinc-300 font-bold flex items-center gap-1">
+                  <Cpu className="w-3 h-3 text-zinc-400" /> AI Counsel (Muse Spark)
                 </span>
               )}
               <Badge variant={badgeVariant} size="sm">

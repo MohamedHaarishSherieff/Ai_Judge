@@ -111,18 +111,18 @@ I am here to guide you with:
       {/* Floating Launcher Button */}
       <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3">
         {!isOpen && (
-          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900/95 border border-amber-500/50 shadow-xl text-xs font-mono text-amber-300 animate-fade-in backdrop-blur-md">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-black border border-zinc-700 shadow-xl text-xs font-mono text-zinc-200 animate-fade-in backdrop-blur-md">
+            <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
             <span>Need Help? Ask Nyaya Sarathi</span>
           </div>
         )}
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 border ${
+          className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 border-2 ${
             isOpen 
-              ? 'bg-zinc-900 border-zinc-700 text-white rotate-90 scale-95' 
-              : 'bg-black border-amber-400 text-amber-400 hover:scale-105 hover:shadow-amber-500/20'
+              ? 'bg-zinc-900 border-zinc-600 text-white rotate-90 scale-95' 
+              : 'bg-black border-white text-white hover:bg-white hover:text-black hover:scale-105'
           }`}
           aria-label="Toggle Nyaya Sarathi Helpdesk"
           title="Nyaya Sarathi • Sovereign Courtroom Guide & Helpdesk"
@@ -131,9 +131,8 @@ I am here to guide you with:
             <X className="w-6 h-6" />
           ) : (
             <div className="relative flex items-center justify-center">
-              <Scale className="w-6 h-6 text-amber-400" />
-              <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 border-2 border-black animate-ping" />
-              <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 border-2 border-black" />
+              <Scale className="w-6 h-6" />
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-white border border-black" />
             </div>
           )}
         </button>
@@ -253,14 +252,14 @@ I am here to guide you with:
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask about app features, court forums, or legal help..."
-                className="flex-1 bg-black border border-zinc-700 rounded-xl px-3.5 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 font-sans"
+                className="flex-1 bg-black border border-zinc-700 rounded-xl px-3.5 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white font-sans"
               />
               <button
                 type="submit"
                 disabled={loading || !input.trim()}
-                className="p-2 rounded-xl bg-amber-400 hover:bg-amber-300 disabled:opacity-40 disabled:hover:bg-amber-400 text-black font-bold transition-all shadow-md shrink-0"
+                className="p-2 rounded-xl bg-white hover:bg-zinc-200 disabled:opacity-40 text-black font-bold transition-all shadow-md shrink-0 cursor-pointer"
               >
-                <Send className="w-4 h-4" />
+                <Send className="w-4 h-4 text-black" />
               </button>
             </form>
             <div className="text-[9px] text-zinc-500 font-mono text-center pt-2">
