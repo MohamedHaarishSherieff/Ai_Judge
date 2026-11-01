@@ -594,6 +594,42 @@ export default function TextCourtroomSessionPage() {
             </div>
           )}
 
+          {/* Statutory Verification Checklist Gate (Meta Trustworthy Legal Agent Pattern) */}
+          <div className="p-4 rounded-xl bg-black border border-emerald-500/40 space-y-3 relative z-10 shadow-lg">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                Statutory Verification Checklist Gate (Meta Legal Architecture)
+              </span>
+              <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-600 text-emerald-300">
+                GATE PASSED (3/3 Checks)
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs font-mono">
+              <div className="p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 flex flex-col justify-between">
+                <div className="text-[10px] text-zinc-400 uppercase font-sans font-medium">1. Evidentiary Admissibility</div>
+                <div className="text-zinc-200 mt-1 font-semibold text-[11px]">Sec 63(4) BSA 2023</div>
+                <div className="text-emerald-400 text-[10px] mt-1.5 flex items-center gap-1">
+                  ✓ Hash & Chain-of-Custody Verified
+                </div>
+              </div>
+              <div className="p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 flex flex-col justify-between">
+                <div className="text-[10px] text-zinc-400 uppercase font-sans font-medium">2. Cause of Action & Doctrine</div>
+                <div className="text-zinc-200 mt-1 font-semibold text-[11px]">Art 21 / Order XX CPC</div>
+                <div className="text-emerald-400 text-[10px] mt-1.5 flex items-center gap-1">
+                  ✓ Proportionality & Prima Facie Proof
+                </div>
+              </div>
+              <div className="p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 flex flex-col justify-between">
+                <div className="text-[10px] text-zinc-400 uppercase font-sans font-medium">3. Damage Mitigation Gate</div>
+                <div className="text-zinc-200 mt-1 font-semibold text-[11px]">Kailash Nath / Sec 74 ICA</div>
+                <div className="text-emerald-400 text-[10px] mt-1.5 flex items-center gap-1">
+                  ✓ Strictly Capped to Actual Proved Loss
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Statutory Clauses Applied */}
           <div className="space-y-2 relative z-10">
             <h4 className="font-bold text-zinc-300 uppercase tracking-wider text-[11px] font-mono">

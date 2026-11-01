@@ -23,6 +23,24 @@ export interface MuseTurnResponse {
   timestamp: string;
 }
 
+function cleanCourtroomArgument(raw: string): string {
+  if (!raw) return '';
+  let cleaned = raw.trim();
+  // Strip quotation wrappers
+  if ((cleaned.startsWith('"') && cleaned.endsWith('"')) || (cleaned.startsWith("'") && cleaned.endsWith("'"))) {
+    cleaned = cleaned.slice(1, -1).trim();
+  }
+  // Remove scratchpad / counting preambles
+  cleaned = cleaned.replace(/^(let's\s+craft|let's\s+count|count\s+sentences|sentence\s*\d+:?|that's\s+\d+|check\s+for|we\s+need\s+to|draft:)[^.\n]*[.:\n]*/i, '').trim();
+  cleaned = cleaned.replace(/^(sentence\s*\d+:|\d+:\s*)/i, '').trim();
+  return cleaned;
+}
+
+function isScratchpadText(text: string): boolean {
+  if (!text || text.length < 15) return true;
+  return /^(let's|count sentences|sentence \d|check for|that's \d|we need to|draft:)/i.test(text.trim());
+}
+
 export async function generateMuseSparkCourtroomTurn(
   caseTitle: string,
   speakerRole: 'petitioner_counsel' | 'respondent_counsel' | 'magistrate_judge',
@@ -37,25 +55,31 @@ export async function generateMuseSparkCourtroomTurn(
 
   const statutesList = statutoryActs.length > 0 ? statutoryActs.join(', ') : 'Constitution of India, BNS 2023, CPC 1908';
 
+  const strictOutputDirective = `
+MANDATORY DIRECTIVE:
+- Deliver ONLY the verbatim oral words spoken aloud in open court.
+- Do NOT output any reasoning, meta-commentary, sentence counting, scratchpad notes, or self-directions (such as "Let's count", "Sentence 1", "Drafting:", "Check periods").
+- Any internal reasoning must stay inside your deliberation. Your final response must be 100% pure judicial dialogue.`;
+
   // 1. CONSTITUTIONAL LAW (Supreme Court of India / High Court Writ Bench)
   if (caseType.toLowerCase().includes('constitutional')) {
     if (speakerRole === 'petitioner_counsel') {
       speakerName = 'Senior Counsel (Petitioner)';
       roleSystemPrompt = `You are Senior Advocate for the Petitioner before the ${courtLevel}.
 You are challenging state action under Article 32/226 for violation of Fundamental Rights (Articles 14, 19, 21).
-Directly deliver a formal oral submission in 2 to 3 powerful sentences.
+Directly deliver a formal, authoritative oral submission.
 Cite landmark Supreme Court authorities such as K.S. Puttaswamy (2017), Maneka Gandhi (1978), or Kesavananda Bharati (1973).
-Argue that the impugned action fails the four-pronged proportionality test.`;
+Argue that the impugned action fails the four-pronged proportionality test.${strictOutputDirective}`;
     } else if (speakerRole === 'respondent_counsel') {
       speakerName = 'Solicitor General / State Counsel';
       roleSystemPrompt = `You are Law Officer representing the Union of India / State Authority before the ${courtLevel}.
-Directly deliver an oral defense in 2 to 3 powerful sentences.
-Argue that state measures pursue a legitimate sovereign aim under reasonable restrictions (Art 19(2)), national security, or valid statutory classification under Article 14.`;
+Directly deliver an authoritative oral defense.
+Argue that state measures pursue a legitimate sovereign aim under reasonable restrictions (Art 19(2)), national security, or valid statutory classification under Article 14.${strictOutputDirective}`;
     } else {
       speakerName = 'Chief Presiding Judicial Officer';
       roleSystemPrompt = `You are the Presiding Judge of the Constitution Bench of the ${courtLevel}.
-Deliver an authoritative bench order in 2 to 3 sentences under Article 142.
-Balance state security against fundamental civil liberties and issue binding procedural directions to the Attorney General and Petitioner.`;
+Deliver an authoritative bench order under Article 142.
+Balance state security against fundamental civil liberties and issue binding procedural directions to the Attorney General and Petitioner.${strictOutputDirective}`;
     }
   }
   // 2. CRIMINAL MATTER (Sessions / High Court Criminal Appellate Bench)
@@ -63,18 +87,18 @@ Balance state security against fundamental civil liberties and issue binding pro
     if (speakerRole === 'petitioner_counsel') {
       speakerName = 'Public Prosecutor (State)';
       roleSystemPrompt = `You are the Public Prosecutor representing the State before the ${courtLevel}.
-Directly deliver your oral arguments in 2 to 3 sentences under the Bharatiya Nyaya Sanhita, 2023 (BNS) and Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS).
-Oppose bail under Section 480 BNSS or press for framing of charges based on prima facie witness testimony and forensic chain of custody.`;
+Directly deliver your oral arguments under the Bharatiya Nyaya Sanhita, 2023 (BNS) and Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS).
+Oppose bail under Section 480 BNSS or press for framing of charges based on prima facie witness testimony and forensic chain of custody.${strictOutputDirective}`;
     } else if (speakerRole === 'respondent_counsel') {
       speakerName = 'Senior Criminal Defense Counsel';
       roleSystemPrompt = `You are Senior Defense Counsel representing the Accused before the ${courtLevel}.
-Directly deliver your oral objection in 2 to 3 sentences under Section 480 BNSS.
-Assert the fundamental presumption of innocence, lack of direct evidentiary nexus, and satisfaction of triple test criteria for grant of bail per Arnesh Kumar / Satender Kumar Antil precedents.`;
+Directly deliver your oral objection under Section 480 BNSS.
+Assert the fundamental presumption of innocence, lack of direct evidentiary nexus, and satisfaction of triple test criteria for grant of bail per Arnesh Kumar / Satender Kumar Antil precedents.${strictOutputDirective}`;
     } else {
       speakerName = 'Presiding Sessions / Criminal Judge';
       roleSystemPrompt = `You are the Presiding Judicial Magistrate / Sessions Judge of the ${courtLevel}.
-Deliver an authoritative judicial ruling in 2 to 3 sentences.
-Rule on the regular bail petition under Section 480 BNSS, imposing strict conditions (surety, passport deposit, attendance before investigating officer).`;
+Deliver an authoritative judicial ruling.
+Rule on the regular bail petition under Section 480 BNSS, imposing strict conditions (surety, passport deposit, attendance before investigating officer).${strictOutputDirective}`;
     }
   }
   // 3. CIVIL DISPUTE (District Court / High Court Civil Division)
@@ -82,18 +106,18 @@ Rule on the regular bail petition under Section 480 BNSS, imposing strict condit
     if (speakerRole === 'petitioner_counsel') {
       speakerName = 'Advocate for Plaintiff';
       roleSystemPrompt = `You are Counsel for the Plaintiff before the ${courtLevel}.
-Directly deliver oral pleadings in 2 to 3 sentences under the Code of Civil Procedure, 1908 (Order XXXIX Rules 1 & 2) and Specific Relief Act, 1963.
-Demonstrate a prima facie case, balance of convenience, and imminent threat of irreparable loss to property rights.`;
+Directly deliver oral pleadings under the Code of Civil Procedure, 1908 (Order XXXIX Rules 1 & 2) and Specific Relief Act, 1963.
+Demonstrate a prima facie case, balance of convenience, and imminent threat of irreparable loss to property rights.${strictOutputDirective}`;
     } else if (speakerRole === 'respondent_counsel') {
       speakerName = 'Advocate for Defendant';
       roleSystemPrompt = `You are Counsel for the Defendant before the ${courtLevel}.
-Directly deliver oral objection in 2 to 3 sentences under Order XXXIX CPC.
-Argue that the Plaintiff has suppressed material facts, that balance of convenience favors the Defendant, and that any alleged loss is compensable in monetary damages.`;
+Directly deliver oral objection under Order XXXIX CPC.
+Argue that the Plaintiff has suppressed material facts, that balance of convenience favors the Defendant, and that any alleged loss is compensable in monetary damages.${strictOutputDirective}`;
     } else {
       speakerName = 'Senior Civil Judge';
       roleSystemPrompt = `You are the Senior Civil Judge of the ${courtLevel}.
-Deliver an authoritative judicial order in 2 to 3 sentences under Order XXXIX CPC.
-Grant an ad-interim status quo or temporary injunction order pending trial, directing maintenance of spot possession.`;
+Deliver an authoritative judicial order under Order XXXIX CPC.
+Grant an ad-interim status quo or temporary injunction order pending trial, directing maintenance of spot possession.${strictOutputDirective}`;
     }
   }
   // 4. CORPORATE & COMMERCIAL
@@ -101,18 +125,18 @@ Grant an ad-interim status quo or temporary injunction order pending trial, dire
     if (speakerRole === 'petitioner_counsel') {
       speakerName = 'Senior Commercial Advocate';
       roleSystemPrompt = `You are Senior Counsel for the Petitioner before the Commercial Division of the ${courtLevel}.
-Directly advance formal arguments in 2 to 3 sentences under Section 74 of the Indian Contract Act, 1872 and Section 63 BSA.
-Argue that contractual breach is proved by electronic records and entitles the Petitioner to stipulated liquidated damages.`;
+Directly advance formal arguments under Section 74 of the Indian Contract Act, 1872 and Section 63 BSA.
+Argue that contractual breach is proved by electronic records and entitles the Petitioner to stipulated liquidated damages.${strictOutputDirective}`;
     } else if (speakerRole === 'respondent_counsel') {
       speakerName = 'Commercial Defense Counsel';
       roleSystemPrompt = `You are Defense Counsel before the Commercial Division of the ${courtLevel}.
-Directly deliver an oral objection in 2 to 3 sentences citing Kailash Nath Associates v. DDA.
-Argue that Section 74 prohibits penal windfalls and requires strict proof of actual loss.`;
+Directly deliver an oral objection citing Kailash Nath Associates v. DDA.
+Argue that Section 74 prohibits penal windfalls and requires strict proof of actual loss.${strictOutputDirective}`;
     } else {
       speakerName = 'Commercial Division Bench Magistrate';
       roleSystemPrompt = `You are the Commercial Division Presiding Judge of the ${courtLevel}.
-Deliver an authoritative bench order in 2 to 3 sentences under Order XX CPC and Commercial Courts Act, 2015.
-Adjudicate on liquidated damages and admissibility of electronic exhibits.`;
+Deliver an authoritative bench order under Order XX CPC and Commercial Courts Act, 2015.
+Adjudicate on liquidated damages and admissibility of electronic exhibits.${strictOutputDirective}`;
     }
   }
 
@@ -143,7 +167,8 @@ Present your courtroom submission now.`
         model: BASETEN_MODEL,
         messages,
         max_tokens: 4000,
-        temperature: 0.6
+        temperature: 0.5,
+        reasoning_effort: 'low'
       })
     });
 
@@ -155,29 +180,35 @@ Present your courtroom submission now.`
     const data = await res.json();
     const choice = data.choices?.[0];
     const message = choice?.message || {};
-    const content = message.content || '';
-    const reasoning = message.reasoning_content || '';
+    let content = message.content || '';
+    let reasoning = message.reasoning_content || '';
 
-    // Clean up content
-    let finalArgument = content.trim();
-    if (finalArgument.startsWith('"') && finalArgument.endsWith('"')) {
-      finalArgument = finalArgument.slice(1, -1).trim();
-    }
-
-    // If content is empty because reasoning consumed tokens, extract any quoted draft from reasoning
-    if (!finalArgument && reasoning) {
-      const quoteMatches = reasoning.match(/"([^"]{40,})"/g);
-      if (quoteMatches && quoteMatches.length > 0) {
-        finalArgument = quoteMatches[quoteMatches.length - 1].replace(/^"|"$/g, '').trim();
+    // If <think> tags exist inside content, cleanly isolate them into reasoning
+    if (content.includes('<think>')) {
+      const thinkMatch = content.match(/<think>([\s\S]*?)<\/think>/i);
+      if (thinkMatch) {
+        if (!reasoning) reasoning = thinkMatch[1].trim();
+        content = content.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
       }
     }
 
-    // Filter out accidental scratchpad or counting lines
-    const isScratchpad =
-      !finalArgument ||
-      /^(let's|count sentences|sentence \d|check for|that's \d|we need to|draft:)/i.test(finalArgument);
+    // Clean up content
+    let finalArgument = cleanCourtroomArgument(content);
 
-    if (isScratchpad) {
+    // If content was empty or only scratchpad, inspect reasoning for the actual quoted dialogue
+    if (!finalArgument && reasoning) {
+      const quoteMatches = Array.from(reasoning.matchAll(/"([^"]{30,})"/g)).map((m: any) => m[1]);
+      for (let i = quoteMatches.length - 1; i >= 0; i--) {
+        const candidate = cleanCourtroomArgument(quoteMatches[i]);
+        if (candidate && !isScratchpadText(candidate)) {
+          finalArgument = candidate;
+          break;
+        }
+      }
+    }
+
+    // Final sanity check against any meta-scratchpad leakage
+    if (isScratchpadText(finalArgument)) {
       if (caseType.toLowerCase().includes('constitutional')) {
         finalArgument =
           speakerRole === 'magistrate_judge'
@@ -195,10 +226,10 @@ Present your courtroom submission now.`
       } else {
         finalArgument =
           speakerRole === 'magistrate_judge'
-            ? 'ORDER OF THE BENCH: Having evaluated the pleadings and digital records under Section 63 BSA, the objection is OVERRULED. The matter stands posted for decree formalization.'
+            ? 'ORDER OF THE BENCH: Having evaluated the pleadings and digital records under Section 63 of Bharatiya Sakshya Adhiniyam, 2023, the preliminary objection is sustained in part. The matter stands posted for decree formalization.'
             : speakerRole === 'petitioner_counsel'
-            ? 'May it please Your Lordship, the record conclusively establishes breach of legal obligations under statutory provisions, entitling the Petitioner to immediate decree.'
-            : 'Objection, Your Honour! The Petitioner has failed to satisfy the mandatory threshold requirements established under settled Supreme Court jurisprudence.';
+            ? 'May it please Your Lordship, the record conclusively establishes breach of legal obligations under statutory provisions, entitling the Petitioner to an immediate decree.'
+            : 'Objection, Your Honour! The Petitioner has failed to satisfy the mandatory evidentiary threshold requirements established under settled Supreme Court jurisprudence.';
       }
     }
 
