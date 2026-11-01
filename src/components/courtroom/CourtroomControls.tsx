@@ -60,8 +60,8 @@ export const CourtroomControls: React.FC<CourtroomControlsProps> = ({
           onClick={() => setScreenSharing(!screenSharing)}
           className={`p-3 rounded-xl border transition-all ${
             screenSharing
-              ? 'bg-amber-950/80 border-amber-500 text-amber-300'
-              : 'bg-slate-900 border-slate-700 text-slate-200 hover:bg-slate-800'
+              ? 'bg-zinc-800 border-white text-white'
+              : 'bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-zinc-800'
           }`}
           title="Share Screen / Evidence Presentation"
         >
@@ -71,7 +71,7 @@ export const CourtroomControls: React.FC<CourtroomControlsProps> = ({
         {/* Upload Document */}
         <button
           onClick={onUploadDoc}
-          className="p-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-amber-400 transition-all"
+          className="p-3 rounded-xl bg-zinc-900 border border-zinc-700 text-zinc-200 hover:bg-zinc-800 hover:text-white transition-all"
           title="Upload Legal Document / Affidavit"
         >
           <Upload className="w-5 h-5" />
@@ -82,8 +82,8 @@ export const CourtroomControls: React.FC<CourtroomControlsProps> = ({
           onClick={onToggleChat}
           className={`p-3 rounded-xl border transition-all ${
             isChatOpen
-              ? 'bg-blue-900/60 border-blue-600 text-blue-300'
-              : 'bg-slate-900 border-slate-700 text-slate-200 hover:bg-slate-800'
+              ? 'bg-zinc-800 border-zinc-500 text-white'
+              : 'bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-zinc-800'
           }`}
           title="Toggle Courtroom Chat Transcript"
         >
@@ -103,8 +103,8 @@ export const CourtroomControls: React.FC<CourtroomControlsProps> = ({
       </div>
 
       {/* Right placeholder */}
-      <div className="hidden md:flex items-center gap-2 text-xs text-amber-400 font-medium">
-        <Shield className="w-4 h-4" />
+      <div className="hidden md:flex items-center gap-2 text-xs text-zinc-300 font-medium">
+        <Shield className="w-4 h-4 text-white" />
         <span>Court Registry Verified</span>
       </div>
     </div>

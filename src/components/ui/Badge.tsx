@@ -21,10 +21,10 @@ export const Badge: React.FC<BadgeProps> = ({
 
   const variantStyles = {
     blue: 'bg-zinc-100 text-zinc-950 font-bold border border-zinc-300',
-    emerald: 'bg-zinc-950 text-emerald-400 border border-emerald-800/80 font-mono',
+    emerald: 'bg-zinc-900 text-zinc-100 border border-zinc-700 font-mono font-medium',
     amber: 'bg-white text-black font-extrabold border border-zinc-300',
     court: 'bg-white text-black font-extrabold border border-zinc-200 shadow-sm',
-    rose: 'bg-zinc-950 text-red-400 border border-red-800/80 font-mono',
+    rose: 'bg-zinc-950 text-zinc-300 border border-zinc-700 font-mono',
     slate: 'bg-zinc-900 text-zinc-300 border border-zinc-700',
     gold: 'bg-white text-black font-extrabold border border-zinc-200 shadow-sm',
   };

@@ -86,7 +86,7 @@ export default function TextCourtroomListPage() {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-zinc-800">
           <div className="space-y-2 max-w-3xl">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-zinc-900 border border-zinc-700 text-amber-400">
+              <span className="px-2.5 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-zinc-900 border border-zinc-700 text-zinc-300 font-bold">
                 Ministry of Law & Justice • e-Courts Sovereign Grid
               </span>
               <span className="text-xs text-zinc-400 font-mono flex items-center gap-1">
@@ -95,7 +95,7 @@ export default function TextCourtroomListPage() {
               </span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <Scale className="w-8 h-8 text-amber-400" />
+              <Scale className="w-8 h-8 text-white" />
               Indian Judicial Bench & Courtroom Directory
             </h1>
             <p className="text-sm text-zinc-300 leading-relaxed">
@@ -108,14 +108,14 @@ export default function TextCourtroomListPage() {
           <div className="flex flex-wrap items-center gap-3">
             <Button
               variant="outline"
-              icon={<HelpCircle className="w-4 h-4 text-amber-400" />}
+              icon={<HelpCircle className="w-4 h-4 text-white" />}
               onClick={() => setShowHelperModal(true)}
-              className="border-zinc-700 hover:border-amber-400 text-xs"
+              className="border-zinc-700 hover:border-white text-xs"
             >
               Which Court Should I Approach?
             </Button>
             <Link href="/cases/new">
-              <Button variant="gold" icon={<Plus className="w-4 h-4 text-black" />} className="text-xs">
+              <Button variant="primary" icon={<Plus className="w-4 h-4 text-black" />} className="text-xs">
                 File New Case Petition
               </Button>
             </Link>
@@ -126,14 +126,14 @@ export default function TextCourtroomListPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-mono uppercase tracking-wider text-zinc-300 flex items-center gap-2 font-bold">
-              <Building2 className="w-4 h-4 text-amber-400" />
+              <Building2 className="w-4 h-4 text-white" />
               Constitutional & Statutory Court Forums of India
             </h2>
             <button
               onClick={() => setSelectedForum('All')}
               className={`text-xs font-mono px-3 py-1 rounded transition-all ${
                 selectedForum === 'All' 
-                  ? 'bg-amber-400 text-black font-bold' 
+                  ? 'bg-white text-black font-extrabold' 
                   : 'text-zinc-400 hover:text-white bg-zinc-900 border border-zinc-800'
               }`}
             >
@@ -152,13 +152,13 @@ export default function TextCourtroomListPage() {
                   onClick={() => setSelectedForum(isSelected ? 'All' : forum.name)}
                   className={`p-4 rounded-xl border cursor-pointer transition-all flex flex-col justify-between space-y-3 relative group ${
                     isSelected
-                      ? 'bg-zinc-900/90 border-amber-400 shadow-lg shadow-amber-500/10'
+                      ? 'bg-zinc-900 border-white shadow-lg shadow-white/5'
                       : 'bg-[#0a0a0a] border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/50'
                   }`}
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-950 border border-zinc-800 text-amber-400/90 font-bold">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-950 border border-zinc-800 text-zinc-200 font-bold">
                         Tier 0{idx + 1}
                       </span>
                       <span className="text-[10px] font-mono text-zinc-400">
@@ -167,10 +167,10 @@ export default function TextCourtroomListPage() {
                     </div>
 
                     <div>
-                      <h3 className="font-bold text-sm text-white group-hover:text-amber-300 transition-colors flex items-center gap-1.5">
+                      <h3 className="font-bold text-sm text-white group-hover:text-zinc-200 transition-colors flex items-center gap-1.5">
                         {forum.shortName}
                       </h3>
-                      <div className="text-[11px] text-amber-400/80 font-mono mt-0.5">
+                      <div className="text-[11px] text-zinc-400 font-mono mt-0.5">
                         {forum.emblemTag}
                       </div>
                     </div>
@@ -182,7 +182,7 @@ export default function TextCourtroomListPage() {
 
                   <div className="pt-2 border-t border-zinc-800/80 flex items-center justify-between text-[10px] font-mono text-zinc-400">
                     <span>{forum.jurisdictionScope}</span>
-                    <span className="text-amber-400 group-hover:translate-x-0.5 transition-transform">
+                    <span className="text-white font-semibold group-hover:translate-x-0.5 transition-transform">
                       {isSelected ? 'Selected' : 'Select Bench →'}
                     </span>
                   </div>
@@ -208,7 +208,7 @@ export default function TextCourtroomListPage() {
           <div className="flex items-center gap-2 self-end sm:self-center">
             {selectedForum !== 'All' && (
               <span className="text-[11px] font-mono text-zinc-400 flex items-center gap-1">
-                Filtering by: <span className="text-amber-400 font-bold">{selectedForum}</span>
+                Filtering by: <span className="text-white font-bold">{selectedForum}</span>
                 <button
                   onClick={() => setSelectedForum('All')}
                   className="ml-1 text-zinc-400 hover:text-white"
@@ -242,19 +242,19 @@ export default function TextCourtroomListPage() {
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-2 flex-wrap">
-                    <span className="text-[11px] font-mono font-bold text-amber-400 px-2.5 py-0.5 rounded bg-zinc-950 border border-zinc-800">
+                    <span className="text-[11px] font-mono font-bold text-white px-2.5 py-0.5 rounded bg-zinc-950 border border-zinc-800">
                       {c.caseNumber}
                     </span>
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] font-mono text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
                         {c.courtLevel}
                       </span>
-                      <Badge variant="amber">{c.status}</Badge>
+                      <Badge variant="court">{c.status}</Badge>
                     </div>
                   </div>
 
                   <div>
-                    <h3 className="text-base font-bold text-white hover:text-amber-300 transition-colors">
+                    <h3 className="text-base font-bold text-white hover:text-zinc-300 transition-colors">
                       {c.title}
                     </h3>
                     <p className="text-xs text-zinc-300 mt-1 line-clamp-2 leading-relaxed">
@@ -296,7 +296,7 @@ export default function TextCourtroomListPage() {
                   </div>
 
                   <Link href={`/text-courtroom/${c.id}`}>
-                    <Button variant="gold" size="sm" icon={<MessageSquare className="w-3.5 h-3.5" />}>
+                    <Button variant="primary" size="sm" icon={<MessageSquare className="w-3.5 h-3.5" />}>
                       Enter Virtual Courtroom
                     </Button>
                   </Link>
@@ -312,7 +312,7 @@ export default function TextCourtroomListPage() {
             <div className="w-full max-w-2xl bg-zinc-950 border border-zinc-700 rounded-2xl p-6 space-y-5 shadow-2xl">
               <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
                 <div className="flex items-center gap-2">
-                  <Scale className="w-5 h-5 text-amber-400" />
+                  <Scale className="w-5 h-5 text-white" />
                   <h3 className="text-lg font-bold text-white">Jurisdictional Guidance: Which Court to Approach?</h3>
                 </div>
                 <button
@@ -336,13 +336,13 @@ export default function TextCourtroomListPage() {
                       setSelectedForum(item.forum);
                       setShowHelperModal(false);
                     }}
-                    className="p-3.5 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-amber-400/80 hover:bg-zinc-850 cursor-pointer transition-all space-y-1.5 group"
+                    className="p-3.5 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-white hover:bg-zinc-850 cursor-pointer transition-all space-y-1.5 group"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-sm text-white group-hover:text-amber-300 transition-colors">
+                      <span className="font-bold text-sm text-white group-hover:text-zinc-200 transition-colors">
                         {item.label}
                       </span>
-                      <span className="text-[11px] font-mono text-amber-400 bg-black px-2 py-0.5 rounded border border-zinc-800">
+                      <span className="text-[11px] font-mono text-white bg-black px-2 py-0.5 rounded border border-zinc-700 font-bold">
                         {item.forum}
                       </span>
                     </div>

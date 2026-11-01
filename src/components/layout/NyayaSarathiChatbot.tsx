@@ -140,18 +140,18 @@ I am here to guide you with:
 
       {/* Chatbot Window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-4 sm:right-6 w-[94vw] sm:w-[420px] h-[580px] max-h-[85vh] z-50 bg-[#0a0a0a] border border-amber-500/40 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-scale-in backdrop-blur-xl">
+        <div className="fixed bottom-24 right-4 sm:right-6 w-[94vw] sm:w-[420px] h-[580px] max-h-[85vh] z-50 bg-[#0a0a0a] border border-zinc-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-scale-in backdrop-blur-xl">
           
           {/* Header */}
           <div className="p-4 bg-gradient-to-r from-black via-zinc-950 to-zinc-900 border-b border-zinc-800 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-400/40 flex items-center justify-center text-amber-400 shadow-md">
+              <div className="w-9 h-9 rounded-xl bg-zinc-900 border border-zinc-700 flex items-center justify-center text-white shadow-md">
                 <Scale className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
                   <h3 className="font-bold text-sm text-white font-serif">न्याय सारथी (Nyaya Sarathi)</h3>
-                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-950 border border-emerald-600 text-emerald-300">
+                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-zinc-900 border border-zinc-700 text-zinc-300">
                     Online
                   </span>
                 </div>
@@ -172,14 +172,14 @@ I am here to guide you with:
                     }
                   ]);
                 }}
-                className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
                 title="Restart Chat"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
                 title="Close"
               >
                 <X className="w-4 h-4" />
@@ -193,7 +193,7 @@ I am here to guide you with:
               <button
                 key={i}
                 onClick={() => handleSend(faq.prompt)}
-                className="px-2.5 py-1 rounded-md bg-zinc-900 border border-zinc-800 hover:border-amber-400/60 text-zinc-300 hover:text-white shrink-0 transition-colors"
+                className="px-2.5 py-1 rounded-md bg-zinc-900 border border-zinc-800 hover:border-zinc-500 text-zinc-300 hover:text-white shrink-0 transition-colors cursor-pointer"
               >
                 {faq.title}
               </button>
@@ -219,7 +219,7 @@ I am here to guide you with:
                     className={`p-3.5 rounded-xl max-w-[88%] leading-relaxed whitespace-pre-wrap ${
                       isAssistant
                         ? 'bg-zinc-900/90 border border-zinc-800 text-zinc-200 shadow-sm'
-                        : 'bg-amber-400 text-black font-medium shadow-md shadow-amber-500/10'
+                        : 'bg-white text-black font-medium shadow-md'
                     }`}
                   >
                     {m.content}
@@ -230,7 +230,7 @@ I am here to guide you with:
 
             {loading && (
               <div className="flex items-center gap-2 p-3 rounded-xl bg-zinc-900/70 border border-zinc-800 text-zinc-400 text-xs font-mono max-w-[70%]">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                <span className="w-2 h-2 rounded-full bg-white animate-ping" />
                 <span>Nyaya Sarathi is consulting judicial records...</span>
               </div>
             )}

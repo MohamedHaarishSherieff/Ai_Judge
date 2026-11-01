@@ -133,7 +133,7 @@ export const ForensicEvidenceViewer: React.FC<ForensicEvidenceViewerProps> = ({
       {/* Top Bar Header */}
       <div className="px-5 py-3.5 bg-black border-b border-zinc-800 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <Badge variant="gold" className="font-mono">{evidence.evidenceCode || 'EXHIBIT-P01'}</Badge>
+          <Badge variant="court" className="font-mono">{evidence.evidenceCode || 'EXHIBIT-P01'}</Badge>
           <span className="font-bold text-white text-sm">{evidence.title}</span>
           <span className="text-xs text-zinc-400 font-mono">({evidence.category})</span>
         </div>
@@ -169,7 +169,7 @@ export const ForensicEvidenceViewer: React.FC<ForensicEvidenceViewerProps> = ({
 
           <Button
             size="sm"
-            variant="gold"
+            variant="primary"
             icon={<Sparkles className="w-3.5 h-3.5 text-black" />}
             onClick={handleRunAnalysis}
             loading={isInspecting}
@@ -247,18 +247,18 @@ export const ForensicEvidenceViewer: React.FC<ForensicEvidenceViewerProps> = ({
                   }}
                   className={`absolute cursor-pointer transition-all duration-200 rounded group flex items-start justify-start p-1 ${
                     isSelected
-                      ? 'border-2 border-amber-400 bg-amber-500/25 ring-4 ring-amber-400/20 z-20'
+                      ? 'border-2 border-white bg-white/25 ring-4 ring-white/20 z-20'
                       : isCritical
                       ? 'border-2 border-dashed border-red-500/80 bg-red-500/15 hover:bg-red-500/25 z-10'
-                      : 'border-2 border-dashed border-amber-500/80 bg-amber-500/15 hover:bg-amber-500/25 z-10'
+                      : 'border-2 border-dashed border-zinc-400/80 bg-zinc-400/15 hover:bg-zinc-400/25 z-10'
                   }`}
                 >
                   <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded font-bold uppercase shadow-sm ${
                     isSelected
-                      ? 'bg-amber-400 text-slate-950'
+                      ? 'bg-white text-black'
                       : isCritical
                       ? 'bg-red-600 text-white'
-                      : 'bg-amber-600 text-white'
+                      : 'bg-zinc-700 text-white'
                   }`}>
                     {seg.label}
                   </span>
@@ -343,7 +343,7 @@ export const ForensicEvidenceViewer: React.FC<ForensicEvidenceViewerProps> = ({
             )}
 
             <Button
-              variant="gold"
+              variant="primary"
               className="w-full"
               icon={<Shield className="w-4 h-4 text-black" />}
               onClick={() => onAdmitToSession && onAdmitToSession(evidence)}

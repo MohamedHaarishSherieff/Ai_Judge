@@ -78,7 +78,7 @@ export default function LandingPage() {
               {/* CTAs */}
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
                 <Link href="/text-courtroom" className="w-full sm:w-auto">
-                  <Button variant="gold" size="lg" className="w-full sm:w-auto" icon={<MessageSquare className="w-5 h-5 text-black" />}>
+                  <Button variant="primary" size="lg" className="w-full sm:w-auto" icon={<MessageSquare className="w-5 h-5 text-black" />}>
                     Enter Virtual Bench Session
                   </Button>
                 </Link>
@@ -142,7 +142,7 @@ export default function LandingPage() {
                 {/* Entry Action */}
                 <div className="space-y-2.5 pt-1">
                   <Link href="/text-courtroom" className="block">
-                    <Button variant="gold" size="lg" className="w-full justify-between" icon={<MessageSquare className="w-5 h-5 text-black" />}>
+                    <Button variant="primary" size="lg" className="w-full justify-between" icon={<MessageSquare className="w-5 h-5 text-black" />}>
                       <span>Enter Chat Courtroom</span>
                       <ArrowRight className="w-4 h-4 text-black" />
                     </Button>

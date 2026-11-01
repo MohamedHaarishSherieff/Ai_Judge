@@ -27,25 +27,25 @@ export const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-xs font-semibold text-slate-200 uppercase tracking-wider mb-4">Courtroom Platform</h4>
-            <ul className="space-y-2.5 text-xs">
+            <h4 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider mb-4 font-mono">Courtroom Platform</h4>
+            <ul className="space-y-2.5 text-xs text-zinc-400">
               <li>
-                <Link href="/text-courtroom" className="hover:text-amber-400 transition-colors flex items-center gap-1">
+                <Link href="/text-courtroom" className="hover:text-white transition-colors flex items-center gap-1">
                   Text Virtual Courtroom
                 </Link>
               </li>
               <li>
-                <Link href="/video-courtroom" className="hover:text-amber-400 transition-colors flex items-center gap-1">
+                <Link href="/video-courtroom" className="hover:text-white transition-colors flex items-center gap-1">
                   Video Bench Experience
                 </Link>
               </li>
               <li>
-                <Link href="/cases" className="hover:text-amber-400 transition-colors flex items-center gap-1">
+                <Link href="/cases" className="hover:text-white transition-colors flex items-center gap-1">
                   Case Repository & Search
                 </Link>
               </li>
               <li>
-                <Link href="/cases/new" className="hover:text-amber-400 transition-colors flex items-center gap-1">
+                <Link href="/cases/new" className="hover:text-white transition-colors flex items-center gap-1">
                   File New Petition
                 </Link>
               </li>
@@ -54,25 +54,25 @@ export const Footer: React.FC = () => {
 
           {/* Legal Knowledge */}
           <div>
-            <h4 className="text-xs font-semibold text-slate-200 uppercase tracking-wider mb-4">Legal Framework</h4>
-            <ul className="space-y-2.5 text-xs">
+            <h4 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider mb-4 font-mono">Legal Framework</h4>
+            <ul className="space-y-2.5 text-xs text-zinc-400">
               <li>
-                <Link href="/how-it-works" className="hover:text-amber-400 transition-colors">
+                <Link href="/how-it-works" className="hover:text-white transition-colors">
                   Six-Step Digital Process
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-amber-400 transition-colors">
+                <Link href="/about" className="hover:text-white transition-colors">
                   Responsible Legal AI & Vision
                 </Link>
               </li>
               <li>
-                <Link href="/documents" className="hover:text-amber-400 transition-colors">
+                <Link href="/documents" className="hover:text-white transition-colors">
                   Document Authentication (Sec 63 BSA)
                 </Link>
               </li>
               <li>
-                <Link href="/appeals" className="hover:text-amber-400 transition-colors">
+                <Link href="/appeals" className="hover:text-white transition-colors">
                   Appellate High Court Escalations
                 </Link>
               </li>

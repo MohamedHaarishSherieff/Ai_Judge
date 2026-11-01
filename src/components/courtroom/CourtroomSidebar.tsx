@@ -176,8 +176,8 @@ export const CourtroomSidebar: React.FC<CourtroomSidebarProps> = ({
             {evidenceList.map((ev) => (
               <div key={ev.id} className="p-3 bg-slate-900 rounded-lg border border-slate-800 space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-amber-400 font-bold">{ev.evidenceCode}</span>
-                  <Badge variant={ev.status === 'Admissible' ? 'emerald' : 'amber'}>
+                  <span className="font-mono text-white font-bold">{ev.evidenceCode}</span>
+                  <Badge variant={ev.status === 'Admissible' ? 'court' : 'slate'}>
                     {ev.status}
                   </Badge>
                 </div>

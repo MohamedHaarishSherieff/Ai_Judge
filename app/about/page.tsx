@@ -32,7 +32,7 @@ export default function AboutPage() {
               />
             </div>
           </div>
-          <Badge variant="gold">National E-Courts Mission • Autonomous Judicial Architecture</Badge>
+          <Badge variant="court">National E-Courts Mission • Autonomous Judicial Architecture</Badge>
           <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
             Institutional Architecture of AI Judge
           </h1>

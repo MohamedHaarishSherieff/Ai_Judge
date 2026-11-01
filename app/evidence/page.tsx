@@ -66,7 +66,7 @@ export default function EvidenceManagementPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-zinc-800">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <Badge variant="gold">Bharatiya Sakshya Adhiniyam Vault</Badge>
+              <Badge variant="court">Bharatiya Sakshya Adhiniyam Vault</Badge>
               <span className="text-xs text-zinc-400 font-mono">{evidenceList.length} Exhibits Ingested</span>
             </div>
             <h1 className="text-3xl font-extrabold text-white font-serif">Digital Evidence & Forensics Vault</h1>
@@ -75,7 +75,7 @@ export default function EvidenceManagementPage() {
             </p>
           </div>
 
-          <Button variant="gold" icon={<Plus className="w-4 h-4 text-black" />} onClick={() => setIsSubmitModalOpen(true)}>
+          <Button variant="primary" icon={<Plus className="w-4 h-4 text-black" />} onClick={() => setIsSubmitModalOpen(true)}>
             Submit Evidence Record
           </Button>
         </div>
@@ -122,7 +122,7 @@ export default function EvidenceManagementPage() {
               </p>
             </div>
             <Button
-              variant="gold"
+              variant="primary"
               icon={<Sparkles className="w-4 h-4 text-black" />}
               onClick={() => {
                 const demoEv: Evidence = {
@@ -203,21 +203,21 @@ export default function EvidenceManagementPage() {
         <form onSubmit={handleAddEvidence} className="space-y-4 text-xs">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">Exhibit Code</label>
+              <label className="block text-zinc-300 font-semibold mb-1">Exhibit Code</label>
               <input
                 type="text"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 placeholder="e.g. EXHIBIT-P03"
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 font-mono focus:border-amber-500 focus:outline-none"
+                className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 font-mono focus:border-white focus:outline-none"
               />
             </div>
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">Category</label>
+              <label className="block text-zinc-300 font-semibold mb-1">Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as any)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:border-amber-500 focus:outline-none"
+                className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 focus:border-white focus:outline-none"
               >
                 <option value="Digital Forensics">Digital Forensics</option>
                 <option value="Documentary">Documentary</option>
@@ -228,25 +228,25 @@ export default function EvidenceManagementPage() {
           </div>
 
           <div>
-            <label className="block text-slate-300 font-semibold mb-1">Evidence Title</label>
+            <label className="block text-zinc-300 font-semibold mb-1">Evidence Title</label>
             <input
               type="text"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Database Audit SHA-256 Checksum Log"
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:border-amber-500 focus:outline-none"
+              className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 focus:border-white focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-slate-300 font-semibold mb-1">Relevance Summary & Statutory Purpose</label>
+            <label className="block text-zinc-300 font-semibold mb-1">Relevance Summary & Statutory Purpose</label>
             <textarea
               rows={3}
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               placeholder="Explain how this evidence establishes claim or defense under Section 63 BSA..."
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:border-amber-500 focus:outline-none resize-none"
+              className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 focus:border-white focus:outline-none resize-none"
             />
           </div>
 
@@ -254,7 +254,7 @@ export default function EvidenceManagementPage() {
             <Button type="button" variant="ghost" onClick={() => setIsSubmitModalOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" variant="gold" icon={<Shield className="w-4 h-4" />}>
+            <Button type="submit" variant="primary" icon={<Shield className="w-4 h-4" />}>
               Submit to Evidence Vault
             </Button>
           </div>

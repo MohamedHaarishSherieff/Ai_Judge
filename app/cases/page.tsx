@@ -59,34 +59,34 @@ export default function CasesDashboardPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-zinc-800">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <Badge variant="gold">National Judicial Data Grid • Chambers Repository</Badge>
+              <Badge variant="court">National Judicial Data Grid • Chambers Repository</Badge>
               <span className="text-xs text-zinc-400 font-mono">{filteredCases.length} Causes Listed</span>
             </div>
-            <h1 className="text-3xl font-extrabold text-white">Chambers Cause List & Case Vault</h1>
+            <h1 className="text-3xl font-extrabold text-white font-serif">Chambers Cause List & Case Vault</h1>
             <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Search, filter, and litigate electronic petitions, automated hearing transcripts, and certified decrees.
             </p>
           </div>
 
           <Link href="/cases/new">
-            <Button variant="gold" icon={<Plus className="w-4 h-4 text-black" />}>
+            <Button variant="primary" icon={<Plus className="w-4 h-4 text-black" />}>
               File Digital Petition
             </Button>
           </Link>
         </div>
 
         {/* Filter & Search Toolbar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 bg-zinc-950/90 backdrop-blur-md rounded-xl border border-zinc-800 text-xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 bg-zinc-950 rounded-xl border border-zinc-800 text-xs">
           
           {/* Search Input */}
           <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by case title, #AJ ID, or case number..."
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500"
+              className="w-full bg-black border border-zinc-700 rounded-lg pl-9 pr-4 py-2 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-white"
             />
           </div>
 
@@ -94,11 +94,11 @@ export default function CasesDashboardPage() {
           <div className="flex items-center gap-3 flex-wrap">
             {/* Status Filter */}
             <div className="flex items-center gap-1.5">
-              <span className="text-slate-400 font-semibold">Status:</span>
+              <span className="text-zinc-400 font-semibold font-mono">Status:</span>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="bg-slate-900 text-slate-200 border border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-amber-500 cursor-pointer"
+                className="bg-black text-zinc-200 border border-zinc-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-white cursor-pointer font-mono"
               >
                 <option value="All">All Statuses</option>
                 <option value="Draft">Draft</option>
@@ -112,11 +112,11 @@ export default function CasesDashboardPage() {
 
             {/* Type Filter */}
             <div className="flex items-center gap-1.5">
-              <span className="text-slate-400 font-semibold">Type:</span>
+              <span className="text-zinc-400 font-semibold font-mono">Type:</span>
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="bg-slate-900 text-slate-200 border border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-amber-500 cursor-pointer"
+                className="bg-black text-zinc-200 border border-zinc-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-white cursor-pointer font-mono"
               >
                 <option value="All">All Case Types</option>
                 <option value="Criminal Matter">Criminal Matter</option>
@@ -128,17 +128,17 @@ export default function CasesDashboardPage() {
             </div>
 
             {/* View Grid/Table Toggle Buttons */}
-            <div className="flex items-center bg-slate-900 p-1 rounded-lg border border-slate-800">
+            <div className="flex items-center bg-black p-1 rounded-lg border border-zinc-800">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-1.5 rounded ${viewMode === 'grid' ? 'bg-amber-500/20 text-amber-300' : 'text-slate-400 hover:text-white'}`}
+                className={`p-1.5 rounded transition-colors ${viewMode === 'grid' ? 'bg-white text-black font-bold shadow-sm' : 'text-zinc-400 hover:text-white'}`}
                 title="Grid View"
               >
                 <LayoutGrid className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setViewMode('table')}
-                className={`p-1.5 rounded ${viewMode === 'table' ? 'bg-amber-500/20 text-amber-300' : 'text-slate-400 hover:text-white'}`}
+                className={`p-1.5 rounded transition-colors ${viewMode === 'table' ? 'bg-white text-black font-bold shadow-sm' : 'text-zinc-400 hover:text-white'}`}
                 title="Table View"
               >
                 <List className="w-4 h-4" />
@@ -238,7 +238,7 @@ export default function CasesDashboardPage() {
                           </Button>
                         </Link>
                         <Link href={`/cases/${c.id}`}>
-                          <Button variant="gold" size="sm">
+                          <Button variant="primary" size="sm">
                             Open
                           </Button>
                         </Link>

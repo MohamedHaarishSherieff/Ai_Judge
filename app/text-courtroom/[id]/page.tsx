@@ -354,13 +354,13 @@ export default function TextCourtroomSessionPage() {
         <div className="flex-1 flex flex-col min-w-0 bg-[#080808]/90 backdrop-blur-sm">
           
           {/* Top Bar Control for Mobile Sidebar */}
-          <div className="lg:hidden flex items-center justify-between px-4 py-2 bg-slate-950 border-b border-slate-800 text-xs text-slate-400">
+          <div className="lg:hidden flex items-center justify-between px-4 py-2 bg-black border-b border-zinc-800 text-xs text-zinc-400">
             <span className="font-mono flex items-center gap-1">
-              <Users className="w-3.5 h-3.5 text-amber-400" /> Courtroom Info & Vault
+              <Users className="w-3.5 h-3.5 text-white" /> Courtroom Info & Vault
             </span>
             <button
               onClick={() => setMobileSidebarOpen(true)}
-              className="flex items-center gap-1 px-2.5 py-1 rounded bg-slate-900 border border-slate-700 text-amber-400 font-medium"
+              className="flex items-center gap-1 px-2.5 py-1 rounded bg-zinc-900 border border-zinc-700 text-white font-medium"
             >
               <PanelRightOpen className="w-3.5 h-3.5" /> View Case Record
             </button>
@@ -481,16 +481,16 @@ export default function TextCourtroomSessionPage() {
               value={newDocName}
               onChange={(e) => setNewDocName(e.target.value)}
               placeholder="e.g. Client_Pleading_Affidavit.pdf"
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-500 focus:border-amber-500 focus:outline-none"
+              className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 placeholder-zinc-500 focus:border-white focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-slate-300 font-semibold mb-1">Document Type</label>
+            <label className="block text-zinc-300 font-semibold mb-1">Document Type</label>
             <select
               value={newDocType}
               onChange={(e) => setNewDocType(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:border-amber-500 focus:outline-none"
+              className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 focus:border-white focus:outline-none"
             >
               <option value="Petition">Petition / Writ</option>
               <option value="Written Statement">Written Statement</option>
@@ -499,17 +499,17 @@ export default function TextCourtroomSessionPage() {
             </select>
           </div>
 
-          <div className="p-4 border-2 border-dashed border-slate-700 rounded-xl bg-slate-950 text-center space-y-2">
-            <Upload className="w-8 h-8 text-amber-400 mx-auto" />
-            <div className="text-slate-300 font-medium">Click or drag file to attach</div>
-            <div className="text-[11px] text-slate-500">Sec 63 BSA Hash Checksum Enabled</div>
+          <div className="p-4 border-2 border-dashed border-zinc-700 rounded-xl bg-zinc-950 text-center space-y-2">
+            <Upload className="w-8 h-8 text-white mx-auto" />
+            <div className="text-zinc-300 font-medium">Click or drag file to attach</div>
+            <div className="text-[11px] text-zinc-500">Sec 63 BSA Hash Checksum Enabled</div>
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="ghost" onClick={() => setDocModalOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" variant="gold" icon={<Upload className="w-4 h-4" />}>
+            <Button type="submit" variant="primary" icon={<Upload className="w-4 h-4" />}>
               Attach to Session
             </Button>
           </div>
@@ -523,21 +523,21 @@ export default function TextCourtroomSessionPage() {
         title="Submit Evidence Record"
       >
         <div className="space-y-4 text-xs">
-          <div className="p-3 bg-emerald-950/30 border border-emerald-500/30 rounded-lg text-emerald-300 space-y-1">
-            <div className="font-bold flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Section 63 BSA Hash Verification Active
+          <div className="p-3 bg-zinc-900 border border-zinc-700 rounded-lg text-zinc-200 space-y-1">
+            <div className="font-bold flex items-center gap-1.5 text-white">
+              <CheckCircle2 className="w-4 h-4 text-white" /> Section 63 BSA Hash Verification Active
             </div>
-            <p className="text-[11px] text-emerald-200/80">
+            <p className="text-[11px] text-zinc-400">
               Evidence items are cryptographically hashed and appended to the session record.
             </p>
           </div>
 
           <div>
-            <label className="block text-slate-300 font-semibold mb-1">Evidence Title</label>
+            <label className="block text-zinc-300 font-semibold mb-1">Evidence Title</label>
             <input
               type="text"
               placeholder="e.g. Digital_Record_Audit.json"
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-500 focus:border-amber-500 focus:outline-none"
+              className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 placeholder-zinc-500 focus:border-white focus:outline-none"
             />
           </div>
 
@@ -547,7 +547,7 @@ export default function TextCourtroomSessionPage() {
             </Button>
             <Button 
               type="button" 
-              variant="gold" 
+              variant="primary" 
               onClick={() => {
                 setEvidenceModalOpen(false);
                 handleSendMessage("Submitted evidence item into the session record.", "Petitioner Counsel", undefined, "Evidence Citation");
@@ -784,7 +784,7 @@ export default function TextCourtroomSessionPage() {
             <div className="text-[11px] text-zinc-500 font-mono">
               Certified Digitally Signed Copy • Ministry of Law & Justice, Govt. of India
             </div>
-            <Button variant="gold" onClick={() => setJudgmentModalOpen(false)}>
+            <Button variant="primary" onClick={() => setJudgmentModalOpen(false)}>
               Affirm & Close Record
             </Button>
           </div>

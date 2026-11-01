@@ -60,11 +60,11 @@ export default function SettingsPage() {
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-left transition-all ${
                     activeTab === tab.id
-                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                      ? 'bg-white text-black font-extrabold shadow-sm'
+                      : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
                   }`}
                 >
-                  <Icon className="w-4 h-4 text-amber-400 shrink-0" />
+                  <Icon className={`w-4 h-4 shrink-0 ${activeTab === tab.id ? 'text-black' : 'text-zinc-400'}`} />
                   <span>{tab.label}</span>
                 </button>
               );
@@ -73,10 +73,10 @@ export default function SettingsPage() {
 
           {/* Right Main Form Area */}
           <div className="lg:col-span-9">
-            <Card variant="court" className="p-8 border-slate-800">
+            <Card variant="court" className="p-8 border-zinc-800">
               {saved && (
-                <div className="mb-6 p-3 bg-emerald-950/50 border border-emerald-500/40 rounded-xl text-emerald-300 text-xs flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <div className="mb-6 p-3 bg-zinc-900 border border-zinc-700 rounded-xl text-white text-xs flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-white" />
                   <span>Settings updated successfully!</span>
                 </div>
               )}
@@ -85,47 +85,47 @@ export default function SettingsPage() {
                 
                 {activeTab === 'profile' && (
                   <div className="space-y-4">
-                    <h3 className="text-base font-bold text-white border-b border-slate-800 pb-3">Legal Profile Details</h3>
+                    <h3 className="text-base font-bold text-white border-b border-zinc-800 pb-3">Legal Profile Details</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-slate-300 font-semibold mb-1">Advocate Full Name</label>
+                        <label className="block text-zinc-300 font-semibold mb-1">Advocate Full Name</label>
                         <input
                           type="text"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-slate-100 focus:border-amber-500 focus:outline-none"
+                          className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3.5 py-2.5 text-zinc-100 focus:border-white focus:outline-none"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-slate-300 font-semibold mb-1">Email Address</label>
+                        <label className="block text-zinc-300 font-semibold mb-1">Email Address</label>
                         <input
                           type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-slate-100 focus:border-amber-500 focus:outline-none"
+                          className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3.5 py-2.5 text-zinc-100 focus:border-white focus:outline-none"
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-slate-300 font-semibold mb-1">Chambers / Law Firm</label>
+                        <label className="block text-zinc-300 font-semibold mb-1">Chambers / Law Firm</label>
                         <input
                           type="text"
                           value={org}
                           onChange={(e) => setOrg(e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-slate-100 focus:border-amber-500 focus:outline-none"
+                          className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3.5 py-2.5 text-zinc-100 focus:border-white focus:outline-none"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-slate-300 font-semibold mb-1">Bar Registration Number</label>
+                        <label className="block text-zinc-300 font-semibold mb-1">Bar Registration Number</label>
                         <input
                           type="text"
                           value={barId}
                           onChange={(e) => setBarId(e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-slate-100 focus:border-amber-500 focus:outline-none font-mono"
+                          className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3.5 py-2.5 text-zinc-100 focus:border-white focus:outline-none font-mono"
                         />
                       </div>
                     </div>
@@ -134,7 +134,7 @@ export default function SettingsPage() {
 
                 {activeTab === 'notifications' && (
                   <div className="space-y-4">
-                    <h3 className="text-base font-bold text-white border-b border-slate-800 pb-3">Hearing & Bench Notifications</h3>
+                    <h3 className="text-base font-bold text-white border-b border-zinc-800 pb-3">Hearing & Bench Notifications</h3>
                     <div className="space-y-3 text-xs">
                       {[
                         'Email alerts when AI Presiding Judge opens virtual session',
@@ -142,9 +142,9 @@ export default function SettingsPage() {
                         'Appellate High Court stay application updates',
                         'Daily cause list digest'
                       ].map((item, i) => (
-                        <label key={i} className="flex items-center gap-3 p-3 bg-slate-950 rounded-lg border border-slate-800 cursor-pointer">
-                          <input type="checkbox" defaultChecked className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 bg-slate-900 border-slate-700" />
-                          <span className="text-slate-200">{item}</span>
+                        <label key={i} className="flex items-center gap-3 p-3 bg-zinc-950 rounded-lg border border-zinc-800 cursor-pointer">
+                          <input type="checkbox" defaultChecked className="w-4 h-4 rounded text-black focus:ring-white bg-zinc-900 border-zinc-700" />
+                          <span className="text-zinc-200">{item}</span>
                         </label>
                       ))}
                     </div>
@@ -153,17 +153,17 @@ export default function SettingsPage() {
 
                 {activeTab === 'appearance' && (
                   <div className="space-y-4">
-                    <h3 className="text-base font-bold text-white border-b border-slate-800 pb-3">Appearance & Judicial Theme</h3>
-                    <p className="text-slate-300 text-xs">Select preferred contrast mode for virtual courtroom sessions.</p>
+                    <h3 className="text-base font-bold text-white border-b border-zinc-800 pb-3">Appearance & Judicial Theme</h3>
+                    <p className="text-zinc-300 text-xs">Select preferred contrast mode for virtual courtroom sessions.</p>
                     <div className="grid grid-cols-3 gap-4 text-xs font-bold">
-                      <div className="p-4 bg-slate-950 border-2 border-amber-500 rounded-xl text-center text-amber-400">
-                        Dark Judicial Navy (Active)
+                      <div className="p-4 bg-zinc-950 border-2 border-white rounded-xl text-center text-white">
+                        Sovereign Black & White (Active)
                       </div>
-                      <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center text-slate-400 opacity-60">
-                        High Contrast Slate
+                      <div className="p-4 bg-zinc-900 border border-zinc-800 rounded-xl text-center text-zinc-400 opacity-60">
+                        High Contrast Monochrome
                       </div>
-                      <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center text-slate-400 opacity-60">
-                        System Preference
+                      <div className="p-4 bg-zinc-900 border border-zinc-800 rounded-xl text-center text-zinc-400 opacity-60">
+                        Institutional Minimalist
                       </div>
                     </div>
                   </div>
@@ -171,19 +171,19 @@ export default function SettingsPage() {
 
                 {(activeTab === 'account' || activeTab === 'privacy' || activeTab === 'security') && (
                   <div className="space-y-4">
-                    <h3 className="text-base font-bold text-white border-b border-slate-800 pb-3">Security & Role Access</h3>
-                    <p className="text-slate-300 text-xs">
+                    <h3 className="text-base font-bold text-white border-b border-zinc-800 pb-3">Security & Role Access</h3>
+                    <p className="text-zinc-300 text-xs">
                       Two-factor authentication (2FA) via hardware security key or mobile OTP is enabled for all bar-certified advocate logins.
                     </p>
-                    <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 text-xs text-emerald-400 font-mono flex items-center justify-between">
+                    <div className="p-4 bg-zinc-950 rounded-xl border border-zinc-800 text-xs text-white font-mono flex items-center justify-between">
                       <span>Status: Hardware 2FA Active</span>
-                      <Badge variant="emerald">Verified Advocate</Badge>
+                      <Badge variant="court">Verified Advocate</Badge>
                     </div>
                   </div>
                 )}
 
-                <div className="pt-4 border-t border-slate-800 flex justify-end">
-                  <Button type="submit" variant="gold" icon={<Save className="w-4 h-4" />}>
+                <div className="pt-4 border-t border-zinc-800 flex justify-end">
+                  <Button type="submit" variant="primary" icon={<Save className="w-4 h-4" />}>
                     Save System Settings
                   </Button>
                 </div>

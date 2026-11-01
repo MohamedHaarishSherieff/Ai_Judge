@@ -25,7 +25,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     : 'bg-[#080808] border border-zinc-800 shadow-sm';
 
   const badgeVariant = isJudge
-    ? 'gold'
+    ? 'court'
     : isPetitioner
     ? 'court'
     : isRespondent

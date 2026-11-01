@@ -96,7 +96,7 @@ export default function DocumentManagementPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-zinc-800">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <Badge variant="gold">Section 63 BSA Digital Evidence Repository</Badge>
+              <Badge variant="court">Section 63 BSA Digital Evidence Repository</Badge>
               <span className="text-xs text-zinc-400 font-mono">{documents.length} Records Authenticated</span>
             </div>
             <h1 className="text-3xl font-extrabold text-white">Chambers Document & Affidavit Vault</h1>
@@ -105,7 +105,7 @@ export default function DocumentManagementPage() {
             </p>
           </div>
 
-          <Button variant="gold" icon={<Upload className="w-4 h-4 text-black" />} onClick={() => setIsUploadModalOpen(true)}>
+          <Button variant="primary" icon={<Upload className="w-4 h-4 text-black" />} onClick={() => setIsUploadModalOpen(true)}>
             Lodge Digital Affidavit
           </Button>
         </div>
@@ -199,24 +199,24 @@ export default function DocumentManagementPage() {
       >
         <form onSubmit={handleUploadSubmit} className="space-y-4 text-xs">
           <div>
-            <label className="block text-slate-300 font-semibold mb-1">Document File Name</label>
+            <label className="block text-zinc-300 font-semibold mb-1">Document File Name</label>
             <input
               type="text"
               required
               value={newDocName}
               onChange={(e) => setNewDocName(e.target.value)}
               placeholder="e.g. Counter_Affidavit_In_Reply.pdf"
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-500 focus:border-amber-500 focus:outline-none"
+              className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 placeholder-zinc-500 focus:border-white focus:outline-none"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">Category Type</label>
+              <label className="block text-zinc-300 font-semibold mb-1">Category Type</label>
               <select
                 value={newDocType}
                 onChange={(e) => setNewDocType(e.target.value as any)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:border-amber-500 focus:outline-none"
+                className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 focus:border-white focus:outline-none"
               >
                 <option value="Petition">Petition</option>
                 <option value="Written Statement">Written Statement</option>
@@ -225,36 +225,36 @@ export default function DocumentManagementPage() {
               </select>
             </div>
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">Format</label>
-              <input type="text" value="PDF/A (Sec 63 BSA)" disabled className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-slate-400 font-mono" />
+              <label className="block text-zinc-300 font-semibold mb-1">Format</label>
+              <input type="text" value="PDF/A (Sec 63 BSA)" disabled className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-zinc-400 font-mono" />
             </div>
           </div>
 
           <div>
-            <label className="block text-slate-300 font-semibold mb-1">Brief Description</label>
+            <label className="block text-zinc-300 font-semibold mb-1">Brief Description</label>
             <textarea
               rows={2}
               value={newDocDescription}
               onChange={(e) => setNewDocDescription(e.target.value)}
               placeholder="Detail document contents and attached exhibits..."
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-500 focus:border-amber-500 focus:outline-none resize-none"
+              className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 placeholder-zinc-500 focus:border-white focus:outline-none resize-none"
             />
           </div>
 
-          <div className="p-6 border-2 border-dashed border-slate-700 rounded-xl bg-slate-950 text-center space-y-2">
-            <Upload className="w-8 h-8 text-amber-400 mx-auto" />
-            <div className="text-slate-200 font-semibold">Drag & Drop PDF File Here</div>
-            <div className="text-[11px] text-slate-500">Includes SHA-256 cryptographic checksum calculation</div>
+          <div className="p-6 border-2 border-dashed border-zinc-700 rounded-xl bg-zinc-950 text-center space-y-2">
+            <Upload className="w-8 h-8 text-white mx-auto" />
+            <div className="text-zinc-200 font-semibold">Drag & Drop PDF File Here</div>
+            <div className="text-[11px] text-zinc-500">Includes SHA-256 cryptographic checksum calculation</div>
           </div>
 
           {isUploading && (
             <div className="space-y-1">
-              <div className="flex justify-between text-[11px] font-mono text-amber-400">
+              <div className="flex justify-between text-[11px] font-mono text-white">
                 <span>Calculating Sec 63 BSA Hash...</span>
                 <span>{uploadProgress}%</span>
               </div>
-              <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden">
-                <div className="bg-amber-500 h-full transition-all duration-200" style={{ width: `${uploadProgress}%` }} />
+              <div className="w-full bg-zinc-900 h-2 rounded-full overflow-hidden">
+                <div className="bg-white h-full transition-all duration-200" style={{ width: `${uploadProgress}%` }} />
               </div>
             </div>
           )}
@@ -263,7 +263,7 @@ export default function DocumentManagementPage() {
             <Button type="button" variant="ghost" onClick={() => setIsUploadModalOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" variant="gold" disabled={isUploading} icon={<Upload className="w-4 h-4" />}>
+            <Button type="submit" variant="primary" disabled={isUploading} icon={<Upload className="w-4 h-4" />}>
               {isUploading ? 'Uploading...' : 'Upload & Verify'}
             </Button>
           </div>

@@ -28,7 +28,7 @@ export default function VideoCourtroomPage() {
           </div>
 
           <div className="space-y-3">
-            <Badge variant="gold">National E-Courts Phase IV Feature</Badge>
+            <Badge variant="court">National E-Courts Phase IV Feature</Badge>
             <h1 className="text-3xl font-extrabold text-white">Multimodal Video Courtroom</h1>
             <p className="text-sm sm:text-base text-zinc-300 max-w-lg mx-auto leading-relaxed">
               Real-time video feed integration with multimodal facial forensic analysis and live speech-to-text stenography is currently undergoing security audits under Section 63 BSA.
@@ -42,7 +42,7 @@ export default function VideoCourtroomPage() {
 
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/text-courtroom" className="w-full sm:w-auto">
-              <Button variant="gold" size="lg" className="w-full" icon={<MessageSquare className="w-5 h-5 text-black" />}>
+              <Button variant="primary" size="lg" className="w-full" icon={<MessageSquare className="w-5 h-5 text-black" />}>
                 Enter Virtual Courtroom
               </Button>
             </Link>

@@ -21,8 +21,8 @@ export default function JudgmentViewerPage() {
       <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-8 w-full">
         
         {/* Top Control Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
-          <Link href={`/cases/${j.caseId}`} className="flex items-center gap-2 text-xs text-amber-400 font-semibold hover:underline">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-800">
+          <Link href={`/cases/${j.caseId}`} className="flex items-center gap-2 text-xs text-zinc-300 font-semibold hover:text-white hover:underline">
             <ArrowLeft className="w-4 h-4" /> Back to Case Summary
           </Link>
 
@@ -30,22 +30,22 @@ export default function JudgmentViewerPage() {
             <Button variant="outline" size="sm" icon={<Printer className="w-4 h-4" />} onClick={() => window.print()}>
               Print Decree
             </Button>
-            <Button variant="gold" size="sm" icon={<Download className="w-4 h-4" />}>
+            <Button variant="primary" size="sm" icon={<Download className="w-4 h-4" />}>
               Download Official PDF/A
             </Button>
           </div>
         </div>
 
         {/* Demo Judgment Notice */}
-        <div className="p-3 bg-amber-950/30 border border-amber-500/40 rounded-xl text-amber-300 text-xs flex items-center justify-between">
+        <div className="p-3 bg-zinc-900 border border-zinc-700 rounded-xl text-zinc-200 text-xs flex items-center justify-between">
           <span className="font-semibold flex items-center gap-1.5">
-            <Gavel className="w-4 h-4 text-amber-400" /> DEMONSTRATION JUDICIAL DECREE SYNTHESIS
+            <Gavel className="w-4 h-4 text-white" /> DEMONSTRATION JUDICIAL DECREE SYNTHESIS
           </span>
-          <span className="font-mono text-[11px] text-amber-400/90">Public Key Verified: 0x8F9A...4B21</span>
+          <span className="font-mono text-[11px] text-zinc-400">Public Key Verified: 0x8F9A...4B21</span>
         </div>
 
         {/* Formal Judicial Document Box */}
-        <div className="judicial-document p-8 sm:p-14 rounded-2xl space-y-8 border-4 border-amber-900/30 shadow-2xl relative overflow-hidden">
+        <div className="judicial-document p-8 sm:p-14 rounded-2xl space-y-8 border-4 border-zinc-300 shadow-2xl relative overflow-hidden">
           
           {/* Watermark Emblem Background */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-5 pointer-events-none">
@@ -55,7 +55,7 @@ export default function JudgmentViewerPage() {
           {/* Document Header */}
           <div className="text-center space-y-3 pb-8 border-b-2 border-slate-900">
             <div className="flex justify-center">
-              <div className="w-16 h-16 rounded-full bg-slate-900 text-amber-400 flex items-center justify-center border-2 border-amber-600 shadow-md">
+              <div className="w-16 h-16 rounded-full bg-black text-white flex items-center justify-center border-2 border-zinc-800 shadow-md">
                 <Gavel className="w-8 h-8" />
               </div>
             </div>
@@ -155,8 +155,8 @@ export default function JudgmentViewerPage() {
           </div>
 
           {/* Section: Final Order */}
-          <div className="p-6 bg-amber-50 border-2 border-amber-800 rounded-xl space-y-3 text-slate-950 font-serif">
-            <h2 className="text-base font-bold uppercase tracking-wider text-amber-900 border-b border-amber-800 pb-1">
+          <div className="p-6 bg-zinc-100 border-2 border-zinc-900 rounded-xl space-y-3 text-slate-950 font-serif">
+            <h2 className="text-base font-bold uppercase tracking-wider text-black border-b-2 border-black pb-1">
               VII. FINAL JUDICIAL ORDER & DECREE
             </h2>
             <p className="text-sm font-bold leading-relaxed">{j.finalOrder}</p>
@@ -168,7 +168,7 @@ export default function JudgmentViewerPage() {
               <div className="font-bold text-sm text-slate-950">{j.judgeSignature}</div>
               <div>Bench Cryptographic Seal • SHA-256 Verified</div>
             </div>
-            <div className="p-3 bg-slate-900 text-amber-400 rounded-lg border border-amber-600 font-mono text-center">
+            <div className="p-3 bg-black text-white rounded-lg border border-zinc-700 font-mono text-center">
               DIGITAL SEAL ATTESTED
             </div>
           </div>

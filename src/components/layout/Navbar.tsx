@@ -83,7 +83,7 @@ export const Navbar: React.FC = () => {
           {/* Direct CTA - No Login Barrier */}
           <div className="hidden lg:flex items-center gap-3">
             <Link href="/text-courtroom">
-              <Button variant="gold" size="sm" icon={<MessageSquare className="w-4 h-4" />}>
+              <Button variant="primary" size="sm" icon={<MessageSquare className="w-4 h-4" />}>
                 Enter Chat Courtroom
               </Button>
             </Link>
@@ -115,11 +115,11 @@ export const Navbar: React.FC = () => {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center gap-3 px-4 py-2.5 text-base font-medium rounded-lg ${
                       isActive
-                        ? 'bg-slate-800 text-amber-400 font-semibold'
-                        : 'text-slate-300 hover:bg-slate-900'
+                        ? 'bg-zinc-900 text-white font-bold border border-zinc-700'
+                        : 'text-zinc-300 hover:bg-zinc-900 hover:text-white'
                     }`}
                   >
-                    <Icon className="w-5 h-5 text-amber-400" />
+                    <Icon className="w-5 h-5 text-white" />
                     {link.name}
                   </Link>
                 );
@@ -129,16 +129,16 @@ export const Navbar: React.FC = () => {
                   setMobileMenuOpen(false);
                   setVideoModalOpen(true);
                 }}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-base font-medium rounded-lg text-slate-400 hover:bg-slate-900"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-base font-medium rounded-lg text-zinc-400 hover:bg-zinc-900 hover:text-white"
               >
-                <Video className="w-5 h-5 text-slate-500" />
-                Video Courtroom (Not Ready)
+                <Video className="w-5 h-5 text-zinc-500" />
+                Video Courtroom
               </button>
             </div>
 
-            <div className="pt-4 border-t border-slate-800">
+            <div className="pt-4 border-t border-zinc-800">
               <Link href="/text-courtroom" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="gold" className="w-full justify-center" icon={<MessageSquare className="w-4 h-4" />}>
+                <Button variant="primary" className="w-full justify-center" icon={<MessageSquare className="w-4 h-4" />}>
                   Enter Chat Courtroom
                 </Button>
               </Link>

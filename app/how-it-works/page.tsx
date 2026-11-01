@@ -119,28 +119,28 @@ export default function HowItWorksPage() {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <Badge variant="gold">Step-By-Step Workflow Guide</Badge>
+          <Badge variant="court">Step-By-Step Workflow Guide</Badge>
           <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
             How AI Judge Works
           </h1>
-          <p className="text-base text-slate-300 leading-relaxed font-sans">
+          <p className="text-base text-zinc-300 leading-relaxed font-sans">
             Explore the 6-stage lifecycle of a virtual case—from initial digital filing to final judicial decree synthesis and appellate review.
           </p>
         </div>
 
         {/* Interactive Step Navigator */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-2 bg-slate-950 p-2 rounded-xl border border-slate-800">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-2 bg-zinc-950 p-2 rounded-xl border border-zinc-800">
           {stepsDetail.map((s, idx) => (
             <button
               key={idx}
               onClick={() => setActiveStep(idx)}
               className={`p-3 rounded-lg text-left transition-all ${
                 activeStep === idx
-                  ? 'bg-amber-500/15 border border-amber-500/40 text-amber-300 font-bold shadow'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                  ? 'bg-white text-black font-extrabold shadow'
+                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
               }`}
             >
-              <div className="text-[10px] font-mono font-bold text-amber-400">STEP {s.step}</div>
+              <div className={`text-[10px] font-mono font-bold ${activeStep === idx ? 'text-zinc-700' : 'text-zinc-400'}`}>STEP {s.step}</div>
               <div className="text-xs font-semibold truncate">{s.title}</div>
             </button>
           ))}
@@ -151,21 +151,21 @@ export default function HowItWorksPage() {
           const current = stepsDetail[activeStep];
           const Icon = current.icon;
           return (
-            <Card variant="court" className="p-8 lg:p-10 border-slate-800 space-y-8 animate-in fade-in duration-300">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-800">
+            <Card variant="court" className="p-8 lg:p-10 border-zinc-800 space-y-8 animate-in fade-in duration-300">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-zinc-800">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
+                  <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-700 flex items-center justify-center text-white shrink-0">
                     <Icon className="w-7 h-7" />
                   </div>
                   <div>
-                    <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">STAGE {current.step} OF 06</span>
+                    <span className="text-xs font-mono font-bold text-zinc-400 uppercase tracking-widest">STAGE {current.step} OF 06</span>
                     <h2 className="text-2xl sm:text-3xl font-extrabold text-white">{current.title}</h2>
-                    <p className="text-xs text-slate-400">{current.subtitle}</p>
+                    <p className="text-xs text-zinc-400">{current.subtitle}</p>
                   </div>
                 </div>
 
                 <Link href={current.ctaHref}>
-                  <Button variant="gold" icon={<ArrowRight className="w-4 h-4" />}>
+                  <Button variant="primary" icon={<ArrowRight className="w-4 h-4" />}>
                     {current.ctaText}
                   </Button>
                 </Link>
@@ -173,18 +173,18 @@ export default function HowItWorksPage() {
 
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div className="lg:col-span-7 space-y-4">
-                  <h3 className="text-base font-bold text-slate-100">Overview & Purpose</h3>
-                  <p className="text-sm text-slate-300 leading-relaxed font-sans">{current.desc}</p>
+                  <h3 className="text-base font-bold text-zinc-100">Overview & Purpose</h3>
+                  <p className="text-sm text-zinc-300 leading-relaxed font-sans">{current.desc}</p>
                 </div>
 
-                <div className="lg:col-span-5 bg-slate-950/80 p-5 rounded-xl border border-slate-800 space-y-3">
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4" /> Key Procedural Actions
+                <div className="lg:col-span-5 bg-zinc-950/80 p-5 rounded-xl border border-zinc-800 space-y-3">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-white flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-zinc-400" /> Key Procedural Actions
                   </h3>
-                  <ul className="space-y-2 text-xs text-slate-300">
+                  <ul className="space-y-2 text-xs text-zinc-300">
                     {current.details.map((d, i) => (
                       <li key={i} className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-4 h-4 text-white shrink-0 mt-0.5" />
                         <span>{d}</span>
                       </li>
                     ))}
