@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Case, Document, Evidence, Hearing } from '@/types';
-import { Users, FileText, Shield, AlertCircle, History, BookOpen, ChevronRight, ChevronDown, X, ExternalLink } from 'lucide-react';
+import { Users, FileText, Shield, AlertCircle, History, BookOpen, ChevronRight, ChevronDown, X, ExternalLink, Landmark } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import Link from 'next/link';
 
@@ -13,6 +13,7 @@ interface CourtroomSidebarProps {
   hearings: Hearing[];
   isOpenMobile?: boolean;
   onCloseMobile?: () => void;
+  onSwitchCourtForum?: () => void;
 }
 
 export const CourtroomSidebar: React.FC<CourtroomSidebarProps> = ({
@@ -22,6 +23,7 @@ export const CourtroomSidebar: React.FC<CourtroomSidebarProps> = ({
   hearings,
   isOpenMobile = false,
   onCloseMobile,
+  onSwitchCourtForum,
 }) => {
   const [activeTab, setActiveTab] = useState<'info' | 'docs' | 'evidence' | 'hearings'>('info');
 
@@ -79,10 +81,22 @@ export const CourtroomSidebar: React.FC<CourtroomSidebarProps> = ({
           <>
             {/* Summary & Court */}
             <div className="space-y-2">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-amber-400">Jurisdiction & Forum</span>
-              <div className="p-3 bg-slate-900 rounded-lg border border-slate-800 space-y-1">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-amber-400 flex items-center justify-between">
+                <span>Jurisdiction & Forum</span>
+                <span className="text-[9px] font-mono text-zinc-400 bg-zinc-800 px-1.5 py-0.5 rounded">8 Courts</span>
+              </span>
+              <div className="p-3 bg-slate-900 rounded-lg border border-slate-800 space-y-2">
                 <div className="font-semibold text-slate-200">{caseData.courtLevel}</div>
                 <div className="text-slate-400 text-[11px]">{caseData.benchInfo}</div>
+                {onSwitchCourtForum && (
+                  <button
+                    onClick={onSwitchCourtForum}
+                    className="w-full mt-2 py-1.5 px-3 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/50 hover:border-amber-400 font-mono text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all shadow-md group"
+                  >
+                    <Landmark className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform" />
+                    Switch Court Forum (8 Indian Courts)
+                  </button>
+                )}
               </div>
             </div>
 

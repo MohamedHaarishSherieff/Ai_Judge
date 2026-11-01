@@ -10,8 +10,8 @@ import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { Message, SenderRole, Case, Evidence, IndianCourtForum, AdvocateRepresentationMode } from '@/types';
 import { ForensicEvidenceViewer } from '@/components/courtroom/ForensicEvidenceViewer';
-import { MOCK_CASES, MOCK_JUDGMENT } from '@/data/mockData';
-import { PanelRightOpen, Shield, FileText, Upload, Sparkles, Gavel, CheckCircle2, Users, Play, Square, Scale, Eye } from 'lucide-react';
+import { MOCK_CASES, MOCK_JUDGMENT, INDIAN_COURT_FORUMS } from '@/data/mockData';
+import { PanelRightOpen, Shield, FileText, Upload, Sparkles, Gavel, CheckCircle2, Users, Play, Square, Scale, Eye, Landmark } from 'lucide-react';
 
 export default function TextCourtroomSessionPage() {
   const params = useParams();
@@ -43,6 +43,7 @@ export default function TextCourtroomSessionPage() {
   const [isSynthesizingDecree, setIsSynthesizingDecree] = useState(false);
   const [modalDecreeData, setModalDecreeData] = useState<any>(null);
   const [activeForensicExhibit, setActiveForensicExhibit] = useState<Evidence | null>(null);
+  const [switchCourtModalOpen, setSwitchCourtModalOpen] = useState(false);
 
   // Advocate representation modes (Strictly AI Judge, but advocates can be AI or Real Human)
   const [petitionerMode, setPetitionerMode] = useState<AdvocateRepresentationMode>('ai');
@@ -419,6 +420,16 @@ export default function TextCourtroomSessionPage() {
                 </button>
               </div>
 
+              <button
+                type="button"
+                onClick={() => setSwitchCourtModalOpen(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-amber-300 border border-amber-500/60 hover:border-amber-400 font-mono text-xs font-bold transition-all shadow-md group"
+                title="Click to switch among all 8 Indian Court Forums"
+              >
+                <Landmark className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform" />
+                <span>Court: <span className="text-white underline">{caseData.courtLevel}</span> (Switch)</span>
+              </button>
+
               <Button
                 size="sm"
                 variant="court"
@@ -501,6 +512,7 @@ export default function TextCourtroomSessionPage() {
           hearings={[]}
           isOpenMobile={mobileSidebarOpen}
           onCloseMobile={() => setMobileSidebarOpen(false)}
+          onSwitchCourtForum={() => setSwitchCourtModalOpen(true)}
         />
       </div>
 
@@ -827,6 +839,73 @@ export default function TextCourtroomSessionPage() {
           </div>
         </div>
       </Modal>
+
+      {/* Switch Court Forum Modal (8 Courts of India) */}
+      {switchCourtModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fade-in">
+          <div className="w-full max-w-2xl bg-zinc-950 border border-zinc-700 rounded-2xl p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
+              <div className="flex items-center gap-2">
+                <Landmark className="w-5 h-5 text-amber-400" />
+                <h3 className="text-base font-bold text-white font-serif">Transfer Proceeding to Another Judicial Forum</h3>
+              </div>
+              <button
+                onClick={() => setSwitchCourtModalOpen(false)}
+                className="text-zinc-400 hover:text-white font-mono text-lg"
+              >
+                ✕
+              </button>
+            </div>
+
+            <p className="text-xs text-zinc-300">
+              Select one of the 8 constitutional or statutory court forums of India to transfer this virtual bench session:
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[55vh] overflow-y-auto pr-1">
+              {INDIAN_COURT_FORUMS.map((f) => {
+                const isCurrent = caseData.courtLevel === f.name;
+                return (
+                  <div
+                    key={f.id}
+                    onClick={() => {
+                      handleSwitchCourtForum(f.name);
+                      setSwitchCourtModalOpen(false);
+                    }}
+                    className={`p-3.5 rounded-xl border cursor-pointer transition-all space-y-1.5 ${
+                      isCurrent
+                        ? 'bg-amber-950/40 border-amber-400 shadow-md shadow-amber-500/10'
+                        : 'bg-zinc-900 border-zinc-800 hover:border-zinc-600 hover:bg-zinc-850'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-xs text-white">{f.shortName}</span>
+                      {isCurrent ? (
+                        <span className="text-[10px] text-amber-400 font-mono font-bold flex items-center gap-1">
+                          <CheckCircle2 className="w-3 h-3" /> Active
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-zinc-500 font-mono">Select →</span>
+                      )}
+                    </div>
+                    <div className="text-[11px] text-zinc-400 leading-snug line-clamp-2">
+                      {f.description}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="pt-2 border-t border-zinc-800 flex justify-end">
+              <button
+                onClick={() => setSwitchCourtModalOpen(false)}
+                className="px-3.5 py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 text-xs text-zinc-300 hover:text-white"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
