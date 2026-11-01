@@ -98,16 +98,16 @@ export const CourtroomSidebar: React.FC<CourtroomSidebarProps> = ({
               </span>
               <div className="space-y-2">
                 {caseData.parties.map((p) => (
-                  <div key={p.id} className="p-2.5 bg-slate-900 rounded-lg border border-slate-800">
+                  <div key={p.id} className="p-2.5 bg-zinc-950 rounded-lg border border-zinc-800 space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-slate-100">{p.name}</span>
-                      <Badge variant={p.role === 'Petitioner' || p.role === 'Prosecution' ? 'blue' : 'emerald'}>
+                      <span className="font-bold text-white">{p.name}</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 text-zinc-300 border border-zinc-700 font-semibold">
                         {p.role}
-                      </Badge>
+                      </span>
                     </div>
                     {p.advocateName && (
-                      <div className="text-[11px] text-slate-400 mt-1">
-                        Advocate: <span className="text-slate-200">{p.advocateName}</span>{p.barCouncilNo ? ` (${p.barCouncilNo})` : ''}
+                      <div className="text-[11px] text-zinc-400 font-mono">
+                        Advocate: <span className="text-zinc-200">{p.advocateName}</span>{p.barCouncilNo ? ` (${p.barCouncilNo})` : ''}
                       </div>
                     )}
                   </div>

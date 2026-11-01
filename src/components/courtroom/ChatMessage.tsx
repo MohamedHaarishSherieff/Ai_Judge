@@ -51,43 +51,28 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-sm font-extrabold text-white">{message.sender}</span>
+              <span className="text-sm font-bold text-white font-serif">{message.sender}</span>
               {isJudge ? (
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white text-black font-extrabold flex items-center gap-1">
-                  <Gavel className="w-3 h-3 text-black" /> AI Presiding Judge (Autonomous Bench)
-                </span>
-              ) : message.isHumanCounsel ? (
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-600 text-zinc-200 font-bold flex items-center gap-1">
-                  <User className="w-3 h-3 text-zinc-300" /> Real Human Advocate
+                  <Gavel className="w-3 h-3 text-black" /> Bench Adjudication
                 </span>
               ) : (
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-950 border border-zinc-700 text-zinc-300 font-bold flex items-center gap-1">
-                  <Cpu className="w-3 h-3 text-zinc-400" /> AI Counsel (Muse Spark)
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-zinc-300 font-medium flex items-center gap-1">
+                  {message.isHumanCounsel ? <User className="w-3 h-3 text-zinc-300" /> : <Cpu className="w-3 h-3 text-zinc-400" />}
+                  {message.isHumanCounsel ? 'Human Advocate' : 'AI Legal Counsel'}
                 </span>
               )}
-              <Badge variant={badgeVariant} size="sm">
-                {message.senderRole}
-              </Badge>
             </div>
-            {isJudge ? (
-              <span className="text-[11px] text-zinc-400 font-mono flex items-center gap-1 mt-0.5">
-                <Scale className="w-3 h-3 text-white" /> Sovereign Judicial Bench Adjudicator
-              </span>
-            ) : message.barEnrollmentNumber ? (
-              <span className="text-[11px] text-zinc-400 font-mono flex items-center gap-1 mt-0.5">
-                Bar Reg: {message.barEnrollmentNumber}
-              </span>
-            ) : null}
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           {message.category && (
-            <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 text-zinc-300 border border-zinc-800">
               {message.category}
             </span>
           )}
-          <span className="text-xs text-slate-400 font-mono">{message.timestamp}</span>
+          <span className="text-xs text-zinc-500 font-mono">{message.timestamp}</span>
         </div>
       </div>
 

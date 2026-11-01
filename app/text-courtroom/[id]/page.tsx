@@ -366,9 +366,10 @@ export default function TextCourtroomSessionPage() {
             </button>
           </div>
 
-          {/* Courtroom AI Action & Advocate Configuration Bar */}
-          <div className="px-4 py-2 bg-[#000000] border-b border-zinc-800 flex items-center justify-between gap-3 text-xs flex-wrap">
-            <div className="flex items-center gap-2 flex-wrap">
+          {/* Courtroom Clean 1-Line Action Toolbar */}
+          <div className="px-4 py-2.5 bg-[#000000] border-b border-zinc-800 flex items-center justify-between gap-3 text-xs">
+            {/* Left Action Buttons */}
+            <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={handleRunAdversarialTrial}
@@ -379,10 +380,8 @@ export default function TextCourtroomSessionPage() {
                 <span>{isSimulatingDebate ? 'Litigating Debate (Muse Spark)...' : 'Simulate Adversarial Trial (Muse Spark)'}</span>
               </button>
 
-              <Button
-                size="sm"
-                variant="court"
-                icon={<FileText className="w-3.5 h-3.5 text-zinc-300" />}
+              <button
+                type="button"
                 onClick={() => {
                   const demoEv: Evidence = {
                     id: `ev-${caseData.id}`,
@@ -404,71 +403,25 @@ export default function TextCourtroomSessionPage() {
                   };
                   setActiveForensicExhibit(demoEv);
                 }}
-                className="bg-zinc-950 text-zinc-200 hover:text-white border border-zinc-800 hover:border-zinc-600"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-950 text-zinc-300 hover:text-white border border-zinc-800 hover:border-zinc-600 transition-colors cursor-pointer"
               >
-                {caseData.type.includes('Constitutional')
-                  ? 'Examine Writ Record (Art 32)'
-                  : caseData.type.includes('Criminal')
-                  ? 'Examine Chargesheet (BNSS 173)'
-                  : caseData.type.includes('Civil')
-                  ? 'Examine Injunction Plaint (CPC)'
-                  : 'Inspect Evidence & Seal (Sec 63 BSA)'}
-              </Button>
-
-              {/* Advocate Selection Toggles: Strictly Black & White Theme */}
-              <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-zinc-950 border border-zinc-800 text-[11px] font-mono">
-                <span className="text-zinc-500 font-bold uppercase text-[9px]">Bench:</span>
-                <span className="text-white font-bold bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-700 flex items-center gap-1">
-                  <Gavel className="w-3 h-3 text-white" /> AI Judge
+                <FileText className="w-3.5 h-3.5 text-zinc-400" />
+                <span>
+                  {caseData.type.includes('Constitutional')
+                    ? 'Examine Writ Record (Art 32)'
+                    : caseData.type.includes('Criminal')
+                    ? 'Examine Chargesheet (BNSS 173)'
+                    : 'Examine Record (Sec 63 BSA)'}
                 </span>
-
-                <span className="text-zinc-700">|</span>
-
-                <span className="text-zinc-400">Petitioner:</span>
-                <button
-                  type="button"
-                  onClick={() => setPetitionerMode(petitionerMode === 'ai' ? 'real' : 'ai')}
-                  className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold transition-all cursor-pointer ${
-                    petitionerMode === 'real'
-                      ? 'bg-white text-black shadow-sm'
-                      : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
-                  }`}
-                  title="Click to toggle between AI Lawyer and Real Human Lawyer"
-                >
-                  {petitionerMode === 'real' ? '👤 Real Lawyer' : '🤖 AI Lawyer'}
-                </button>
-
-                <span className="text-zinc-700">|</span>
-
-                <span className="text-zinc-400">Respondent:</span>
-                <button
-                  type="button"
-                  onClick={() => setRespondentMode(respondentMode === 'ai' ? 'real' : 'ai')}
-                  className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold transition-all cursor-pointer ${
-                    respondentMode === 'real'
-                      ? 'bg-white text-black shadow-sm'
-                      : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
-                  }`}
-                  title="Click to toggle between AI Lawyer and Real Human Lawyer"
-                >
-                  {respondentMode === 'real' ? '👤 Real Lawyer' : '🤖 AI Lawyer'}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-950 border border-zinc-800 text-[10px] font-mono text-zinc-300">
-                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                Muse Spark Open • Online
-              </span>
+              </button>
 
               <button
                 type="button"
                 onClick={handleOpenDecreeModal}
                 disabled={isSynthesizingDecree}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs border border-zinc-700 hover:border-white transition-all cursor-pointer active:scale-95 disabled:opacity-50"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-950 text-zinc-300 hover:text-white border border-zinc-800 hover:border-zinc-600 transition-colors cursor-pointer disabled:opacity-50"
               >
-                <Gavel className="w-3.5 h-3.5 text-white" />
+                <Gavel className="w-3.5 h-3.5 text-zinc-400" />
                 <span>
                   {caseData.type.includes('Constitutional')
                     ? 'Synthesize Writ Order (Art 142)'
@@ -477,6 +430,14 @@ export default function TextCourtroomSessionPage() {
                     : 'Synthesize Decree (Order XX CPC)'}
                 </span>
               </button>
+            </div>
+
+            {/* Right Status Indicator */}
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-950 border border-zinc-800 text-[10px] font-mono text-zinc-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                Meta Muse Spark • Live
+              </span>
             </div>
           </div>
 

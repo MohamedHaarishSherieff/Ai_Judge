@@ -52,179 +52,137 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   };
 
   return (
-    <div className="w-full bg-[#000000] border-t border-zinc-800 p-3 sm:p-4 space-y-3">
-      {/* Quick Prompts */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
-        <span className="text-zinc-400 text-[11px] font-mono font-semibold uppercase tracking-wider shrink-0 mr-1">Bench Submissions:</span>
+    <div className="w-full bg-[#000000] border-t border-zinc-800 p-3 sm:p-4 space-y-2.5">
+      {/* Quick Prompts - Minimalist Motion Pills */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-0.5 text-xs no-scrollbar">
+        <span className="text-zinc-500 text-[10px] font-mono uppercase tracking-wider shrink-0">Motions:</span>
         <button
-          onClick={() => handleQuickPrompt("May it please the Court, representing our client, we submit our opening argument under Section 63 BSA...", "Argument")}
-          className="px-2.5 py-1 rounded-md bg-[#0a0a0a] border border-zinc-700 hover:border-white text-zinc-300 hover:text-white shrink-0 transition-colors"
+          type="button"
+          onClick={() => handleQuickPrompt("May it please the Bench, on behalf of our client, we present preliminary submissions on statutory admissibility...", "Argument")}
+          className="px-2.5 py-0.5 rounded-full bg-zinc-950 border border-zinc-800 hover:border-zinc-500 text-zinc-300 hover:text-white shrink-0 text-[11px] font-mono transition-colors"
         >
-          + Submit Opening Argument for Client
+          + Opening Plea
         </button>
         <button
-          onClick={() => handleQuickPrompt("Objection, Your Honour! The opposing counsel's submission lacks verified electronic record certification under BSA Section 63.", "Argument")}
-          className="px-2.5 py-1 rounded-md bg-[#0a0a0a] border border-zinc-700 hover:border-white text-zinc-300 hover:text-white shrink-0 transition-colors"
+          type="button"
+          onClick={() => handleQuickPrompt("Objection, Your Honour! The opposing counsel's submission lacks electronic record certification under Section 63 BSA.", "Argument")}
+          className="px-2.5 py-0.5 rounded-full bg-zinc-950 border border-zinc-800 hover:border-zinc-500 text-zinc-300 hover:text-white shrink-0 text-[11px] font-mono transition-colors"
         >
-          + Raise Statutory Objection
+          + Raise Objection
         </button>
         <button
-          onClick={() => handleQuickPrompt("We cite statutory precedent under Bharatiya Nyaya Sanhita (BNS) and request preliminary directions from the Bench.", "Citation")}
-          className="px-2.5 py-1 rounded-md bg-[#0a0a0a] border border-zinc-700 hover:border-white text-zinc-300 hover:text-white shrink-0 transition-colors"
+          type="button"
+          onClick={() => handleQuickPrompt("We cite binding Supreme Court precedent and request preliminary directions from the Bench.", "Citation")}
+          className="px-2.5 py-0.5 rounded-full bg-zinc-950 border border-zinc-800 hover:border-zinc-500 text-zinc-300 hover:text-white shrink-0 text-[11px] font-mono transition-colors"
         >
-          + Cite BNS / BSA Precedent
+          + Cite Precedent
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-3">
-        {/* Role & Representation Choice Bar */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 text-xs bg-[#0c0c0c] p-2.5 rounded-lg border border-zinc-800">
-          
-          {/* Submitting Advocate Persona */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-zinc-300 font-semibold flex items-center gap-1">
-              <User className="w-3.5 h-3.5 text-white" /> Side:
-            </span>
-            <select
-              value={activeRole}
-              onChange={(e) => setActiveRole(e.target.value as any)}
-              className="bg-black text-white font-semibold border border-zinc-700 rounded px-2.5 py-1 focus:outline-none focus:border-white cursor-pointer"
-            >
-              <option value="Petitioner Counsel">Advocate 1 (Petitioner Counsel)</option>
-              <option value="Respondent Counsel">Advocate 2 (Respondent Counsel)</option>
-            </select>
+      <form onSubmit={handleSubmit} className="space-y-2">
+        {/* Unified Input Box */}
+        <div className="bg-zinc-950 border border-zinc-800 rounded-xl p-3 focus-within:border-zinc-600 transition-colors shadow-lg">
+          <textarea
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
+            placeholder="Type legal argument, statutory plea, or response on behalf of your client (Press Enter to submit)..."
+            rows={2}
+            className="w-full bg-transparent text-white placeholder-zinc-500 text-xs focus:outline-none resize-none leading-relaxed"
+          />
 
-            {/* AI Lawyer vs Real Human Lawyer Toggle */}
-            <div className="flex items-center gap-1.5 ml-1 bg-black p-0.5 rounded border border-zinc-800">
+          {/* Submissions Control Footer */}
+          <div className="flex items-center justify-between pt-2.5 border-t border-zinc-900 gap-2 flex-wrap text-xs">
+            {/* Counsel Selection */}
+            <div className="flex items-center gap-2">
+              <span className="text-zinc-500 text-[11px] font-mono">Pleading As:</span>
+              <select
+                value={activeRole}
+                onChange={(e) => setActiveRole(e.target.value as any)}
+                className="bg-black text-white text-xs font-semibold border border-zinc-800 rounded-lg px-2.5 py-1 focus:outline-none focus:border-zinc-600 cursor-pointer"
+              >
+                <option value="Petitioner Counsel">Advocate 1 (Petitioner)</option>
+                <option value="Respondent Counsel">Advocate 2 (Respondent)</option>
+              </select>
+
+              <div className="flex items-center gap-1 bg-black p-0.5 rounded-lg border border-zinc-800">
+                <button
+                  type="button"
+                  onClick={() => setIsHumanAdvocate(false)}
+                  className={`px-2 py-0.5 rounded text-[10px] font-mono transition-all ${
+                    !isHumanAdvocate ? 'bg-white text-black font-extrabold shadow-sm' : 'text-zinc-400 hover:text-white'
+                  }`}
+                  title="Switch to AI Legal Counsel"
+                >
+                  🤖 AI Counsel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsHumanAdvocate(true)}
+                  className={`px-2 py-0.5 rounded text-[10px] font-mono transition-all ${
+                    isHumanAdvocate ? 'bg-white text-black font-extrabold shadow-sm' : 'text-zinc-400 hover:text-white'
+                  }`}
+                  title="Switch to Real Human Lawyer"
+                >
+                  👤 Human Lawyer
+                </button>
+              </div>
+            </div>
+
+            {/* Voice, Attachments & Submit */}
+            <div className="flex items-center gap-1.5">
               <button
                 type="button"
-                onClick={() => setIsHumanAdvocate(true)}
-                className={`px-2.5 py-1 rounded text-[11px] font-mono font-medium transition-all ${
-                  isHumanAdvocate ? 'bg-white text-black font-extrabold shadow-sm' : 'text-zinc-400 hover:text-white'
+                onClick={() => {
+                  if (!isRecording) {
+                    setIsRecording(true);
+                  } else {
+                    setIsRecording(false);
+                    setText(prev => (prev ? `${prev} ` : '') + "[Oral Testimony via Muse Voice Transcribe]: May it please the Bench, we verbally affirm on behalf of our client that the digital record has been verified under Sec 63 BSA.");
+                  }
+                }}
+                title={isRecording ? "Stop Recording (Muse Voice Transcribe)" : "Record Oral Testimony"}
+                className={`p-1.5 rounded-lg border transition-all ${
+                  isRecording
+                    ? 'bg-red-500/20 border-red-500 text-red-400 animate-pulse'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-900 border-transparent'
                 }`}
               >
-                👤 Real Human Lawyer
+                {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              </button>
+
+              <button
+                type="button"
+                onClick={onOpenDocumentModal}
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors"
+                title="Attach Document / Pleading"
+              >
+                <FileText className="w-4 h-4" />
               </button>
               <button
                 type="button"
-                onClick={() => setIsHumanAdvocate(false)}
-                className={`px-2.5 py-1 rounded text-[11px] font-mono font-medium transition-all ${
-                  !isHumanAdvocate ? 'bg-white text-black font-extrabold shadow-sm' : 'text-zinc-400 hover:text-white'
-                }`}
+                onClick={onOpenEvidenceModal}
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors"
+                title="Attach Forensic Evidence"
               >
-                🤖 AI Legal Counsel
+                <Shield className="w-4 h-4" />
+              </button>
+              <button
+                type="submit"
+                disabled={!text.trim()}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white hover:bg-zinc-200 disabled:opacity-30 disabled:hover:bg-white text-black font-bold text-xs transition-all shadow-sm active:scale-95 cursor-pointer ml-1"
+              >
+                <span>Submit</span>
+                <Send className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
-
-          {/* Advocate Details / Bar ID */}
-          <div className="flex items-center gap-2 flex-wrap">
-            {isHumanAdvocate ? (
-              <>
-                <input
-                  type="text"
-                  value={advocateName}
-                  onChange={(e) => setAdvocateName(e.target.value)}
-                  placeholder="Advocate Name"
-                  className="bg-black text-white border border-zinc-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-white w-32"
-                />
-                <input
-                  type="text"
-                  value={barNumber}
-                  onChange={(e) => setBarNumber(e.target.value)}
-                  placeholder="Bar Council Reg (e.g. D/1482/2012)"
-                  className="bg-black text-white border border-zinc-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-white w-36 font-mono"
-                />
-              </>
-            ) : (
-              <span className="text-[11px] font-mono text-amber-400/90 bg-zinc-950 px-2 py-1 rounded border border-zinc-800">
-                ⚡ Powered by Meta Muse Spark Open 1026
-              </span>
-            )}
-
-            <input
-              type="text"
-              value={clientName}
-              onChange={(e) => setClientName(e.target.value)}
-              placeholder="Representing Client Name"
-              className="bg-black text-white border border-zinc-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-white w-36"
-            />
-          </div>
         </div>
-
-        {/* Text Input & Buttons */}
-        <div className="flex items-center gap-2">
-          <div className="relative flex-1">
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder="Type formal legal argument, citation, or response on behalf of your client..."
-              rows={2}
-              className="w-full bg-[#0a0a0a] border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-white focus:border-white resize-none font-sans"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSubmit(e);
-                }
-              }}
-            />
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center gap-1.5 shrink-0">
-            <button
-              type="button"
-              onClick={() => {
-                if (!isRecording) {
-                  setIsRecording(true);
-                } else {
-                  setIsRecording(false);
-                  setText(prev => (prev ? `${prev} ` : '') + "[Oral Testimony via Muse Voice Transcribe]: May it please the Bench, we verbally affirm on behalf of our client that the digital record has been verified under Sec 63 BSA.");
-                }
-              }}
-              title={isRecording ? "Stop Recording (Muse Voice Transcribe)" : "Record Oral Testimony (Muse Voice Transcribe)"}
-              className={`p-2.5 rounded-lg border transition-all ${
-                isRecording
-                  ? 'bg-red-500/20 border-red-500 text-red-400 animate-pulse'
-                  : 'bg-[#0a0a0a] border-zinc-700 text-zinc-300 hover:text-white hover:border-white'
-              }`}
-            >
-              {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-            </button>
-
-            <button
-              type="button"
-              onClick={onOpenDocumentModal}
-              title="Attach Document / Petition"
-              className="p-2.5 rounded-lg bg-[#0a0a0a] border border-zinc-700 text-zinc-300 hover:text-white hover:border-white transition-colors"
-            >
-              <FileText className="w-4 h-4" />
-            </button>
-
-            <button
-              type="button"
-              onClick={onOpenEvidenceModal}
-              title="Submit Evidence Record"
-              className="p-2.5 rounded-lg bg-[#0a0a0a] border border-zinc-700 text-zinc-300 hover:text-white hover:border-white transition-colors"
-            >
-              <Shield className="w-4 h-4" />
-            </button>
-
-            <Button
-              type="submit"
-              variant="gold"
-              size="md"
-              icon={<Send className="w-4 h-4" />}
-            >
-              Submit
-            </Button>
-          </div>
-        </div>
-        {isRecording && (
-          <div className="flex items-center gap-2 text-xs font-mono text-red-400 px-1 animate-pulse">
-            <span className="w-2 h-2 rounded-full bg-red-500" />
-            Recording oral legal submission • Streaming to Meta Muse Voice Transcribe...
-          </div>
-        )}
       </form>
     </div>
   );

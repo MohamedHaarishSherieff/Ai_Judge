@@ -56,35 +56,21 @@ export const CourtroomHeader: React.FC<CourtroomHeaderProps> = ({
         </div>
 
         {/* Bench & Hearing status details */}
-        <div className="flex items-center gap-3 text-xs shrink-0 flex-wrap">
+        <div className="flex items-center gap-3 text-xs shrink-0">
           <div className="flex flex-col text-right">
-            <div className="flex items-center gap-2 justify-end">
-              <span className="text-white font-bold font-serif text-sm">{displayCourt}</span>
-              {onSwitchCourtForum && (
-                <button
-                  type="button"
-                  onClick={() => setSwitchModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700 hover:border-white text-xs font-mono transition-all cursor-pointer shadow-sm active:scale-95"
-                  title="Transfer proceeding to another of the 8 Indian court forums"
-                >
-                  <Landmark className="w-3.5 h-3.5 text-zinc-300" />
-                  <span>Transfer Forum ▾</span>
-                </button>
-              )}
-            </div>
-            <span className="text-[11px] text-zinc-400 font-mono">
-              AI Presiding Judicial Officer (Autonomous Bench)
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
             <button
-              onClick={() => setVideoModalOpen(true)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-600 text-xs font-medium transition-colors cursor-pointer"
+              type="button"
+              onClick={() => setSwitchModalOpen(true)}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white border border-zinc-700 hover:border-white font-serif text-xs font-bold transition-all cursor-pointer shadow-sm group active:scale-95"
+              title="Click to switch among the 8 constitutional and statutory courts of India"
             >
-              <Video className="w-3.5 h-3.5 text-zinc-500" />
-              Switch to Video Court
+              <Landmark className="w-3.5 h-3.5 text-zinc-300" />
+              <span>{displayCourt}</span>
+              <span className="text-[10px] font-mono text-zinc-400 group-hover:text-white">▾</span>
             </button>
+            <span className="text-[10px] text-zinc-500 font-mono mt-0.5">
+              Autonomous AI Presiding Bench
+            </span>
           </div>
         </div>
       </div>
