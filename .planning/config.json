@@ -1,0 +1,29 @@
+{
+  "project_name": "AI Judge",
+  "tagline": "Sovereign AI Judicial Bench & Virtual Courtroom Platform for the Indian Judiciary",
+  "version": "1.0.0",
+  "author": "Mohamed Haarish Sherieff",
+  "contact": "mohamedhaarishsherieff@gmail.com",
+  "competition": {
+    "name": "Meta Global AI Developer Hackathon",
+    "track": "Indie Grand Prize",
+    "pool_usd": 450000,
+    "primary_models": [
+      "meta-models/muse-spark-open-1026",
+      "meta/sam-3.1"
+    ]
+  },
+  "workflow": {
+    "mode": "standard",
+    "auto_commit": true,
+    "verification_gates": true,
+    "statutory_compliance_enforced": true
+  },
+  "models": {
+    "reasoning": "meta-models/muse-spark-open-1026",
+    "reasoning_endpoint": "https://inference.baseten.co/v1",
+    "reasoning_effort": "low",
+    "vision_forensics": "meta/sam-3.1",
+    "serverless_engine": "modal-cloud"
+  }
+}
