@@ -66,11 +66,13 @@ export const CourtroomHeader: React.FC<CourtroomHeaderProps> = ({
 
           <div className="flex items-center gap-2">
             <button
+              type="button"
               onClick={() => setSwitchModalOpen(true)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-zinc-900 text-amber-400 border border-zinc-700 hover:border-amber-400 text-xs font-mono font-medium transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs shadow-md transition-all active:scale-95 cursor-pointer border border-amber-500"
+              title="Switch between all 8 judicial court levels of India"
             >
-              <Landmark className="w-3.5 h-3.5" />
-              Switch Forum (8 Courts)
+              <Landmark className="w-4 h-4 text-black" />
+              <span>🏛️ Switch Court (8 Forums)</span>
             </button>
 
             <button

@@ -39,6 +39,34 @@ export const CourtroomSidebar: React.FC<CourtroomSidebarProps> = ({
         )}
       </div>
 
+      {/* Permanent Judicial Forum Banner & Switcher (Visible on ALL tabs) */}
+      <div className="p-3 bg-gradient-to-r from-amber-950/40 via-zinc-900 to-black border-b border-amber-500/30">
+        <div className="flex items-center justify-between gap-1 text-[10px] text-amber-400 font-mono uppercase tracking-wider mb-1">
+          <span className="flex items-center gap-1 font-bold">
+            <Landmark className="w-3.5 h-3.5 text-amber-400" /> Current Judicial Forum
+          </span>
+          <span className="bg-amber-400/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded text-[9px] font-mono">
+            8 Courts
+          </span>
+        </div>
+        <div className="font-bold text-white text-xs font-serif line-clamp-1">
+          {caseData.courtLevel}
+        </div>
+        <div className="text-zinc-400 text-[10px] line-clamp-1 mb-2">
+          {caseData.benchInfo || 'Autonomous Presiding Bench'}
+        </div>
+        {onSwitchCourtForum && (
+          <button
+            type="button"
+            onClick={onSwitchCourtForum}
+            className="w-full py-2 px-3 rounded-lg bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-amber-400/20 active:scale-[0.98] cursor-pointer"
+          >
+            <Landmark className="w-4 h-4 text-black shrink-0" />
+            <span>Switch Court Forum (Choose from 8)</span>
+          </button>
+        )}
+      </div>
+
       {/* Tabs */}
       <div className="grid grid-cols-4 bg-slate-900 border-b border-slate-800 text-xs font-medium">
         <button

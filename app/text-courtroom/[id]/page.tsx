@@ -381,7 +381,7 @@ export default function TextCourtroomSessionPage() {
               </Button>
 
               {/* Advocate Selection Toggles: Strictly AI Judge, Choice for Advocates */}
-              <div className="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-zinc-950 border border-zinc-800 text-[11px] font-mono">
+              <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-zinc-950 border border-zinc-800 text-[11px] font-mono">
                 <span className="text-zinc-500 font-bold uppercase text-[9px]">Bench:</span>
                 <span className="text-white font-bold bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-700 flex items-center gap-1">
                   <Gavel className="w-3 h-3 text-white" /> AI Judge
@@ -393,10 +393,10 @@ export default function TextCourtroomSessionPage() {
                 <button
                   type="button"
                   onClick={() => setPetitionerMode(petitionerMode === 'ai' ? 'real' : 'ai')}
-                  className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all ${
+                  className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
                     petitionerMode === 'real'
-                      ? 'bg-emerald-500 text-black'
-                      : 'bg-zinc-900 text-amber-400 border border-amber-500/40'
+                      ? 'bg-emerald-500 text-black shadow-sm'
+                      : 'bg-zinc-900 text-amber-400 border border-amber-500/40 hover:border-amber-400'
                   }`}
                   title="Click to toggle between AI Lawyer and Real Human Lawyer"
                 >
@@ -409,10 +409,10 @@ export default function TextCourtroomSessionPage() {
                 <button
                   type="button"
                   onClick={() => setRespondentMode(respondentMode === 'ai' ? 'real' : 'ai')}
-                  className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all ${
+                  className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
                     respondentMode === 'real'
-                      ? 'bg-emerald-500 text-black'
-                      : 'bg-zinc-900 text-amber-400 border border-amber-500/40'
+                      ? 'bg-emerald-500 text-black shadow-sm'
+                      : 'bg-zinc-900 text-amber-400 border border-amber-500/40 hover:border-amber-400'
                   }`}
                   title="Click to toggle between AI Lawyer and Real Human Lawyer"
                 >
@@ -420,14 +420,15 @@ export default function TextCourtroomSessionPage() {
                 </button>
               </div>
 
+              {/* High-visibility Court Forum Switch Button */}
               <button
                 type="button"
                 onClick={() => setSwitchCourtModalOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-amber-300 border border-amber-500/60 hover:border-amber-400 font-mono text-xs font-bold transition-all shadow-md group"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400 hover:border-amber-300 font-mono text-xs font-bold transition-all shadow-md group cursor-pointer active:scale-95"
                 title="Click to switch among all 8 Indian Court Forums"
               >
                 <Landmark className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform" />
-                <span>Court: <span className="text-white underline">{caseData.courtLevel}</span> (Switch)</span>
+                <span>🏛️ Forum: <span className="text-white underline">{caseData.courtLevel}</span> (Switch)</span>
               </button>
 
               <Button

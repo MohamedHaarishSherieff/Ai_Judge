@@ -118,3 +118,4 @@ How may I assist your legal navigation today?`;
     return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }
 }
+
