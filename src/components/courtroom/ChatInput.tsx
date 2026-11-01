@@ -6,7 +6,14 @@ import { Button } from '@/components/ui/Button';
 import { SenderRole } from '@/types';
 
 interface ChatInputProps {
-  onSendMessage: (text: string, role: SenderRole, clientName?: string, category?: string) => void;
+  onSendMessage: (
+    text: string, 
+    role: SenderRole, 
+    clientName?: string, 
+    category?: string, 
+    isHuman?: boolean, 
+    barReg?: string
+  ) => void;
   onOpenDocumentModal: () => void;
   onOpenEvidenceModal: () => void;
 }
@@ -17,7 +24,10 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   onOpenEvidenceModal,
 }) => {
   const [text, setText] = useState('');
-  const [activeRole, setActiveRole] = useState<SenderRole>('Petitioner Counsel');
+  const [activeRole, setActiveRole] = useState<'Petitioner Counsel' | 'Respondent Counsel'>('Petitioner Counsel');
+  const [isHumanAdvocate, setIsHumanAdvocate] = useState(true);
+  const [advocateName, setAdvocateName] = useState('Adv. Rajesh Sharma');
+  const [barNumber, setBarNumber] = useState('D/1482/2012');
   const [clientName, setClientName] = useState('');
   const [category, setCategory] = useState<'Argument' | 'Citation' | 'Question'>('Argument');
   const [isRecording, setIsRecording] = useState(false);
@@ -25,7 +35,14 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!text.trim()) return;
-    onSendMessage(text, activeRole, clientName, category);
+    onSendMessage(
+      text, 
+      activeRole, 
+      clientName || undefined, 
+      category, 
+      isHumanAdvocate, 
+      isHumanAdvocate ? barNumber : undefined
+    );
     setText('');
   };
 
@@ -60,34 +77,77 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3">
-        {/* Role & Client Selection Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs bg-[#0c0c0c] p-2.5 rounded-lg border border-zinc-800">
+        {/* Role & Representation Choice Bar */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 text-xs bg-[#0c0c0c] p-2.5 rounded-lg border border-zinc-800">
           
-          {/* Advocate Persona Switcher */}
+          {/* Submitting Advocate Persona */}
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-zinc-300 font-semibold flex items-center gap-1">
-              <User className="w-3.5 h-3.5 text-white" /> Submitting As Advocate:
+              <User className="w-3.5 h-3.5 text-white" /> Side:
             </span>
             <select
               value={activeRole}
-              onChange={(e) => setActiveRole(e.target.value as SenderRole)}
+              onChange={(e) => setActiveRole(e.target.value as any)}
               className="bg-black text-white font-semibold border border-zinc-700 rounded px-2.5 py-1 focus:outline-none focus:border-white cursor-pointer"
             >
-              <option value="Petitioner Counsel">Advocate 1 — Petitioner Counsel</option>
-              <option value="Respondent Counsel">Advocate 2 — Respondent Counsel</option>
-              <option value="AI Judge">AI Presiding Judge (Simulate Ruling)</option>
+              <option value="Petitioner Counsel">Advocate 1 (Petitioner Counsel)</option>
+              <option value="Respondent Counsel">Advocate 2 (Respondent Counsel)</option>
             </select>
+
+            {/* AI Lawyer vs Real Human Lawyer Toggle */}
+            <div className="flex items-center gap-1.5 ml-1 bg-black p-0.5 rounded border border-zinc-700">
+              <button
+                type="button"
+                onClick={() => setIsHumanAdvocate(true)}
+                className={`px-2 py-0.5 rounded text-[11px] font-mono font-medium transition-colors ${
+                  isHumanAdvocate ? 'bg-emerald-500 text-black font-bold' : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                👤 Real Human Lawyer
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsHumanAdvocate(false)}
+                className={`px-2 py-0.5 rounded text-[11px] font-mono font-medium transition-colors ${
+                  !isHumanAdvocate ? 'bg-amber-400 text-black font-bold' : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                🤖 AI Legal Counsel
+              </button>
+            </div>
           </div>
 
-          {/* Optional Client Name Input */}
-          <div className="flex items-center gap-2">
-            <span className="text-zinc-400 font-medium">Representing Client:</span>
+          {/* Advocate Details / Bar ID */}
+          <div className="flex items-center gap-2 flex-wrap">
+            {isHumanAdvocate ? (
+              <>
+                <input
+                  type="text"
+                  value={advocateName}
+                  onChange={(e) => setAdvocateName(e.target.value)}
+                  placeholder="Advocate Name"
+                  className="bg-black text-white border border-zinc-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-white w-32"
+                />
+                <input
+                  type="text"
+                  value={barNumber}
+                  onChange={(e) => setBarNumber(e.target.value)}
+                  placeholder="Bar Council Reg (e.g. D/1482/2012)"
+                  className="bg-black text-white border border-zinc-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-white w-36 font-mono"
+                />
+              </>
+            ) : (
+              <span className="text-[11px] font-mono text-amber-400/90 bg-zinc-950 px-2 py-1 rounded border border-zinc-800">
+                ⚡ Powered by Meta Muse Spark Open 1026
+              </span>
+            )}
+
             <input
               type="text"
               value={clientName}
               onChange={(e) => setClientName(e.target.value)}
-              placeholder={activeRole === 'Petitioner Counsel' ? 'Petitioner Client Name' : 'Respondent Client Name'}
-              className="bg-black text-white border border-zinc-700 rounded px-2.5 py-1 text-xs focus:outline-none focus:border-white w-36 sm:w-44"
+              placeholder="Representing Client Name"
+              className="bg-black text-white border border-zinc-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-white w-36"
             />
           </div>
         </div>

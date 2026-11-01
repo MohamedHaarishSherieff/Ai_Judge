@@ -1,4 +1,103 @@
-import { Case, Hearing, Message, Document, Evidence, Judgment, Appeal, User } from '@/types';
+import { Case, Hearing, Message, Document, Evidence, Judgment, Appeal, User, CourtForumMetadata } from '@/types';
+
+export const INDIAN_COURT_FORUMS: CourtForumMetadata[] = [
+  {
+    id: 'supreme-court',
+    name: 'Supreme Court of India',
+    shortName: 'Supreme Court (Apex)',
+    tier: 'Apex Constitutional Court',
+    jurisdictionScope: 'Union of India (All States & UTs)',
+    description: 'The apex constitutional court and highest appellate authority of the nation, exercising original writ jurisdiction under Article 32, appellate jurisdiction, and inherent plenary powers under Article 142.',
+    emblemTag: 'यतो धर्मस्ततो जयः',
+    benchDesignation: 'Constitution Bench / Division Bench (Courtroom No. 1)',
+    typicalMatters: ['Fundamental Rights Writs (Art 32)', 'Special Leave Petitions (Art 136)', 'Constitutional Validity of Statutes', 'Interstate River & Boundary Disputes'],
+    keyStatutes: ['Constitution of India (Articles 14, 19, 21, 32, 142)', 'Supreme Court Rules, 2013']
+  },
+  {
+    id: 'high-courts',
+    name: 'High Courts of the States',
+    shortName: 'High Court (State)',
+    tier: 'State Constitutional & Appellate',
+    jurisdictionScope: 'State Jurisdiction / Union Territory',
+    description: 'The highest judicial bodies exercising constitutional, writ (Article 226), supervisory (Article 227), and appellate jurisdiction within their respective States or Union Territories.',
+    emblemTag: 'State Judicature',
+    benchDesignation: 'Division Bench / Single Judge Commercial & Writ Division',
+    typicalMatters: ['State Action Writs (Art 226)', 'First Appeals from District Decrees', 'Commercial Contract Disputes', 'Bail Appeals & Criminal Revisions'],
+    keyStatutes: ['Constitution of India (Article 226/227)', 'Commercial Courts Act, 2015', 'Letters Patent Act']
+  },
+  {
+    id: 'district-sessions',
+    name: 'District & Sessions Courts',
+    shortName: 'District & Sessions Court',
+    tier: 'Principal District Trial Court',
+    jurisdictionScope: 'Judicial District',
+    description: 'The primary trial courts at the district level, handling major civil disputes (as District Court) and serious criminal trials (as Sessions Court) for offences carrying life imprisonment or major penalties.',
+    emblemTag: 'District Judiciary',
+    benchDesignation: 'Court of Principal District & Sessions Judge',
+    typicalMatters: ['Major Civil Property Suits', 'BNS Murder & Conspiracy Trials (Sec 103/61)', 'Regular Bail Applications (Sec 480 BNSS)', 'Probate & Partition Decrees'],
+    keyStatutes: ['Bharatiya Nyaya Sanhita, 2023 (BNS)', 'Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS § 480)', 'Code of Civil Procedure, 1908']
+  },
+  {
+    id: 'subordinate-civil',
+    name: 'Subordinate Civil Courts',
+    shortName: 'Civil Judge (Senior/Junior)',
+    tier: 'Subordinate Civil Judicature',
+    jurisdictionScope: 'Taluk / Sub-Division / City Civil',
+    description: 'Lower trial courts (such as Civil Judge Senior & Junior Divisions and Small Causes Courts) handling localized property, monetary recovery, tenancy, and contract disputes within pecuniary limits.',
+    emblemTag: 'Civil Division',
+    benchDesignation: 'Court of Civil Judge (Senior Division)',
+    typicalMatters: ['Specific Performance & Injunctions', 'Tenancy Eviction & Rent Recovery', 'Promissory Note & Loan Enforcements', 'Declaration of Title'],
+    keyStatutes: ['Code of Civil Procedure, 1908 (Order XXXIX)', 'Specific Relief Act, 1963', 'Transfer of Property Act, 1882']
+  },
+  {
+    id: 'subordinate-criminal',
+    name: 'Subordinate Criminal Courts',
+    shortName: 'Judicial Magistrate (CJM/JMFC)',
+    tier: 'Magisterial Criminal Judicature',
+    jurisdictionScope: 'Magisterial Sub-District',
+    description: 'Magistrate courts (such as Chief Judicial Magistrates and Judicial Magistrates First & Second Class) handling summary trials, bailable/non-bailable offenses, cognizable complaints, and mid-level criminal offenses.',
+    emblemTag: 'Magistrate Division',
+    benchDesignation: 'Court of Judicial Magistrate First Class (JMFC)',
+    typicalMatters: ['Cheque Dishonour (NI Act § 138)', 'Theft & Criminal Trespass (BNS)', 'Summary Trials & Police Remand', 'First Production & Bail in Minor Offenses'],
+    keyStatutes: ['Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS)', 'Negotiable Instruments Act, 1881 (§ 138)', 'Bharatiya Nyaya Sanhita, 2023']
+  },
+  {
+    id: 'special-courts',
+    name: 'Special Courts',
+    shortName: 'Special CBI / POCSO Court',
+    tier: 'Statutory Designated Benches',
+    jurisdictionScope: 'Statewide / Designated Zonal Jurisdiction',
+    description: 'Dedicated benches established by specific statutes for time-bound disposal of targeted matters like POCSO, corruption (CBI), commercial disputes, NDPS, and family law.',
+    emblemTag: 'Designated Bench',
+    benchDesignation: 'Court of Special Judge (CBI / Anti-Corruption)',
+    typicalMatters: ['Prevention of Corruption Act Trials', 'POCSO Act Child Protection', 'NDPS Narcotics Adjudications', 'Designated Commercial Bench Expeditions'],
+    keyStatutes: ['Prevention of Corruption Act, 1988', 'POCSO Act, 2012', 'NDPS Act, 1985', 'Commercial Courts Act, 2015']
+  },
+  {
+    id: 'quasi-judicial-tribunals',
+    name: 'Quasi-Judicial Tribunals',
+    shortName: 'Tribunals (NCLT / NGT / CAT)',
+    tier: 'Specialized Subject Tribunals',
+    jurisdictionScope: 'National / Zonal Tribunal Benches',
+    description: 'Specialized adjudicatory bodies (such as NCLT, NGT, and CAT) addressing expert subject areas including corporate insolvency, environmental regulation, and administrative disputes.',
+    emblemTag: 'Tribunal Bench',
+    benchDesignation: 'National Company Law Tribunal (NCLT) Principal Bench',
+    typicalMatters: ['Corporate Insolvency Resolution (IBC § 7/9)', 'Mergers & Company Oppression Claims', 'Environmental Damage Compensation (NGT)', 'Civil Service Service Disputes (CAT)'],
+    keyStatutes: ['Insolvency and Bankruptcy Code, 2016 (IBC)', 'National Green Tribunal Act, 2010', 'Administrative Tribunals Act, 1985']
+  },
+  {
+    id: 'grassroots-dispute-forums',
+    name: 'Grassroots Dispute Forums',
+    shortName: 'Lok Adalat / Gram Nyayalaya',
+    tier: 'Alternative & Rural Settlement',
+    jurisdictionScope: 'Village / Sub-District / Community Benches',
+    description: 'Alternative settlement forums (such as Lok Adalats and Gram Nyayalayas) resolving pre-litigation, compoundable offences, and rural community disputes through speedy conciliation.',
+    emblemTag: 'जन अदालत',
+    benchDesignation: 'Bench of National Lok Adalat & Conciliator',
+    typicalMatters: ['Pre-Litigation Bank Recovery Settlement', 'Matrimonial & Family Mutual Conciliation', 'Compoundable Minor Traffic & Civil Disputes', 'Agricultural Land & Water Channel Harmony'],
+    keyStatutes: ['Legal Services Authorities Act, 1987', 'Gram Nyayalayas Act, 2008', 'Arbitration and Conciliation Act, 1996']
+  }
+];
 
 export const CURRENT_USER: User = {
   id: 'usr-101',
@@ -11,6 +110,7 @@ export const CURRENT_USER: User = {
 };
 
 export const MOCK_CASES: Case[] = [
+  // 1. SUPREME COURT OF INDIA (Apex Constitutional Court)
   {
     id: 'SC-WP-2026-104',
     caseNumber: 'Writ Petition (Civil) No. 104 of 2026',
@@ -38,16 +138,46 @@ export const MOCK_CASES: Case[] = [
     ],
     benchInfo: 'Chief Justice of India & 4-Judge Constitution Bench (Courtroom No. 1)',
   },
+
+  // 2. HIGH COURTS OF THE STATES (State Constitutional & Appellate)
   {
-    id: 'HC-CRL-2026-302',
-    caseNumber: 'Criminal Appeal No. 302 of 2026',
+    id: 'HC-WRIT-2026-512',
+    caseNumber: 'Writ Petition No. 512 of 2026',
+    title: 'Federation of Retail Traders v. State Commissioner of Revenue',
+    type: 'Corporate & Commercial',
+    courtLevel: 'High Courts of the States',
+    status: 'Hearing',
+    filedDate: '22 Jan 2026',
+    nextHearing: 'Today (Live Bench)',
+    summary: 'Writ petition under Article 226 challenging arbitrary administrative seizure of digital warehouse stock inventories and seeking enforcement of commercial procedural protections.',
+    parties: [
+      { id: 'p1', name: 'Federation of Retail Traders', role: 'Petitioner', advocateName: 'Senior Adv. Rajesh Sharma', barCouncilNo: 'D/1482/2012' },
+      { id: 'p2', name: 'State Commissioner of Revenue', role: 'Respondent', advocateName: 'Additional Advocate General K. V. Subramanian', barCouncilNo: 'MAH/2001/412' },
+    ],
+    statutoryActs: [
+      'Constitution of India — Article 226 (High Court Writ Powers)',
+      'Commercial Courts Act, 2015 — Section 12A',
+      'Bharatiya Sakshya Adhiniyam, 2023 — Section 63 (Electronic Evidence Admissibility)',
+      'Indian Contract Act, 1872 — Section 74'
+    ],
+    issuesForDetermination: [
+      'Whether the impugned seizure notice by the State Tax Authority was ultra vires and violated principles of natural justice.',
+      'Whether digitally signed e-invoices are conclusive evidence under Section 63 BSA.'
+    ],
+    benchInfo: 'Hon\'ble High Court Division Bench (Commercial & Appellate Jurisdiction)',
+  },
+
+  // 3. DISTRICT & SESSIONS COURTS (Primary District Trial Courts)
+  {
+    id: 'DS-SESS-2026-218',
+    caseNumber: 'Sessions Case No. 218 of 2026',
     title: 'State of Maharashtra v. Vikram Deshmukh & Ors.',
     type: 'Criminal Matter',
-    courtLevel: 'High Court of State',
+    courtLevel: 'District & Sessions Courts',
     status: 'Hearing',
     filedDate: '02 Feb 2026',
     nextHearing: 'Today (Live Bench)',
-    summary: 'Sessions criminal appeal involving charges of criminal conspiracy and breach of public order under Bharatiya Nyaya Sanhita (BNS) Sections 103 and 61, with bail petition under BNSS Section 480.',
+    summary: 'Sessions criminal trial involving charges of criminal conspiracy and grievous public endangerment under BNS 2023 Sections 103 and 61, with contested bail petition under Section 480 BNSS.',
     parties: [
       { id: 'p1', name: 'State of Maharashtra (Through CID)', role: 'Prosecution', advocateName: 'Public Prosecutor Adv. Anita Nadkarni', barCouncilNo: 'MAH/2004/819' },
       { id: 'p2', name: 'Vikram Deshmukh (Accused No. 1)', role: 'Defence', advocateName: 'Senior Defense Counsel Adv. Meenakshi Sundaram', barCouncilNo: 'MAH/1997/341' },
@@ -55,66 +185,152 @@ export const MOCK_CASES: Case[] = [
     statutoryActs: [
       'Bharatiya Nyaya Sanhita, 2023 (BNS) — Section 103 (Punishment for Murder)',
       'Bharatiya Nyaya Sanhita, 2023 (BNS) — Section 61 (Criminal Conspiracy)',
-      'Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS) — Section 480 (Bail Standards)',
+      'Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS) — Section 480 (Regular Bail Standards)',
       'Bharatiya Sakshya Adhiniyam, 2023 (BSA) — Section 105 (Burden of Proof)'
     ],
     issuesForDetermination: [
       'Whether prima facie circumstantial evidence satisfies threshold criteria for denial of regular bail under Section 480 BNSS.',
       'Whether the chain of custody of digital call detail records (CDR) complies with mandatory Section 63 BSA certificates.'
     ],
-    benchInfo: 'Hon\'ble Division Bench (Criminal Appellate Jurisdiction)',
+    benchInfo: 'Court of Principal District & Sessions Judge',
   },
+
+  // 4. SUBORDINATE CIVIL COURTS (Civil Judge Senior/Junior Divisions)
   {
-    id: 'DC-CS-2026-088',
-    caseNumber: 'Civil Original Suit No. 88 of 2026',
-    title: 'Rajiv Singhania v. Mehra Real Estate Developers Ltd.',
+    id: 'SCC-CIV-2026-091',
+    caseNumber: 'Original Civil Suit No. 91 of 2026',
+    title: 'Kavita Raman v. Urban Heights Apartment Owners Association',
     type: 'Civil Dispute',
-    courtLevel: 'District Court',
+    courtLevel: 'Subordinate Civil Courts',
     status: 'Hearing',
-    filedDate: '12 Jan 2026',
-    nextHearing: 'Tomorrow (10:30 AM)',
-    summary: 'Civil suit for specific performance and perpetual prohibitory injunction under Order XXXIX Rules 1 & 2 CPC regarding title encroachment and illegal alienation of commercial ancestral real estate.',
+    filedDate: '10 Feb 2026',
+    nextHearing: 'Tomorrow (11:30 AM)',
+    summary: 'Suit for perpetual prohibitory injunction and recovery of maintenance deposit under Order XXXIX Rules 1 & 2 CPC regarding arbitrary restriction of common club access and parking rights.',
     parties: [
-      { id: 'p1', name: 'Rajiv Singhania (Plaintiff)', role: 'Petitioner', advocateName: 'Adv. Suresh Chandran', barCouncilNo: 'D/2010/512' },
-      { id: 'p2', name: 'Mehra Real Estate Developers (Defendant)', role: 'Respondent', advocateName: 'Adv. Harish Trivedi', barCouncilNo: 'D/2008/193' },
+      { id: 'p1', name: 'Kavita Raman (Resident/Owner)', role: 'Petitioner', advocateName: 'Adv. Suresh Chandran', barCouncilNo: 'D/2010/512' },
+      { id: 'p2', name: 'Urban Heights Association (Managing Committee)', role: 'Respondent', advocateName: 'Adv. Harish Trivedi', barCouncilNo: 'D/2008/193' },
     ],
     statutoryActs: [
-      'Code of Civil Procedure, 1908 (CPC) — Order XXXIX Rules 1 & 2 (Injunctions)',
-      'Specific Relief Act, 1963 — Section 16 (Personal Bars to Relief)',
-      'Transfer of Property Act, 1882 — Section 53A (Part Performance)',
-      'Registration Act, 1908 — Section 17'
+      'Code of Civil Procedure, 1908 (CPC) — Order XXXIX Rules 1 & 2 (Temporary Injunctions)',
+      'Specific Relief Act, 1963 — Section 38 (Perpetual Injunctions)',
+      'Transfer of Property Act, 1882 — Section 53A'
     ],
     issuesForDetermination: [
-      'Whether plaintiff has established a prima facie case, balance of convenience, and irreparable injury for grant of temporary injunction.',
-      'Whether unregistered agreement to sell can be admitted as evidence of part performance under Section 53A TPA.'
+      'Whether the plaintiff has made out a prima facie case and balance of convenience for status quo ante.',
+      'Whether bye-law amendments by the resident association can override original deed of apartment ownership covenants.'
     ],
-    benchInfo: 'Court of Senior Civil Judge, Original Division',
+    benchInfo: 'Court of Civil Judge (Senior Division), City Civil Court',
   },
+
+  // 5. SUBORDINATE CRIMINAL COURTS (Judicial Magistrates JMFC/CJM)
   {
-    id: 'HC-COMM-2026-042',
-    caseNumber: 'Commercial Suit No. 42 of 2026',
-    title: 'TechMatrix Global Ltd. v. Apex Enterprise Cloud Solutions',
-    type: 'Corporate & Commercial',
-    courtLevel: 'High Court of State',
+    id: 'SCM-CRIM-2026-144',
+    caseNumber: 'Criminal Summary Case No. 144 of 2026',
+    title: 'Premier Agro Supplies Ltd. v. Harishankar Grain Mills',
+    type: 'Criminal Matter',
+    courtLevel: 'Subordinate Criminal Courts',
     status: 'Hearing',
-    filedDate: '08 Jan 2026',
+    filedDate: '18 Feb 2026',
     nextHearing: 'Today (Live Bench)',
-    summary: 'Commercial breach of contract claiming liquidated damages under Section 74 of the Indian Contract Act, 1872 and interim relief under Section 9 of the Arbitration and Conciliation Act.',
+    summary: 'Summary criminal prosecution under Section 138 of the Negotiable Instruments Act for cheque dishonour exceeding ₹18,50,000 with notice of demand under BNSS Section 223.',
     parties: [
-      { id: 'p1', name: 'TechMatrix Global Ltd.', role: 'Petitioner', advocateName: 'Senior Adv. Rajesh Sharma', barCouncilNo: 'D/1482/2012' },
-      { id: 'p2', name: 'Apex Enterprise Cloud Solutions', role: 'Respondent', advocateName: 'Adv. Vikramaditya Rao', barCouncilNo: 'KAR/2011/724' },
+      { id: 'p1', name: 'Premier Agro Supplies Ltd. (Complainant)', role: 'Prosecution', advocateName: 'Adv. R. K. Shrivastava', barCouncilNo: 'UP/2014/198' },
+      { id: 'p2', name: 'Harishankar (Managing Partner / Accused)', role: 'Defence', advocateName: 'Adv. Devendra Verma', barCouncilNo: 'UP/2016/552' },
     ],
     statutoryActs: [
-      'Indian Contract Act, 1872 — Section 74 (Liquidated Damages vs. Penalty)',
-      'Commercial Courts Act, 2015 — Section 12A (Pre-Institution Mediation)',
-      'Bharatiya Sakshya Adhiniyam, 2023 — Section 63 (Electronic Evidence)',
-      'Arbitration and Conciliation Act, 1996 — Section 9'
+      'Negotiable Instruments Act, 1881 — Section 138 (Dishonour of Cheque)',
+      'Negotiable Instruments Act, 1881 — Section 139 (Presumption in Favour of Holder)',
+      'Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS) — Section 223 (Magistrate Cognizance)',
+      'Bharatiya Sakshya Adhiniyam, 2023 — Section 63'
     ],
     issuesForDetermination: [
-      'Whether liquidated damages clause operates as genuine pre-estimate of loss or unenforceable penal clause per Kailash Nath Associates.',
-      'Admissibility of electronic cloud SLA logs under Section 63(4) BSA without continuous device audit.'
+      'Whether statutory legal notice was served within the prescribed 30-day window under Section 138 proviso (b).',
+      'Whether the disputed cheque was issued towards legally enforceable debt or as conditional security.'
     ],
-    benchInfo: 'Commercial Division Bench IV, High Court of Judicature',
+    benchInfo: 'Court of Judicial Magistrate First Class (JMFC) Special NI Act Court',
+  },
+
+  // 6. SPECIAL COURTS (CBI / POCSO / Commercial Special Benches)
+  {
+    id: 'SPEC-CBI-2026-033',
+    caseNumber: 'Special CBI Case No. 33 of 2026',
+    title: 'Central Bureau of Investigation (CBI) v. Global Maritime Freight & Ors.',
+    type: 'Corporate & Commercial',
+    courtLevel: 'Special Courts',
+    status: 'Hearing',
+    filedDate: '05 Jan 2026',
+    nextHearing: 'Today (Live Bench)',
+    summary: 'Special CBI Court trial investigating illicit port clearance waivers, public procurement fraud under Prevention of Corruption Act, and verification of altered digital bill-of-lading hashes.',
+    parties: [
+      { id: 'p1', name: 'Central Bureau of Investigation (CBI Special Unit)', role: 'Prosecution', advocateName: 'Special Public Prosecutor Adv. Arvind Saxena', barCouncilNo: 'D/1993/088' },
+      { id: 'p2', name: 'Global Maritime Freight Ltd. & Directors', role: 'Defence', advocateName: 'Senior Adv. Vikramaditya Rao', barCouncilNo: 'KAR/2011/724' },
+    ],
+    statutoryActs: [
+      'Prevention of Corruption Act, 1988 — Section 7 & 13(1)(b)',
+      'Bharatiya Nyaya Sanhita, 2023 — Section 318 (Cheating & Fraud)',
+      'Bharatiya Sakshya Adhiniyam, 2023 — Section 63(4) (Electronic Certificate Integrity)',
+      'Customs Act, 1962 — Section 132'
+    ],
+    issuesForDetermination: [
+      'Admissibility of electronic customs clearing logs where forensic cryptographic seal discontinuity was flagged.',
+      'Whether public servant pecuniary advantage was conferred without public tender.'
+    ],
+    benchInfo: 'Court of Special Judge (CBI & Anti-Corruption Wing)',
+  },
+
+  // 7. QUASI-JUDICIAL TRIBUNALS (NCLT / NGT / CAT)
+  {
+    id: 'TRIB-NCLT-2026-702',
+    caseNumber: 'Company Petition (IB) No. 702 of 2026',
+    title: 'National Infrastructure Financing Bank v. Apex Telecom Infra Ltd.',
+    type: 'Corporate & Commercial',
+    courtLevel: 'Quasi-Judicial Tribunals',
+    status: 'Hearing',
+    filedDate: '14 Jan 2026',
+    nextHearing: 'Today (Live Bench)',
+    summary: 'Insolvency resolution petition under Section 7 of the Insolvency and Bankruptcy Code (IBC), 2016 for default on ₹125 Crore structured term debt, praying for initiation of Corporate Insolvency Resolution Process (CIRP).',
+    parties: [
+      { id: 'p1', name: 'National Infrastructure Financing Bank (Financial Creditor)', role: 'Petitioner', advocateName: 'Senior Adv. Siddharth Singhal', barCouncilNo: 'MAH/2005/671' },
+      { id: 'p2', name: 'Apex Telecom Infra Ltd. (Corporate Debtor)', role: 'Respondent', advocateName: 'Adv. Rohini Deshmukh', barCouncilNo: 'D/2009/442' },
+    ],
+    statutoryActs: [
+      'Insolvency and Bankruptcy Code, 2016 (IBC) — Section 7 (Initiation of CIRP)',
+      'Insolvency and Bankruptcy Code, 2016 — Section 14 (Moratorium Provisions)',
+      'Commercial Courts Act, 2015 — Section 12A',
+      'Bharatiya Sakshya Adhiniyam, 2023 — Section 63'
+    ],
+    issuesForDetermination: [
+      'Whether the Financial Creditor has conclusively established debt and default via NeSL Information Utility records.',
+      'Whether pending pre-litigation restructuring interdicts mandatory admission under Section 7(5) IBC.'
+    ],
+    benchInfo: 'National Company Law Tribunal (NCLT) Principal Bench, New Delhi',
+  },
+
+  // 8. GRASSROOTS DISPUTE FORUMS (Lok Adalats & Gram Nyayalayas)
+  {
+    id: 'GRASS-LOK-2026-015',
+    caseNumber: 'National Lok Adalat Settlement No. 15 of 2026',
+    title: 'Gram Vikas Committee v. Kisan Sahakari Cooperative & Anr.',
+    type: 'Civil Dispute',
+    courtLevel: 'Grassroots Dispute Forums',
+    status: 'Hearing',
+    filedDate: '25 Jan 2026',
+    nextHearing: 'Today (Live Conciliation)',
+    summary: 'Pre-litigation village conciliation regarding agricultural canal water distribution, village thoroughfare easement, and amicable micro-loan restructuring under Legal Services Authorities Act.',
+    parties: [
+      { id: 'p1', name: 'Gram Vikas Committee (Farmers Welfare)', role: 'Petitioner', advocateName: 'Panel Legal Counsel Adv. Mohan Lal Patel', barCouncilNo: 'MP/2012/339' },
+      { id: 'p2', name: 'Kisan Sahakari Cooperative', role: 'Respondent', advocateName: 'Adv. Sunita Choudhary', barCouncilNo: 'MP/2015/812' },
+    ],
+    statutoryActs: [
+      'Legal Services Authorities Act, 1987 — Section 19 & 21 (Finality of Lok Adalat Award)',
+      'Gram Nyayalayas Act, 2008 — Section 26 (Conciliation Procedures)',
+      'Arbitration and Conciliation Act, 1996 — Section 73 (Settlement Agreement)'
+    ],
+    issuesForDetermination: [
+      'Formulation of binding consensual settlement agreement with zero court fee liability under Section 21 LSA Act.',
+      'Equitable allocation of canal sluice timing during harvesting season.'
+    ],
+    benchInfo: 'National Lok Adalat Bench & Gram Nyayalaya Rural Conciliation Panel',
   }
 ];
 

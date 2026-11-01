@@ -72,3 +72,4 @@ The platform tackles India's pendency crisis (over 50 million pending court case
 * **Lead Architect:** Mohamed Haarish Sherieff
 * **Email:** mohamedhaarishsherieff@gmail.com
 * **Repository:** `https://github.com/MohamedHaarishSherieff/Ai_Judge.git`
+

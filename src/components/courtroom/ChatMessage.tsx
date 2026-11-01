@@ -50,17 +50,34 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
           )}
 
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="text-sm font-extrabold text-white">{message.sender}</span>
+              {isJudge ? (
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white text-black font-extrabold flex items-center gap-1">
+                  <Gavel className="w-3 h-3 text-black" /> AI Presiding Judge (Autonomous Bench)
+                </span>
+              ) : message.isHumanCounsel ? (
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-500/60 text-emerald-300 font-bold flex items-center gap-1">
+                  <User className="w-3 h-3" /> Real Human Advocate
+                </span>
+              ) : (
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/80 border border-amber-500/60 text-amber-300 font-bold flex items-center gap-1">
+                  <Cpu className="w-3 h-3" /> AI Counsel (Muse Spark)
+                </span>
+              )}
               <Badge variant={badgeVariant} size="sm">
                 {message.senderRole}
               </Badge>
             </div>
-            {isJudge && (
-              <span className="text-[11px] text-zinc-400 font-mono flex items-center gap-1">
-                <Scale className="w-3 h-3 text-white" /> Presiding Judicial Officer
+            {isJudge ? (
+              <span className="text-[11px] text-zinc-400 font-mono flex items-center gap-1 mt-0.5">
+                <Scale className="w-3 h-3 text-white" /> Sovereign Judicial Bench Adjudicator
               </span>
-            )}
+            ) : message.barEnrollmentNumber ? (
+              <span className="text-[11px] text-zinc-400 font-mono flex items-center gap-1 mt-0.5">
+                Bar Reg: {message.barEnrollmentNumber}
+              </span>
+            ) : null}
           </div>
         </div>
 

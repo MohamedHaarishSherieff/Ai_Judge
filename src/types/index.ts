@@ -16,10 +16,36 @@ export type CaseType =
   | 'Intellectual Property' 
   | 'Family Law';
 
+export type IndianCourtForum =
+  | 'Supreme Court of India'
+  | 'High Courts of the States'
+  | 'District & Sessions Courts'
+  | 'Subordinate Civil Courts'
+  | 'Subordinate Criminal Courts'
+  | 'Special Courts'
+  | 'Quasi-Judicial Tribunals'
+  | 'Grassroots Dispute Forums';
+
 export type CourtLevel = 
+  | IndianCourtForum
   | 'District Court' 
   | 'High Court of State' 
   | 'Supreme Court of India';
+
+export type AdvocateRepresentationMode = 'ai' | 'real';
+
+export interface CourtForumMetadata {
+  id: string;
+  name: IndianCourtForum;
+  shortName: string;
+  tier: string;
+  jurisdictionScope: string;
+  description: string;
+  emblemTag: string;
+  benchDesignation: string;
+  typicalMatters: string[];
+  keyStatutes: string[];
+}
 
 export interface Party {
   id: string;
@@ -66,6 +92,8 @@ export interface Message {
   caseId: string;
   sender: string;
   senderRole: SenderRole;
+  isHumanCounsel?: boolean;
+  barEnrollmentNumber?: string;
   avatar?: string;
   content: string;
   reasoningContent?: string;

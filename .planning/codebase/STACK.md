@@ -23,3 +23,4 @@
   - File: `modal_backend/legal_engine.py`
   - Libraries: `modal`, `pydantic`, `hashlib`
   - Capability: Deterministic legal interest calculation and cryptographic SHA-256 seal hashing
+

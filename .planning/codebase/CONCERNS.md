@@ -16,3 +16,4 @@
 * **Issue:** AI models may fabricate section numbers or non-existent precedents.
 * **Mitigation:**
   - Meta's official "Trustworthy Legal Agent" architecture enforces a 3-point **Statutory Verification Checklist Gate** (`verify_checklist`) prior to decree synthesis, checking statutory standing, Section 63 BSA compliance, and *Kailash Nath* actual loss limits.
+

@@ -8,7 +8,7 @@ import { ChatInput } from '@/components/courtroom/ChatInput';
 import { CourtroomSidebar } from '@/components/courtroom/CourtroomSidebar';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
-import { Message, SenderRole, Case, Evidence } from '@/types';
+import { Message, SenderRole, Case, Evidence, IndianCourtForum, AdvocateRepresentationMode } from '@/types';
 import { ForensicEvidenceViewer } from '@/components/courtroom/ForensicEvidenceViewer';
 import { MOCK_CASES, MOCK_JUDGMENT } from '@/data/mockData';
 import { PanelRightOpen, Shield, FileText, Upload, Sparkles, Gavel, CheckCircle2, Users, Play, Square, Scale, Eye } from 'lucide-react';
@@ -44,19 +44,51 @@ export default function TextCourtroomSessionPage() {
   const [modalDecreeData, setModalDecreeData] = useState<any>(null);
   const [activeForensicExhibit, setActiveForensicExhibit] = useState<Evidence | null>(null);
 
+  // Advocate representation modes (Strictly AI Judge, but advocates can be AI or Real Human)
+  const [petitionerMode, setPetitionerMode] = useState<AdvocateRepresentationMode>('ai');
+  const [respondentMode, setRespondentMode] = useState<AdvocateRepresentationMode>('ai');
+
   // New Document Modal Form State
   const [newDocName, setNewDocName] = useState('');
   const [newDocType, setNewDocType] = useState('Petition');
 
-  // Handle sending new message
-  const handleSendMessage = (text: string, senderRole: SenderRole, clientName?: string, category: string = 'Argument') => {
+  // Handle switching court forum
+  const handleSwitchCourtForum = (newForum: IndianCourtForum) => {
+    setCaseData(prev => ({
+      ...prev,
+      courtLevel: newForum,
+      benchInfo: `${newForum} (Special AI Adjudication Bench)`
+    }));
+
+    const transferMsg: Message = {
+      id: `msg-transfer-${Date.now()}`,
+      caseId: caseData.id,
+      sender: 'Judicial Registrar',
+      senderRole: 'AI Judge',
+      content: `PROCEDURAL FORUM TRANSFER ORDER: By bench direction, this matter is formally transferred to the jurisdiction of ${newForum}. The bench is reconstituted under applicable rules and statutory authorities.`,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      category: 'Procedural',
+      legalReferences: [newForum, 'Section 63 Bharatiya Sakshya Adhiniyam, 2023'],
+    };
+    setMessages(prev => [...prev, transferMsg]);
+  };
+
+  // Handle sending new message from advocate input
+  const handleSendMessage = (
+    text: string, 
+    senderRole: SenderRole, 
+    clientName?: string, 
+    category: string = 'Argument',
+    isHuman: boolean = true,
+    barReg?: string
+  ) => {
     let senderName = '';
     if (senderRole === 'AI Judge') {
       senderName = 'AI Presiding Judge';
     } else if (senderRole === 'Petitioner Counsel') {
-      senderName = clientName ? `Advocate 1 (For ${clientName})` : 'Advocate 1 (Petitioner Counsel)';
+      senderName = isHuman ? `Adv. Rajesh Sharma (Petitioner Counsel)` : 'Senior Counsel (Petitioner)';
     } else {
-      senderName = clientName ? `Advocate 2 (For ${clientName})` : 'Advocate 2 (Respondent Counsel)';
+      senderName = isHuman ? `Adv. Anita Nadkarni (Respondent Counsel)` : 'Senior Defense Counsel';
     }
 
     const newMessage: Message = {
@@ -64,6 +96,8 @@ export default function TextCourtroomSessionPage() {
       caseId: caseData.id,
       sender: senderName,
       senderRole,
+      isHumanCounsel: isHuman,
+      barEnrollmentNumber: barReg,
       content: text,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
       category: category as any,
@@ -71,25 +105,25 @@ export default function TextCourtroomSessionPage() {
 
     setMessages(prev => [...prev, newMessage]);
 
-    // Simulate AI Judge evaluation response after 1.5 seconds if sent by counsel
+    // AI Judge evaluates submission under Section 63 BSA and court rules
     if (senderRole !== 'AI Judge') {
       setTimeout(() => {
         const judgeReply: Message = {
           id: `msg-judge-${Date.now()}`,
           caseId: caseData.id,
-          sender: 'AI Presiding Judge',
+          sender: 'AI Presiding Judicial Officer',
           senderRole: 'AI Judge',
-          content: `The Bench has recorded the submission from ${senderRole}. The argument on behalf of the client has been entered in the transcript log. The opposing counsel or bench may now respond.`,
+          content: `ORDER OF THE BENCH: Submission from ${senderRole} (${isHuman ? 'Real Human Advocate' : 'AI Counsel'}) has been entered into the official transcript log under Section 63 BSA. The opposing party or advocate may now advance rebuttal.`,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
           category: 'Ruling',
-          legalReferences: ['BNS Statutory Review', 'Code of Civil Procedure'],
+          legalReferences: [caseData.statutoryActs[0] || 'Code of Civil Procedure', 'Bharatiya Sakshya Adhiniyam, 2023'],
         };
         setMessages(prev => [...prev, judgeReply]);
       }, 1500);
     }
   };
 
-  // Run autonomous multi-agent courtroom trial powered by Modal Cloud Legal Engine
+  // Run autonomous multi-agent courtroom trial powered by Modal Cloud Legal Engine & Baseten Muse Spark
   const handleRunAdversarialTrial = async () => {
     if (isSimulatingDebate) return;
     setIsSimulatingDebate(true);
@@ -103,77 +137,129 @@ export default function TextCourtroomSessionPage() {
         ? 'Order XXXIX Injunction Application & Registered Agreement to Sell'
         : 'Exhibit-P01 (Commercial Agreement & Section 63 BSA Digital Seal)';
 
-      // Turn 1: Petitioner Counsel / Prosecution argues (Baseten Muse Spark Open)
-      const resPet = await fetch('/api/courtroom/modal-stream', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'simulate_turn',
+      let updatedMessages = [...messages];
+
+      // Turn 1: Petitioner Counsel (AI Lawyer vs Real Human Lawyer)
+      let petMsg: Message | null = null;
+      if (petitionerMode === 'real') {
+        // If set to Real Lawyer, check if user already submitted an argument recently
+        const lastPetitioner = [...messages].reverse().find(m => m.senderRole === 'Petitioner Counsel');
+        if (!lastPetitioner) {
+          const promptMsg: Message = {
+            id: `msg-prompt-pet-${Date.now()}`,
+            caseId: caseData.id,
+            sender: 'AI Presiding Judicial Officer',
+            senderRole: 'AI Judge',
+            content: 'BENCH NOTIFICATION: Petitioner Counsel is registered as a Real Human Advocate. The Bench invites the learned advocate to enter their oral submissions in the submission dock below, or switch representation to AI Lawyer for automated argumentation.',
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            category: 'Procedural',
+            legalReferences: ['Bar Council of India Rules', 'Order XVIII CPC'],
+          };
+          setMessages(prev => [...prev, promptMsg]);
+          setIsSimulatingDebate(false);
+          return;
+        } else {
+          petMsg = lastPetitioner;
+        }
+      } else {
+        // Automated Muse Spark 1026 Turn for Petitioner Counsel
+        const resPet = await fetch('/api/courtroom/modal-stream', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'simulate_turn',
+            caseId: caseData.id,
+            caseTitle: caseData.title,
+            caseType: caseData.type,
+            courtLevel: caseData.courtLevel,
+            statutoryActs: caseData.statutoryActs,
+            speakerRole: 'petitioner_counsel',
+            evidenceSummary: caseEvidenceSummary,
+            transcriptHistory: updatedMessages.map(m => ({ speaker: m.sender, text: m.content })),
+          }),
+        });
+        const petJson = await resPet.json();
+        const petData = petJson.data;
+
+        petMsg = {
+          id: `msg-pet-${Date.now()}`,
           caseId: caseData.id,
-          caseTitle: caseData.title,
-          caseType: caseData.type,
-          courtLevel: caseData.courtLevel,
-          statutoryActs: caseData.statutoryActs,
-          speakerRole: 'petitioner_counsel',
-          evidenceSummary: caseEvidenceSummary,
-          transcriptHistory: messages.map(m => ({ speaker: m.sender, text: m.content })),
-        }),
-      });
-      const petJson = await resPet.json();
-      const petData = petJson.data;
+          sender: petData?.speaker || (caseData.type.includes('Criminal') ? 'Public Prosecutor (State)' : 'Senior Counsel (Petitioner)'),
+          senderRole: 'Petitioner Counsel',
+          isHumanCounsel: false,
+          content: petData?.argument_text || 'May it please the Bench. Submissions presented in accordance with statutory requirements.',
+          reasoningContent: petData?.reasoning_content,
+          timestamp: petData?.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+          category: 'Argument',
+          legalReferences: petData?.precedents_cited || [caseData.statutoryActs[0] || 'Constitution of India'],
+        };
+        updatedMessages = [...updatedMessages, petMsg];
+        setMessages(updatedMessages);
 
-      const petMsg: Message = {
-        id: `msg-pet-${Date.now()}`,
-        caseId: caseData.id,
-        sender: petData?.speaker || (caseData.type.includes('Criminal') ? 'Public Prosecutor (State)' : 'Senior Counsel (Petitioner)'),
-        senderRole: 'Petitioner Counsel',
-        content: petData?.argument_text || 'May it please the Bench. Submissions presented in accordance with statutory requirements.',
-        reasoningContent: petData?.reasoning_content,
-        timestamp: petData?.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-        category: 'Argument',
-        legalReferences: petData?.precedents_cited || [caseData.statutoryActs[0] || 'Constitution of India'],
-      };
-      setMessages(prev => [...prev, petMsg]);
+        // Delay 2s for courtroom pacing before Respondent rebuts
+        await new Promise(r => setTimeout(r, 2000));
+      }
 
-      // Delay 2s for courtroom pacing before Respondent rebuts
-      await new Promise(r => setTimeout(r, 2000));
+      // Turn 2: Respondent / Defense Counsel (AI Lawyer vs Real Human Lawyer)
+      let respMsg: Message | null = null;
+      if (respondentMode === 'real') {
+        const lastResp = [...updatedMessages].reverse().find(m => m.senderRole === 'Respondent Counsel');
+        if (!lastResp) {
+          const promptMsg: Message = {
+            id: `msg-prompt-resp-${Date.now()}`,
+            caseId: caseData.id,
+            sender: 'AI Presiding Judicial Officer',
+            senderRole: 'AI Judge',
+            content: 'BENCH NOTIFICATION: Respondent Counsel is registered as a Real Human Advocate. The Bench now calls upon Respondent Counsel to submit their oral rebuttal or objections in the dock below.',
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            category: 'Procedural',
+            legalReferences: ['Bar Council of India Rules'],
+          };
+          setMessages(prev => [...prev, promptMsg]);
+          setIsSimulatingDebate(false);
+          return;
+        } else {
+          respMsg = lastResp;
+        }
+      } else {
+        const resResp = await fetch('/api/courtroom/modal-stream', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'simulate_turn',
+            caseId: caseData.id,
+            caseTitle: caseData.title,
+            caseType: caseData.type,
+            courtLevel: caseData.courtLevel,
+            statutoryActs: caseData.statutoryActs,
+            speakerRole: 'respondent_counsel',
+            evidenceSummary: caseEvidenceSummary,
+            transcriptHistory: updatedMessages.map(m => ({ speaker: m.sender, text: m.content })),
+          }),
+        });
+        const respJson = await resResp.json();
+        const respData = respJson.data;
 
-      // Turn 2: Respondent / Defense Counsel rebuts (Baseten Muse Spark Open)
-      const resResp = await fetch('/api/courtroom/modal-stream', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'simulate_turn',
+        respMsg = {
+          id: `msg-resp-${Date.now()}`,
           caseId: caseData.id,
-          caseTitle: caseData.title,
-          caseType: caseData.type,
-          courtLevel: caseData.courtLevel,
-          statutoryActs: caseData.statutoryActs,
-          speakerRole: 'respondent_counsel',
-          evidenceSummary: caseEvidenceSummary,
-          transcriptHistory: [...messages, petMsg].map(m => ({ speaker: m.sender, text: m.content })),
-        }),
-      });
-      const respJson = await resResp.json();
-      const respData = respJson.data;
+          sender: respData?.speaker || (caseData.type.includes('Constitutional') ? 'Solicitor General (Union of India)' : 'Senior Defense Counsel'),
+          senderRole: 'Respondent Counsel',
+          isHumanCounsel: false,
+          content: respData?.argument_text || 'Objection, Your Honour! The contentions are unsustainable under settled legal doctrines.',
+          reasoningContent: respData?.reasoning_content,
+          timestamp: respData?.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+          category: 'Argument',
+          legalReferences: respData?.precedents_cited || [caseData.statutoryActs[1] || 'Statutory Precedents'],
+        };
+        updatedMessages = [...updatedMessages, respMsg];
+        setMessages(updatedMessages);
 
-      const respMsg: Message = {
-        id: `msg-resp-${Date.now()}`,
-        caseId: caseData.id,
-        sender: respData?.speaker || (caseData.type.includes('Constitutional') ? 'Solicitor General (Union of India)' : 'Senior Defense Counsel'),
-        senderRole: 'Respondent Counsel',
-        content: respData?.argument_text || 'Objection, Your Honour! The contentions are unsustainable under settled legal doctrines.',
-        reasoningContent: respData?.reasoning_content,
-        timestamp: respData?.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-        category: 'Argument',
-        legalReferences: respData?.precedents_cited || [caseData.statutoryActs[1] || 'Statutory Precedents'],
-      };
-      setMessages(prev => [...prev, respMsg]);
+        // Delay 2s before Bench Magistrate issues ruling
+        await new Promise(r => setTimeout(r, 2000));
+      }
 
-      // Delay 2s before Bench Magistrate issues ruling
-      await new Promise(r => setTimeout(r, 2000));
-
-      // Turn 3: AI Presiding Judge Rules (Baseten Muse Spark Open)
+      // Turn 3: AI Presiding Judge Rules (Strictly Autonomous AI Adjudication)
       const resJudge = await fetch('/api/courtroom/modal-stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -186,7 +272,7 @@ export default function TextCourtroomSessionPage() {
           statutoryActs: caseData.statutoryActs,
           speakerRole: 'magistrate_judge',
           evidenceSummary: caseEvidenceSummary,
-          transcriptHistory: [...messages, petMsg, respMsg].map(m => ({ speaker: m.sender, text: m.content })),
+          transcriptHistory: updatedMessages.map(m => ({ speaker: m.sender, text: m.content })),
         }),
       });
       const judgeJson = await resJudge.json();
@@ -195,15 +281,15 @@ export default function TextCourtroomSessionPage() {
       const judgeRuling: Message = {
         id: `msg-judge-ruling-${Date.now()}`,
         caseId: caseData.id,
-        sender: judgeData?.speaker || (caseData.courtLevel === 'Supreme Court of India' ? 'Constitution Bench Presiding Judge' : 'Presiding Judicial Magistrate'),
+        sender: judgeData?.speaker || (caseData.courtLevel === 'Supreme Court of India' ? 'Constitution Bench Presiding Judge' : 'AI Presiding Judicial Officer'),
         senderRole: 'AI Judge',
-        content: judgeData?.argument_text || 'ORDER OF THE BENCH: Having evaluated submissions from both counsels, the Bench issues statutory directions.',
+        content: judgeData?.argument_text || 'ORDER OF THE BENCH: Having evaluated submissions from both counsels, the Bench issues binding statutory directions.',
         reasoningContent: judgeData?.reasoning_content,
         timestamp: judgeData?.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Ruling',
-        legalReferences: judgeData?.precedents_cited || ['Constitution of India Art 142', 'High Court Rules'],
+        legalReferences: judgeData?.precedents_cited || ['Constitution of India Art 142', 'High Court Rules', 'Section 63 BSA'],
       };
-      setMessages(prev => [...prev, judgeRuling]);
+      setMessages([...updatedMessages, judgeRuling]);
     } catch (err) {
       console.error('Trial simulation error:', err);
     } finally {
@@ -254,8 +340,12 @@ export default function TextCourtroomSessionPage() {
         style={{ backgroundImage: `url('/images/courtroom_chamber.jpg')` }}
       />
 
-      {/* Top Bar Header */}
-      <CourtroomHeader caseData={caseData} mode="Text" />
+      {/* Top Bar Header with 8 Courts Switcher */}
+      <CourtroomHeader 
+        caseData={caseData} 
+        mode="Text" 
+        onSwitchCourtForum={handleSwitchCourtForum} 
+      />
 
       {/* Main Content Area */}
       <div className="flex-1 flex min-h-0 relative z-10">
@@ -276,9 +366,9 @@ export default function TextCourtroomSessionPage() {
             </button>
           </div>
 
-          {/* Courtroom AI Action & Simulation Bar */}
+          {/* Courtroom AI Action & Advocate Configuration Bar */}
           <div className="px-4 py-2.5 bg-[#0a0a0a] border-b border-zinc-800 flex items-center justify-between gap-3 text-xs flex-wrap">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <Button
                 size="sm"
                 variant="gold"
@@ -288,6 +378,46 @@ export default function TextCourtroomSessionPage() {
               >
                 {isSimulatingDebate ? 'Litigating Debate (Muse Spark)...' : 'Simulate Adversarial Trial (Muse Spark)'}
               </Button>
+
+              {/* Advocate Selection Toggles: Strictly AI Judge, Choice for Advocates */}
+              <div className="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-zinc-950 border border-zinc-800 text-[11px] font-mono">
+                <span className="text-zinc-500 font-bold uppercase text-[9px]">Bench:</span>
+                <span className="text-white font-bold bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-700 flex items-center gap-1">
+                  <Gavel className="w-3 h-3 text-white" /> AI Judge
+                </span>
+
+                <span className="text-zinc-700">|</span>
+
+                <span className="text-zinc-400">Petitioner:</span>
+                <button
+                  type="button"
+                  onClick={() => setPetitionerMode(petitionerMode === 'ai' ? 'real' : 'ai')}
+                  className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all ${
+                    petitionerMode === 'real'
+                      ? 'bg-emerald-500 text-black'
+                      : 'bg-zinc-900 text-amber-400 border border-amber-500/40'
+                  }`}
+                  title="Click to toggle between AI Lawyer and Real Human Lawyer"
+                >
+                  {petitionerMode === 'real' ? '👤 Real Lawyer' : '🤖 AI Lawyer'}
+                </button>
+
+                <span className="text-zinc-700">|</span>
+
+                <span className="text-zinc-400">Respondent:</span>
+                <button
+                  type="button"
+                  onClick={() => setRespondentMode(respondentMode === 'ai' ? 'real' : 'ai')}
+                  className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all ${
+                    respondentMode === 'real'
+                      ? 'bg-emerald-500 text-black'
+                      : 'bg-zinc-900 text-amber-400 border border-amber-500/40'
+                  }`}
+                  title="Click to toggle between AI Lawyer and Real Human Lawyer"
+                >
+                  {respondentMode === 'real' ? '👤 Real Lawyer' : '🤖 AI Lawyer'}
+                </button>
+              </div>
 
               <Button
                 size="sm"

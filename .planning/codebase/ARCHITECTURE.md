@@ -35,3 +35,4 @@ AI Judge is designed as an institutional, low-latency, hybrid edge-and-cloud arc
 3. **Graceful Fallback & Resilience:**
    - The Next.js API orchestrator attempts live inference via Baseten's 2M/min endpoint first.
    - If network or provider failure occurs, it seamlessly degrades to the Modal Serverless Legal Engine, ensuring zero bench interruption.
+

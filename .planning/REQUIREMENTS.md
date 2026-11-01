@@ -32,3 +32,4 @@
 | **REQ-UI-02** | **Full Jurisdictional Breadth** | Native support for Supreme Court (Constitutional), High Court (Commercial/Appellate), and District/Sessions Courts (Civil/Criminal). | **VERIFIED** |
 | **REQ-UI-03** | **Interactive Modals & Vault** | Interactive Forensic Evidence Viewer, Decree Synthesis Modal, Case Information Vault, and Real-time Status Badges. | **VERIFIED** |
 | **REQ-UI-04** | **Cross-Platform Accessibility** | Responsive layout supporting mobile, tablet, and ultra-wide courtroom monitors with zero horizontal overflow. | **VERIFIED** |
+

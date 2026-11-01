@@ -21,3 +21,4 @@
 ## 4. Decree Determinism Verification
 * All financial decree awards must be deterministically computable:
   - Principal + Statutory Interest (quarterly compounding) + Taxed Costs == Total Enforceable Sum.
+

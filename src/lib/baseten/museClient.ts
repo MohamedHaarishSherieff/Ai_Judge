@@ -61,8 +61,8 @@ MANDATORY DIRECTIVE:
 - Do NOT output any reasoning, meta-commentary, sentence counting, scratchpad notes, or self-directions (such as "Let's count", "Sentence 1", "Drafting:", "Check periods").
 - Any internal reasoning must stay inside your deliberation. Your final response must be 100% pure judicial dialogue.`;
 
-  // 1. CONSTITUTIONAL LAW (Supreme Court of India / High Court Writ Bench)
-  if (caseType.toLowerCase().includes('constitutional')) {
+  // 1. SUPREME COURT OF INDIA (Apex Constitutional Court)
+  if (courtLevel.includes('Supreme Court') || caseType.toLowerCase().includes('constitutional')) {
     if (speakerRole === 'petitioner_counsel') {
       speakerName = 'Senior Counsel (Petitioner)';
       roleSystemPrompt = `You are Senior Advocate for the Petitioner before the ${courtLevel}.
@@ -82,8 +82,80 @@ Deliver an authoritative bench order under Article 142.
 Balance state security against fundamental civil liberties and issue binding procedural directions to the Attorney General and Petitioner.${strictOutputDirective}`;
     }
   }
-  // 2. CRIMINAL MATTER (Sessions / High Court Criminal Appellate Bench)
-  else if (caseType.toLowerCase().includes('criminal') || caseType.toLowerCase().includes('crime')) {
+  // 2. QUASI-JUDICIAL TRIBUNALS (NCLT / NGT / CAT)
+  else if (courtLevel.includes('Tribunal') || courtLevel.includes('NCLT') || courtLevel.includes('NGT')) {
+    if (speakerRole === 'petitioner_counsel') {
+      speakerName = 'Senior Counsel for Financial Creditor / Applicant';
+      roleSystemPrompt = `You are Senior Advocate representing the Financial Creditor / Applicant before the ${courtLevel}.
+Advance oral submissions under the Insolvency and Bankruptcy Code, 2016 (IBC Section 7) or National Green Tribunal Act.
+Demonstrate debt, default via Information Utility records, or clear statutory ecological damage.${strictOutputDirective}`;
+    } else if (speakerRole === 'respondent_counsel') {
+      speakerName = 'Counsel for Corporate Debtor / Respondent';
+      roleSystemPrompt = `You are Counsel representing the Corporate Debtor before the ${courtLevel}.
+Oppose admission under Section 7 IBC or assert compliance with environmental norms.
+Argue ongoing solvent operations, debt restructuring, or pre-existing bona fide disputes under Section 8/9 IBC.${strictOutputDirective}`;
+    } else {
+      speakerName = 'Presiding Member, Judicial Division';
+      roleSystemPrompt = `You are the Hon'ble Presiding Judicial Member of the ${courtLevel}.
+Deliver an authoritative tribunal order on admission, moratorium under Section 14 IBC, or statutory directions.${strictOutputDirective}`;
+    }
+  }
+  // 3. SPECIAL COURTS (CBI / Anti-Corruption / POCSO)
+  else if (courtLevel.includes('Special') || courtLevel.includes('CBI')) {
+    if (speakerRole === 'petitioner_counsel') {
+      speakerName = 'Special Public Prosecutor (CBI)';
+      roleSystemPrompt = `You are the Special Public Prosecutor appearing before the ${courtLevel}.
+Directly deliver oral submissions under the Prevention of Corruption Act, 1988 and Bharatiya Nyaya Sanhita (BNS).
+Assert proof of corrupt gratification, breach of public trust, and cryptographic evidence continuity under Section 63 BSA.${strictOutputDirective}`;
+    } else if (speakerRole === 'respondent_counsel') {
+      speakerName = 'Senior Defense Counsel';
+      roleSystemPrompt = `You are Senior Defense Counsel before the ${courtLevel}.
+Directly deliver oral objection opposing prosecution charges.
+Assert lack of demand/acceptance proof, tainted witness testimonies, and defective Section 63(4) BSA electronic certificates.${strictOutputDirective}`;
+    } else {
+      speakerName = 'Special Judge (Designated Bench)';
+      roleSystemPrompt = `You are the Hon'ble Special Judge presiding over the ${courtLevel}.
+Deliver an authoritative judicial ruling adjudicating on charge framing or evidence admissibility under Section 63 BSA.${strictOutputDirective}`;
+    }
+  }
+  // 4. GRASSROOTS DISPUTE FORUMS (Lok Adalats & Gram Nyayalayas)
+  else if (courtLevel.includes('Grassroots') || courtLevel.includes('Lok Adalat') || courtLevel.includes('Gram Nyayalaya')) {
+    if (speakerRole === 'petitioner_counsel') {
+      speakerName = 'Advocate / Legal Aid Counsel for Complainant';
+      roleSystemPrompt = `You are Legal Aid Counsel representing the rural community / complainant before the ${courtLevel}.
+Advance fair, conciliatory settlement terms under the Legal Services Authorities Act, 1987.
+Propose mutual access compromise and amicable resolution with zero punitive acrimony.${strictOutputDirective}`;
+    } else if (speakerRole === 'respondent_counsel') {
+      speakerName = 'Counsel for Respondent / Cooperative';
+      roleSystemPrompt = `You are Counsel for the Respondent before the ${courtLevel}.
+Respond constructively to the conciliation proposal.
+Offer pragmatic concessions on schedule, water sharing, or payment rescheduling in the spirit of Lok Adalat.${strictOutputDirective}`;
+    } else {
+      speakerName = 'Presiding Conciliator & Judicial Officer';
+      roleSystemPrompt = `You are the Hon'ble Presiding Officer of the National Lok Adalat / Gram Nyayalaya.
+Pronounce an amicable, consensual settlement award under Section 21 of the Legal Services Authorities Act, 1987 with finality and refund of court fees.${strictOutputDirective}`;
+    }
+  }
+  // 5. SUBORDINATE CRIMINAL COURTS (Judicial Magistrates JMFC/CJM)
+  else if (courtLevel.includes('Subordinate Criminal') || courtLevel.includes('Magistrate')) {
+    if (speakerRole === 'petitioner_counsel') {
+      speakerName = 'Counsel for Complainant / APP';
+      roleSystemPrompt = `You are Counsel representing the Complainant before the ${courtLevel}.
+Directly deliver oral arguments under Section 138 of the Negotiable Instruments Act or BNSS summary offenses.
+Assert statutory presumptions under Section 139 NI Act and service of legal notice.${strictOutputDirective}`;
+    } else if (speakerRole === 'respondent_counsel') {
+      speakerName = 'Defense Counsel for Accused';
+      roleSystemPrompt = `You are Defense Counsel before the ${courtLevel}.
+Directly raise an oral objection rebutting the statutory presumption.
+Demonstrate security cheque misuse, absence of legally enforceable debt, or non-service of statutory notice.${strictOutputDirective}`;
+    } else {
+      speakerName = 'Judicial Magistrate First Class (JMFC)';
+      roleSystemPrompt = `You are the Judicial Magistrate First Class presiding over the ${courtLevel}.
+Deliver an authoritative summary bench order on plea recording or discharge.${strictOutputDirective}`;
+    }
+  }
+  // 6. SESSIONS & CRIMINAL (District & Sessions Courts)
+  else if (caseType.toLowerCase().includes('criminal') || caseType.toLowerCase().includes('crime') || courtLevel.includes('Sessions')) {
     if (speakerRole === 'petitioner_counsel') {
       speakerName = 'Public Prosecutor (State)';
       roleSystemPrompt = `You are the Public Prosecutor representing the State before the ${courtLevel}.
@@ -101,8 +173,8 @@ Deliver an authoritative judicial ruling.
 Rule on the regular bail petition under Section 480 BNSS, imposing strict conditions (surety, passport deposit, attendance before investigating officer).${strictOutputDirective}`;
     }
   }
-  // 3. CIVIL DISPUTE (District Court / High Court Civil Division)
-  else if (caseType.toLowerCase().includes('civil') || caseType.toLowerCase().includes('property')) {
+  // 7. SUBORDINATE CIVIL & DISTRICT CIVIL (Civil Judge Senior/Junior Divisions)
+  else if (caseType.toLowerCase().includes('civil') || caseType.toLowerCase().includes('property') || courtLevel.includes('Civil')) {
     if (speakerRole === 'petitioner_counsel') {
       speakerName = 'Advocate for Plaintiff';
       roleSystemPrompt = `You are Counsel for the Plaintiff before the ${courtLevel}.
@@ -120,7 +192,7 @@ Deliver an authoritative judicial order under Order XXXIX CPC.
 Grant an ad-interim status quo or temporary injunction order pending trial, directing maintenance of spot possession.${strictOutputDirective}`;
     }
   }
-  // 4. CORPORATE & COMMERCIAL
+  // 8. HIGH COURT COMMERCIAL & CORPORATE
   else {
     if (speakerRole === 'petitioner_counsel') {
       speakerName = 'Senior Commercial Advocate';
