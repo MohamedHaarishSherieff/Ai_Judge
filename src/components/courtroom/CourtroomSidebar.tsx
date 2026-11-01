@@ -59,10 +59,11 @@ export const CourtroomSidebar: React.FC<CourtroomSidebarProps> = ({
           <button
             type="button"
             onClick={onSwitchCourtForum}
-            className="w-full py-2 px-3 rounded-lg bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-amber-400/20 active:scale-[0.98] cursor-pointer"
+            className="w-full py-2.5 px-3 rounded-lg bg-amber-400 hover:bg-amber-300 text-black font-black text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-amber-400/20 active:scale-[0.98] cursor-pointer border-2 border-amber-300"
+            title="Click here to switch court forum"
           >
             <Landmark className="w-4 h-4 text-black shrink-0" />
-            <span>Switch Court Forum (Choose from 8)</span>
+            <span>🏛️ CHANGE COURT (Choose from 8)</span>
           </button>
         )}
       </div>
