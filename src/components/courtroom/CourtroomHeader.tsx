@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Case, Hearing, IndianCourtForum } from '@/types';
 import { Gavel, Shield, Calendar, Clock, Video, FileText, ArrowLeft, Landmark, CheckCircle2 } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
+import { Modal } from '@/components/ui/Modal';
 import { VideoUnavailableModal } from './VideoUnavailableModal';
 import { INDIAN_COURT_FORUMS } from '@/data/mockData';
 import Link from 'next/link';
@@ -57,14 +58,15 @@ export const CourtroomHeader: React.FC<CourtroomHeaderProps> = ({
 
         {/* Bench & Hearing status details */}
         <div className="flex items-center gap-3 text-xs shrink-0">
-          <Link
-            href="/video-courtroom"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700 hover:border-zinc-500 font-mono text-xs transition-all shadow-sm"
-            title="Switch to Multimodal Video Courtroom"
+          <button
+            type="button"
+            onClick={() => setVideoModalOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700 hover:border-zinc-500 font-mono text-xs transition-all shadow-sm cursor-pointer"
+            title="Video Courtroom - Feature Notice"
           >
             <Video className="w-3.5 h-3.5 text-white" />
             <span className="hidden sm:inline">Video Court</span>
-          </Link>
+          </button>
 
           <div className="flex flex-col text-right">
             <button
@@ -87,73 +89,62 @@ export const CourtroomHeader: React.FC<CourtroomHeaderProps> = ({
       <VideoUnavailableModal isOpen={videoModalOpen} onClose={() => setVideoModalOpen(false)} />
 
       {/* Switch Court Forum Modal */}
-      {switchModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fade-in">
-          <div className="w-full max-w-2xl bg-black border border-zinc-700 rounded-2xl p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
-              <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-full bg-white text-black flex items-center justify-center">
-                  <Landmark className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-white font-serif">Judicial Forum Transfer</h3>
-                  <p className="text-[11px] text-zinc-400 font-mono">Select one of the 8 constitutional & statutory tiers of India</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setSwitchModalOpen(false)}
-                className="text-zinc-400 hover:text-white font-mono text-lg p-1"
-              >
-                ✕
-              </button>
-            </div>
+      <Modal
+        isOpen={switchModalOpen}
+        onClose={() => setSwitchModalOpen(false)}
+        title="Select Court Forum (8 Judicial Benches)"
+        maxWidth="2xl"
+      >
+        <div className="space-y-4">
+          <p className="text-xs text-zinc-400 font-mono">
+            Select one of the 8 constitutional & statutory tiers of India to re-constitute the Presiding Bench:
+          </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[55vh] overflow-y-auto pr-1">
-              {INDIAN_COURT_FORUMS.map((f) => {
-                const isCurrent = displayCourt === f.name;
-                return (
-                  <div
-                    key={f.id}
-                    onClick={() => {
-                      if (onSwitchCourtForum) onSwitchCourtForum(f.name);
-                      setSwitchModalOpen(false);
-                    }}
-                    className={`p-3.5 rounded-xl border cursor-pointer transition-all space-y-1.5 ${
-                      isCurrent
-                        ? 'bg-zinc-900 border-white text-white shadow-md'
-                        : 'bg-zinc-950 border-zinc-850 border-zinc-800/80 text-zinc-300 hover:border-zinc-500 hover:bg-zinc-900'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-xs text-white font-serif">{f.shortName}</span>
-                      {isCurrent ? (
-                        <span className="text-[10px] text-black font-mono font-extrabold bg-white px-2 py-0.5 rounded flex items-center gap-1">
-                          <CheckCircle2 className="w-3 h-3 text-black" /> Active Bench
-                        </span>
-                      ) : (
-                        <span className="text-[10px] text-zinc-400 font-mono">Select →</span>
-                      )}
-                    </div>
-                    <div className="text-[11px] text-zinc-400 leading-snug line-clamp-2">
-                      {f.description}
-                    </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[55vh] overflow-y-auto pr-1">
+            {INDIAN_COURT_FORUMS.map((f) => {
+              const isCurrent = displayCourt === f.name;
+              return (
+                <div
+                  key={f.id}
+                  onClick={() => {
+                    if (onSwitchCourtForum) onSwitchCourtForum(f.name);
+                    setSwitchModalOpen(false);
+                  }}
+                  className={`p-3.5 rounded-xl border cursor-pointer transition-all space-y-1.5 ${
+                    isCurrent
+                      ? 'bg-zinc-900 border-white text-white shadow-md'
+                      : 'bg-zinc-950 border-zinc-800 text-zinc-300 hover:border-zinc-500 hover:bg-zinc-900'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-white font-serif">{f.shortName}</span>
+                    {isCurrent ? (
+                      <span className="text-[10px] text-black font-mono font-extrabold bg-white px-2 py-0.5 rounded flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-black" /> Active Bench
+                      </span>
+                    ) : (
+                      <span className="text-[10px] text-zinc-400 font-mono">Select →</span>
+                    )}
                   </div>
-                );
-              })}
-            </div>
+                  <div className="text-[11px] text-zinc-400 leading-snug line-clamp-2">
+                    {f.description}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
-            <div className="pt-3 border-t border-zinc-800 flex items-center justify-between">
-              <span className="text-[11px] font-mono text-zinc-500">Ministry of Law & Justice • National Judicial Portal</span>
-              <button
-                onClick={() => setSwitchModalOpen(false)}
-                className="px-3.5 py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 text-xs text-zinc-200 hover:text-white hover:border-zinc-500 transition-colors"
-              >
-                Close
-              </button>
-            </div>
+          <div className="pt-3 border-t border-zinc-800 flex items-center justify-between">
+            <span className="text-[11px] font-mono text-zinc-500">Ministry of Law & Justice • National Judicial Portal</span>
+            <button
+              onClick={() => setSwitchModalOpen(false)}
+              className="px-3.5 py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 text-xs text-zinc-200 hover:text-white hover:border-zinc-500 transition-colors"
+            >
+              Close
+            </button>
           </div>
         </div>
-      )}
+      </Modal>
     </>
   );
 };

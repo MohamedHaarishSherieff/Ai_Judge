@@ -10,7 +10,7 @@ import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { Message, SenderRole, Case, Evidence, IndianCourtForum, AdvocateRepresentationMode } from '@/types';
 import { ForensicEvidenceViewer } from '@/components/courtroom/ForensicEvidenceViewer';
-import { MOCK_CASES, MOCK_JUDGMENT, INDIAN_COURT_FORUMS } from '@/data/mockData';
+import { MOCK_CASES, MOCK_JUDGMENT, INDIAN_COURT_FORUMS, MOCK_DOCUMENTS, MOCK_EVIDENCE, MOCK_HEARINGS } from '@/data/mockData';
 import { PanelRightOpen, Shield, FileText, Upload, Sparkles, Gavel, CheckCircle2, Users, Play, Square, Scale, Eye, Landmark } from 'lucide-react';
 
 export default function TextCourtroomSessionPage() {
@@ -44,6 +44,18 @@ export default function TextCourtroomSessionPage() {
   const [modalDecreeData, setModalDecreeData] = useState<any>(null);
   const [activeForensicExhibit, setActiveForensicExhibit] = useState<Evidence | null>(null);
   const [debateStatusText, setDebateStatusText] = useState('');
+  const [switchBenchModalOpen, setSwitchBenchModalOpen] = useState(false);
+
+  // Relevant documents and evidence for sidebar
+  const caseDocuments = MOCK_DOCUMENTS.filter(d => d.caseId === caseData.id).length > 0
+    ? MOCK_DOCUMENTS.filter(d => d.caseId === caseData.id)
+    : MOCK_DOCUMENTS;
+  const caseEvidence = MOCK_EVIDENCE.filter(e => e.caseId === caseData.id).length > 0
+    ? MOCK_EVIDENCE.filter(e => e.caseId === caseData.id)
+    : MOCK_EVIDENCE;
+  const caseHearings = MOCK_HEARINGS.filter(h => h.caseId === caseData.id).length > 0
+    ? MOCK_HEARINGS.filter(h => h.caseId === caseData.id)
+    : MOCK_HEARINGS;
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -134,7 +146,7 @@ export default function TextCourtroomSessionPage() {
   const fetchCourtroomTurnWithFallback = async (payload: any): Promise<any> => {
     try {
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 12000); // 12s timeout
+      const timer = setTimeout(() => controller.abort(), 2000); // 2s timeout for instant responsiveness
 
       const res = await fetch('/api/courtroom/modal-stream', {
         method: 'POST',
@@ -149,7 +161,7 @@ export default function TextCourtroomSessionPage() {
         if (json?.data?.argument_text) return json.data;
       }
     } catch (err) {
-      console.warn('[Courtroom] Live inference latency reached threshold, deploying instantaneous CoT fallback:', err);
+      console.warn('[Courtroom] Live inference latency threshold reached, deploying rapid CoT legal fallback:', err);
     }
 
     // Instantaneous High-Fidelity CoT Legal Fallback
@@ -510,13 +522,72 @@ export default function TextCourtroomSessionPage() {
         {/* Right Sidebar */}
         <CourtroomSidebar
           caseData={caseData}
-          documents={[]}
-          evidenceList={[]}
-          hearings={[]}
+          documents={caseDocuments}
+          evidenceList={caseEvidence}
+          hearings={caseHearings}
           isOpenMobile={mobileSidebarOpen}
           onCloseMobile={() => setMobileSidebarOpen(false)}
+          onSwitchCourtForum={() => setSwitchBenchModalOpen(true)}
         />
       </div>
+
+      {/* Sidebar Triggered Court Forum Modal */}
+      <Modal
+        isOpen={switchBenchModalOpen}
+        onClose={() => setSwitchBenchModalOpen(false)}
+        title="Select Court Forum (8 Judicial Benches)"
+        maxWidth="2xl"
+      >
+        <div className="space-y-4">
+          <p className="text-xs text-zinc-400 font-mono">
+            Select one of the 8 constitutional & statutory tiers of India to re-constitute the Presiding Bench:
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[55vh] overflow-y-auto pr-1">
+            {INDIAN_COURT_FORUMS.map((f) => {
+              const isCurrent = caseData.courtLevel === f.name;
+              return (
+                <div
+                  key={f.id}
+                  onClick={() => {
+                    handleSwitchCourtForum(f.name);
+                    setSwitchBenchModalOpen(false);
+                  }}
+                  className={`p-3.5 rounded-xl border cursor-pointer transition-all space-y-1.5 ${
+                    isCurrent
+                      ? 'bg-zinc-900 border-white text-white shadow-md'
+                      : 'bg-zinc-950 border-zinc-800 text-zinc-300 hover:border-zinc-500 hover:bg-zinc-900'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-white font-serif">{f.shortName}</span>
+                    {isCurrent ? (
+                      <span className="text-[10px] text-black font-mono font-extrabold bg-white px-2 py-0.5 rounded flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-black" /> Active Bench
+                      </span>
+                    ) : (
+                      <span className="text-[10px] text-zinc-400 font-mono">Select →</span>
+                    )}
+                  </div>
+                  <div className="text-[11px] text-zinc-400 leading-snug line-clamp-2">
+                    {f.description}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="pt-3 border-t border-zinc-800 flex items-center justify-between">
+            <span className="text-[11px] font-mono text-zinc-500">Ministry of Law & Justice • National Judicial Portal</span>
+            <button
+              onClick={() => setSwitchBenchModalOpen(false)}
+              className="px-3.5 py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 text-xs text-zinc-200 hover:text-white hover:border-zinc-500 transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       {/* Upload Document Modal */}
       <Modal

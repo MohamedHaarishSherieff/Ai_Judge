@@ -71,17 +71,14 @@ export const Navbar: React.FC = () => {
               );
             })}
             
-            <Link
-              href="/video-courtroom"
-              className={`flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg transition-all ${
-                pathname.startsWith('/video-courtroom')
-                  ? 'bg-zinc-900 text-white border border-zinc-700 shadow-sm'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-900/60'
-              }`}
+            <button
+              type="button"
+              onClick={() => setVideoModalOpen(true)}
+              className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900/60 transition-all cursor-pointer"
             >
-              <Video className="w-3.5 h-3.5 text-white" />
+              <Video className="w-3.5 h-3.5 text-zinc-400" />
               Video Courtroom
-            </Link>
+            </button>
           </nav>
 
           {/* Direct CTA - No Login Barrier */}
@@ -128,18 +125,17 @@ export const Navbar: React.FC = () => {
                   </Link>
                 );
               })}
-              <Link
-                href="/video-courtroom"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 text-base font-medium rounded-lg ${
-                  pathname.startsWith('/video-courtroom')
-                    ? 'bg-zinc-900 text-white border border-zinc-700'
-                    : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
-                }`}
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setVideoModalOpen(true);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-base font-medium rounded-lg text-zinc-400 hover:bg-zinc-900 hover:text-white text-left"
               >
-                <Video className="w-5 h-5 text-white" />
+                <Video className="w-5 h-5 text-zinc-400" />
                 Video Courtroom
-              </Link>
+              </button>
             </div>
 
             <div className="pt-4 border-t border-zinc-800">

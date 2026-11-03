@@ -83,7 +83,15 @@ export const CourtroomSidebar: React.FC<CourtroomSidebarProps> = ({
             <div className="space-y-2">
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-zinc-300 flex items-center justify-between">
                 <span>Jurisdiction & Forum</span>
-                <span className="text-[9px] font-mono text-zinc-400 bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded">8 Courts</span>
+                <button
+                  type="button"
+                  onClick={onSwitchCourtForum}
+                  className="text-[10px] font-mono text-zinc-300 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 hover:border-white px-2 py-0.5 rounded cursor-pointer transition-all flex items-center gap-1"
+                  title="Click to transfer matter to any of the 8 constitutional & statutory courts of India"
+                >
+                  <Landmark className="w-3 h-3 text-white" />
+                  <span>8 Courts ▾</span>
+                </button>
               </span>
               <div className="p-3 bg-zinc-950 rounded-lg border border-zinc-800 space-y-1.5">
                 <div className="font-bold text-white font-serif text-sm">{caseData.courtLevel}</div>
