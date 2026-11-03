@@ -57,6 +57,15 @@ export const CourtroomHeader: React.FC<CourtroomHeaderProps> = ({
 
         {/* Bench & Hearing status details */}
         <div className="flex items-center gap-3 text-xs shrink-0">
+          <Link
+            href="/video-courtroom"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700 hover:border-zinc-500 font-mono text-xs transition-all shadow-sm"
+            title="Switch to Multimodal Video Courtroom"
+          >
+            <Video className="w-3.5 h-3.5 text-white" />
+            <span className="hidden sm:inline">Video Court</span>
+          </Link>
+
           <div className="flex flex-col text-right">
             <button
               type="button"

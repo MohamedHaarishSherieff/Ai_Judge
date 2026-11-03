@@ -8,6 +8,7 @@ import { Disclaimer } from '@/components/layout/Disclaimer';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { Modal } from '@/components/ui/Modal';
 import { MOCK_CASES, INDIAN_COURT_FORUMS } from '@/data/mockData';
 import { IndianCourtForum } from '@/types';
 import { 
@@ -315,60 +316,50 @@ export default function TextCourtroomListPage() {
         </div>
 
         {/* Guided Jurisdiction Modal */}
-        {showHelperModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-            <div className="w-full max-w-2xl bg-zinc-950 border border-zinc-700 rounded-2xl p-6 space-y-5 shadow-2xl">
-              <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
-                <div className="flex items-center gap-2">
-                  <Scale className="w-5 h-5 text-white" />
-                  <h3 className="text-lg font-bold text-white">Jurisdictional Guidance: Which Court to Approach?</h3>
-                </div>
-                <button
-                  onClick={() => setShowHelperModal(false)}
-                  className="text-zinc-400 hover:text-white text-lg font-mono"
+        <Modal
+          isOpen={showHelperModal}
+          onClose={() => setShowHelperModal(false)}
+          title="Jurisdictional Guidance: Which Court to Approach?"
+          maxWidth="2xl"
+        >
+          <div className="space-y-4">
+            <p className="text-xs text-zinc-300">
+              In the Indian legal system, forum competence is governed by constitutional writ limits, 
+              statutory subject matter, and pecuniary thresholds. Select your matter type to identify the proper bench:
+            </p>
+
+            <div className="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
+              {jurisdictionHelpers.map((item, i) => (
+                <div
+                  key={i}
+                  onClick={() => {
+                    setSelectedForum(item.forum);
+                    setShowHelperModal(false);
+                  }}
+                  className="p-3.5 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-white hover:bg-zinc-850 cursor-pointer transition-all space-y-1.5 group"
                 >
-                  ✕
-                </button>
-              </div>
-
-              <p className="text-xs text-zinc-300">
-                In the Indian legal system, forum competence is governed by constitutional writ limits, 
-                statutory subject matter, and pecuniary thresholds. Select your matter type to identify the proper bench:
-              </p>
-
-              <div className="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
-                {jurisdictionHelpers.map((item, i) => (
-                  <div
-                    key={i}
-                    onClick={() => {
-                      setSelectedForum(item.forum);
-                      setShowHelperModal(false);
-                    }}
-                    className="p-3.5 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-white hover:bg-zinc-850 cursor-pointer transition-all space-y-1.5 group"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-sm text-white group-hover:text-zinc-200 transition-colors">
-                        {item.label}
-                      </span>
-                      <span className="text-[11px] font-mono text-white bg-black px-2 py-0.5 rounded border border-zinc-700 font-bold">
-                        {item.forum}
-                      </span>
-                    </div>
-                    <div className="text-xs text-zinc-400 leading-relaxed">
-                      {item.reason}
-                    </div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-sm text-white group-hover:text-zinc-200 transition-colors">
+                      {item.label}
+                    </span>
+                    <span className="text-[11px] font-mono text-white bg-black px-2 py-0.5 rounded border border-zinc-700 font-bold">
+                      {item.forum}
+                    </span>
                   </div>
-                ))}
-              </div>
+                  <div className="text-xs text-zinc-400 leading-relaxed">
+                    {item.reason}
+                  </div>
+                </div>
+              ))}
+            </div>
 
-              <div className="pt-2 border-t border-zinc-800 flex justify-end">
-                <Button variant="outline" size="sm" onClick={() => setShowHelperModal(false)}>
-                  Close Guide
-                </Button>
-              </div>
+            <div className="pt-2 border-t border-zinc-800 flex justify-end">
+              <Button variant="outline" size="sm" onClick={() => setShowHelperModal(false)}>
+                Close Guide
+              </Button>
             </div>
           </div>
-        )}
+        </Modal>
 
         <Disclaimer />
       </main>
