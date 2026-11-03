@@ -222,13 +222,18 @@ export default function TextCourtroomListPage() {
 
         {/* Active Docket / Courtroom Sessions */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-              Active Benchmark Courtroom Sessions ({filteredCases.length})
-            </h2>
-            <span className="text-xs text-zinc-400 font-mono">
-              AI Judge Autonomous Adjudication Bench
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1 border-b border-zinc-800">
+            <div>
+              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                Pre-Loaded Demonstration Courtroom Sessions ({filteredCases.length})
+              </h2>
+              <p className="text-xs text-zinc-400 mt-0.5">
+                Ready-to-test demonstration cases for each Indian court forum • Click to simulate trial, or click &quot;File New Case Petition&quot; above to start your own.
+              </p>
+            </div>
+            <span className="text-xs text-zinc-400 font-mono shrink-0">
+              Instant 1-Click Evaluation
             </span>
           </div>
 
@@ -246,6 +251,9 @@ export default function TextCourtroomListPage() {
                       {c.caseNumber}
                     </span>
                     <div className="flex items-center gap-2">
+                      <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-300 bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800 font-semibold">
+                        Demonstration
+                      </span>
                       <span className="text-[10px] font-mono text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
                         {c.courtLevel}
                       </span>
