@@ -76,6 +76,7 @@ flowchart TD
 ### 1. Cognitive Layer — Meta Muse Spark Open (`meta-models/muse-spark-open-1026`)
 - Hosted on **Baseten** with 2,000,000 tokens/minute throughput.
 - Orchestrates multi-agent adversarial oral litigation between **Petitioner Senior Advocate**, **Respondent Defense Counsel**, and the **AI Presiding Judge**.
+- Supports **Hybrid Representation**: Litigate as a **Real Human Lawyer** (enter Bar Council registration number and custom arguments) or toggle to **AI Legal Counsel**, while the Presiding Judge remains strictly autonomous AI.
 - Exposes native **Chain-of-Thought (CoT) Legal Deliberations** directly in the UI, allowing observers to audit the model's statutory reasoning.
 
 ### 2. Forensic Vision Layer — Meta Segment Anything (`SAM 3.1`)
@@ -86,6 +87,18 @@ flowchart TD
 - High-performance Python container executing pure mathematical calculations without variance.
 - Calculates compounding contractual interest (quarterly/monthly) and strictly caps unreasonable penal sums per *Kailash Nath Associates v. DDA (2015)*.
 - Issues digital Section 63 BSA certificates and signs decree sheets with SHA-256 cryptographic digests.
+
+### 4. Pan-India Court System & Citizen Legal Guide
+- **8 Constitutional & Statutory Court Forums of India**: Complete jurisdiction-based courtroom routing across:
+  1. *Supreme Court of India* (Article 32 Writ & Article 136 SLP)
+  2. *High Courts of the States* (Article 226 Constitutional Jurisdiction)
+  3. *District & Sessions Courts* (Major Civil Claims & Sessions Trials)
+  4. *Subordinate Civil Courts* (Civil Judge Senior/Junior Divisions)
+  5. *Subordinate Criminal Courts* (Chief Judicial Magistrate / JMFC)
+  6. *Special Courts* (POCSO, CBI Anti-Corruption, Commercial Benches)
+  7. *Quasi-Judicial Tribunals* (NCLT Corporate Insolvency, NGT Environmental Law)
+  8. *Grassroots Dispute Forums* (National Lok Adalats & Gram Nyayalayas)
+- **Nyaya Sarathi (न्याय सारथी) Sovereign Legal Chatbot**: Floating 24/7 AI courtroom concierge guiding citizens through court forum selection, application features, and statutory procedures while politely filtering non-legal queries.
 
 ---
 
