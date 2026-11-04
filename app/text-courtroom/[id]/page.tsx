@@ -63,6 +63,31 @@ export default function TextCourtroomSessionPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isSimulatingDebate, debateStatusText]);
 
+  // Load custom case data from localStorage if available
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedCase = localStorage.getItem('custom_case_' + caseId);
+      if (savedCase) {
+        try {
+          const parsed: Case = JSON.parse(savedCase);
+          setCaseData(parsed);
+          setMessages([
+            {
+              id: 'msg-welcome',
+              caseId: parsed.id,
+              sender: parsed.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Commercial Judge',
+              senderRole: 'AI Judge',
+              content: `The ${parsed.courtLevel} is now in formal session for ${parsed.caseNumber}: "${parsed.title}". This Bench calls Senior Counsel for the Petitioner (${parsed.parties[0]?.name}) and Learned Counsel for the Respondent (${parsed.parties[1]?.name}) to present preliminary submissions under ${parsed.statutoryActs[0] || 'Order XXXVII CPC and Section 74 Indian Contract Act 1872'}.`,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              category: 'Procedural',
+              legalReferences: [parsed.statutoryActs[0] || 'Order XXXVII CPC', parsed.statutoryActs[1] || 'Section 74 Indian Contract Act'],
+            }
+          ]);
+        } catch (e) {}
+      }
+    }
+  }, [caseId]);
+
   // Advocate representation modes (Strictly AI Judge, but advocates can be AI or Real Human)
   const [petitionerMode, setPetitionerMode] = useState<AdvocateRepresentationMode>('ai');
   const [respondentMode, setRespondentMode] = useState<AdvocateRepresentationMode>('ai');

@@ -141,6 +141,33 @@ export const MOCK_CASES: Case[] = [
 
   // 2. HIGH COURTS OF THE STATES (State Constitutional & Appellate)
   {
+    id: 'HC-COMM-2026-781',
+    caseNumber: 'Commercial Summary Suit No. 418 of 2026',
+    title: 'Verma Technologies Pvt. Ltd. v. Bharat Cloud Infrastructure Ltd.',
+    type: 'Corporate & Commercial',
+    courtLevel: 'High Courts of the States',
+    status: 'Hearing',
+    filedDate: '04 Nov 2026',
+    nextHearing: 'Today (Live Bench)',
+    summary: 'Commercial Summary Suit under Order XXXVII CPC for recovery of ₹14,82,00,000/- on account of persistent cloud outage, SLA default under Section 74 Indian Contract Act 1872, and damages under Section 43A IT Act.',
+    parties: [
+      { id: 'p1', name: 'Verma Technologies Pvt. Ltd.', role: 'Petitioner', advocateName: 'Senior Adv. Rajesh Sharma', barCouncilNo: 'D/4829/2012' },
+      { id: 'p2', name: 'Bharat Cloud Infrastructure Ltd.', role: 'Respondent', advocateName: 'Adv. Meera Sen', barCouncilNo: 'MH/1920/2015' },
+    ],
+    statutoryActs: [
+      'Order XXXVII Code of Civil Procedure, 1908 (Summary Suits)',
+      'Indian Contract Act, 1872 — Section 74 (Liquidated Damages)',
+      'Bharatiya Sakshya Adhiniyam, 2023 — Section 63 (Electronic Evidence Certificate)',
+      'Information Technology Act, 2000 — Section 43A (Failure to Protect Data)'
+    ],
+    issuesForDetermination: [
+      'Whether 96-hour continuous cloud server outage constitutes repudiatory breach of service level agreement under Section 74 ICA.',
+      'Whether electronic audit logs and Section 63 BSA certificate are admissible without oral examining of cloud engineers.',
+      'Whether the plaintiff is entitled to summary decree under Order XXXVII Rule 3 CPC for ₹14.82 Crores.'
+    ],
+    benchInfo: "Hon'ble High Court Commercial Division Bench (Courtroom No. 4)",
+  },
+  {
     id: 'HC-WRIT-2026-512',
     caseNumber: 'Writ Petition No. 512 of 2026',
     title: 'Federation of Retail Traders v. State Commissioner of Revenue',
@@ -382,10 +409,60 @@ export const MOCK_HEARINGS: Hearing[] = [
     mode: 'Text',
     presidingJudge: 'Commercial Division Bench Magistrate',
     summaryNote: 'Adversarial oral arguments on liquidated damages under Section 74 Contract Act.'
+  },
+  {
+    id: 'hr-verma-01',
+    caseId: 'HC-COMM-2026-781',
+    hearingNumber: 'Hearing #01',
+    title: 'Urgent Motion for Summary Summons for Judgment (Order XXXVII Rule 3 CPC)',
+    date: 'Today',
+    time: '11:00 AM',
+    status: 'In Session',
+    mode: 'Text',
+    presidingJudge: "Hon'ble High Court Commercial Division Bench",
+    summaryNote: 'Preliminary hearing on commercial plaint admission and issuance of defendant appearance notice.'
+  },
+  {
+    id: 'hr-writ-01',
+    caseId: 'HC-WRIT-2026-512',
+    hearingNumber: 'Hearing #01',
+    title: 'Notice of Motion for Stay of Warehouse Inventory Seizure',
+    date: 'Today',
+    time: '11:30 AM',
+    status: 'In Session',
+    mode: 'Text',
+    presidingJudge: "Hon'ble High Court Division Bench",
+    summaryNote: 'Arguments on interim injunction against administrative seizure under Article 226.'
   }
 ];
 
 export const MOCK_DOCUMENTS: Document[] = [
+  {
+    id: 'doc-verma-01',
+    caseId: 'HC-COMM-2026-781',
+    name: 'Verma_Technologies_v_Bharat_Cloud_Petition.pdf',
+    type: 'Petition',
+    uploadedBy: 'Senior Adv. Rajesh Sharma',
+    uploadedRole: 'Petitioner Counsel',
+    uploadedDate: '04 Nov 2026',
+    fileSize: '1.84 MB',
+    fileFormat: 'PDF/A',
+    status: 'Verified',
+    description: 'Original Commercial Summary Suit Plaint with Section 63 BSA electronic verification certificate and Tier-IV SLA breach exhibits.'
+  },
+  {
+    id: 'doc-retail-01',
+    caseId: 'HC-WRIT-2026-512',
+    name: 'Writ_Petition_Article226_Inventory_Seizure.pdf',
+    type: 'Petition',
+    uploadedBy: 'Senior Adv. Rajesh Sharma',
+    uploadedRole: 'Petitioner Counsel',
+    uploadedDate: '22 Jan 2026',
+    fileSize: '3.4 MB',
+    fileFormat: 'PDF/A',
+    status: 'Verified',
+    description: 'High Court Writ Petition challenging administrative warehouse seizure notices under Article 226.'
+  },
   {
     id: 'doc-01',
     caseId: 'SC-WP-2026-104',
@@ -440,7 +517,34 @@ export const MOCK_DOCUMENTS: Document[] = [
   }
 ];
 
-export const MOCK_EVIDENCE: Evidence[] = [];
+export const MOCK_EVIDENCE: Evidence[] = [
+  {
+    id: 'ev-verma-01',
+    evidenceCode: 'EXHIBIT-P-1',
+    caseId: 'HC-COMM-2026-781',
+    title: 'Cloud Outage System Audit Logs & Tier-IV SLA Agreement',
+    category: 'Digital Forensics',
+    submittedBy: 'Verma Technologies Pvt. Ltd.',
+    submissionDate: '04 Nov 2026',
+    status: 'Admissible',
+    relevanceSummary: 'Timestamped network syslog and downtime audit records demonstrating breach of Tier-IV uptime commitments.',
+    custodyChain: 'Extracted directly from production infrastructure, SHA-256 sealed under Sec 63 BSA.',
+    sha256Hash: '7fa29b4412c9842a6c81093f412e84c9876231d601b0451a99f12d8a39b94017'
+  },
+  {
+    id: 'ev-writ-01',
+    evidenceCode: 'EXHIBIT-W-1',
+    caseId: 'HC-WRIT-2026-512',
+    title: 'Impugned Inventory Seizure Notice & Warehouse Registry',
+    category: 'Documentary',
+    submittedBy: 'Federation of Retail Traders',
+    submissionDate: '22 Jan 2026',
+    status: 'Admissible',
+    relevanceSummary: 'Administrative seal order and inventory audit contesting jurisdiction under Article 226.',
+    custodyChain: 'Original certified copy presented before High Court Registrar.',
+    sha256Hash: '9a31f7823b4112e84c9876231d601b0451a99f12d8a39b940177fa29b4412c98'
+  }
+];
 export const MOCK_MESSAGES: Message[] = [];
 export const MOCK_APPEALS: Appeal[] = [];
 

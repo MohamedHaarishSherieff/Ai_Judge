@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Navbar } from '@/components/layout/Navbar';
@@ -10,6 +10,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge, CaseStatusBadge } from '@/components/ui/Badge';
 import { MOCK_CASES, MOCK_HEARINGS, MOCK_DOCUMENTS, MOCK_EVIDENCE, MOCK_MESSAGES } from '@/data/mockData';
+import { Case, Hearing, Document, Evidence } from '@/types';
 import { 
   FolderKanban, 
   MessageSquare, 
@@ -23,19 +24,70 @@ import {
   ExternalLink,
   BookOpen,
   ArrowRight,
-  Gavel
+  Gavel,
+  Eye,
+  CheckCircle2
 } from 'lucide-react';
 
 export default function CaseDetailPage() {
   const params = useParams();
-  const caseId = (params?.id as string) || 'AJ-2026-001';
+  const caseId = (params?.id as string) || 'HC-COMM-2026-781';
 
-  const caseData = MOCK_CASES.find(c => c.id === caseId) || MOCK_CASES[0];
-  const hearings = MOCK_HEARINGS.filter(h => h.caseId === caseData.id);
-  const documents = MOCK_DOCUMENTS.filter(d => d.caseId === caseData.id);
-  const evidenceList = MOCK_EVIDENCE.filter(e => e.caseId === caseData.id);
+  const [caseData, setCaseData] = useState<Case>(() => {
+    return MOCK_CASES.find(c => c.id === caseId) || MOCK_CASES[0];
+  });
+  const [hearings, setHearings] = useState<Hearing[]>(() => {
+    return MOCK_HEARINGS.filter(h => h.caseId === caseData.id);
+  });
+  const [documents, setDocuments] = useState<Document[]>(() => {
+    return MOCK_DOCUMENTS.filter(d => d.caseId === caseData.id);
+  });
+  const [evidenceList, setEvidenceList] = useState<Evidence[]>(() => {
+    return MOCK_EVIDENCE.filter(e => e.caseId === caseData.id);
+  });
 
   const [activeTab, setActiveTab] = useState<'overview' | 'hearings' | 'arguments' | 'documents' | 'evidence' | 'judgment' | 'appeals'>('overview');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedCase = localStorage.getItem('custom_case_' + caseId);
+      if (savedCase) {
+        try {
+          const parsed = JSON.parse(savedCase);
+          setCaseData(parsed);
+
+          const savedDocs = localStorage.getItem('custom_docs_' + caseId);
+          if (savedDocs) {
+            setDocuments(JSON.parse(savedDocs));
+          } else {
+            setDocuments(MOCK_DOCUMENTS.filter(d => d.caseId === caseId));
+          }
+
+          const savedEvidence = localStorage.getItem('custom_evidence_' + caseId);
+          if (savedEvidence) {
+            setEvidenceList(JSON.parse(savedEvidence));
+          } else {
+            setEvidenceList(MOCK_EVIDENCE.filter(e => e.caseId === caseId));
+          }
+
+          const savedHearings = localStorage.getItem('custom_hearings_' + caseId);
+          if (savedHearings) {
+            setHearings(JSON.parse(savedHearings));
+          } else {
+            setHearings(MOCK_HEARINGS.filter(h => h.caseId === caseId));
+          }
+          return;
+        } catch (e) {}
+      }
+
+      // If not custom, fetch from mockData
+      const found = MOCK_CASES.find(c => c.id === caseId) || MOCK_CASES[0];
+      setCaseData(found);
+      setHearings(MOCK_HEARINGS.filter(h => h.caseId === found.id));
+      setDocuments(MOCK_DOCUMENTS.filter(d => d.caseId === found.id));
+      setEvidenceList(MOCK_EVIDENCE.filter(e => e.caseId === found.id));
+    }
+  }, [caseId]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#090d16] text-slate-100">
@@ -219,28 +271,51 @@ export default function CaseDetailPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-base font-bold text-white font-serif">Case Pleadings & Digital Filings</h3>
-                <Link href="/documents">
+                <Link href="/cases/new">
                   <Button variant="primary" size="sm" icon={<FileText className="w-4 h-4 text-black" />}>
-                    Upload Pleading
+                    File New Pleading
                   </Button>
                 </Link>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {documents.map((doc) => (
-                  <Card key={doc.id} variant="bordered" className="p-4 space-y-2 bg-zinc-950 border-zinc-800">
-                    <div className="flex items-start justify-between">
-                      <span className="font-bold text-white text-sm line-clamp-1">{doc.name}</span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-zinc-300 font-bold">{doc.type}</span>
-                    </div>
-                    <p className="text-xs text-zinc-400">{doc.description}</p>
-                    <div className="pt-2 border-t border-zinc-800 flex justify-between text-[11px] text-zinc-500 font-mono">
-                      <span>By {doc.uploadedBy}</span>
-                      <span>{doc.fileSize} • Sec 63 BSA Hash OK</span>
-                    </div>
-                  </Card>
-                ))}
-              </div>
+              {documents.length === 0 ? (
+                <Card variant="bordered" className="p-8 text-center space-y-3 bg-zinc-950 border-zinc-800">
+                  <FileText className="w-10 h-10 text-zinc-500 mx-auto" />
+                  <div className="text-white font-bold">No documents attached yet</div>
+                  <p className="text-xs text-zinc-400">File a petition or attach affidavit under Section 63 BSA.</p>
+                </Card>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {documents.map((doc) => (
+                    <Card key={doc.id} variant="bordered" className="p-4 space-y-3 bg-zinc-950 border-zinc-800 hover:border-zinc-700 transition-colors">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <FileText className="w-4 h-4 text-emerald-400 shrink-0" />
+                          <span className="font-bold text-white text-sm truncate font-mono">{doc.name}</span>
+                        </div>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-zinc-300 font-bold shrink-0">
+                          {doc.type}
+                        </span>
+                      </div>
+                      <p className="text-xs text-zinc-300 leading-relaxed">{doc.description}</p>
+                      <div className="pt-2 border-t border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400 font-mono flex-wrap gap-2">
+                        <span className="truncate">By {doc.uploadedBy}</span>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="text-emerald-400 font-medium">{doc.fileSize} • BSA Sec. 63</span>
+                          <a 
+                            href="/documents/Verma_Technologies_v_Bharat_Cloud_Petition.pdf" 
+                            target="_blank" 
+                            rel="noreferrer"
+                            className="px-2.5 py-1 bg-white hover:bg-zinc-200 text-black font-sans font-bold text-xs rounded transition-colors inline-flex items-center gap-1 shadow-sm"
+                          >
+                            <Eye className="w-3.5 h-3.5" /> View PDF
+                          </a>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

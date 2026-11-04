@@ -70,12 +70,61 @@ export default function CreateCasePage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Route to appropriate High Court or Supreme Court case details page
-    if (courtLevel === 'Supreme Court of India') {
-      router.push('/cases/SC-WP-2026-104');
-    } else {
-      router.push('/cases/HC-WRIT-2026-512');
+    const newCaseId = courtLevel === 'Supreme Court of India' ? 'SC-WP-2026-104' : 'HC-COMM-2026-781';
+
+    const newCase = {
+      id: newCaseId,
+      caseNumber: courtLevel === 'Supreme Court of India' ? 'Writ Petition (Civil) No. 104 of 2026' : 'Commercial Summary Suit No. 418 of 2026',
+      title: title || 'Verma Technologies Pvt. Ltd. v. Bharat Cloud Infrastructure Ltd.',
+      type: type || 'Corporate & Commercial',
+      courtLevel: courtLevel,
+      status: 'Hearing',
+      filedDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+      nextHearing: 'Today (Live Bench)',
+      summary: description || 'Commercial Summary Suit under Order XXXVII CPC for recovery of ₹14,82,00,000/- on account of persistent cloud outage, SLA default under Section 74 Indian Contract Act 1872, and damages under Section 43A IT Act.',
+      benchInfo: courtLevel === 'Supreme Court of India' 
+        ? "Chief Justice of India & 4-Judge Constitution Bench (Courtroom No. 1)" 
+        : "Hon'ble High Court Commercial Division Bench (Courtroom No. 4)",
+      statutoryActs: [
+        'Order XXXVII Code of Civil Procedure, 1908 (Summary Suits)',
+        'Indian Contract Act, 1872 — Section 74 (Liquidated Damages)',
+        'Bharatiya Sakshya Adhiniyam, 2023 — Section 63 (Electronic Evidence Certificate)',
+        'Information Technology Act, 2000 — Section 43A (Failure to Protect Data)'
+      ],
+      issuesForDetermination: [
+        'Whether 96-hour continuous cloud server outage constitutes repudiatory breach of service level agreement under Section 74 ICA.',
+        'Whether electronic audit logs and Section 63 BSA certificate are admissible without oral examining of cloud engineers.',
+        'Whether the plaintiff is entitled to summary decree under Order XXXVII Rule 3 CPC for ₹14.82 Crores.'
+      ],
+      parties: [
+        { id: 'p1', name: petitionerName || 'Verma Technologies Pvt. Ltd.', role: 'Petitioner', advocateName: petitionerAdvocate || 'Senior Adv. Rajesh Sharma', barCouncilNo: 'D/4829/2012' },
+        { id: 'p2', name: respondentName || 'Bharat Cloud Infrastructure Ltd.', role: 'Respondent', advocateName: respondentAdvocate || 'Adv. Meera Sen', barCouncilNo: 'MH/1920/2015' },
+      ],
+    };
+
+    const newDoc = {
+      id: 'doc-uploaded-' + Date.now(),
+      caseId: newCaseId,
+      name: fileName || 'Verma_Technologies_v_Bharat_Cloud_Petition.pdf',
+      type: 'Petition',
+      uploadedBy: petitionerAdvocate || 'Senior Adv. Rajesh Sharma',
+      uploadedRole: 'Petitioner Counsel',
+      uploadedDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+      fileSize: fileSize || '1.84 MB',
+      fileFormat: 'PDF/A',
+      status: 'Verified',
+      description: 'Original Commercial Summary Suit Plaint with Section 63 BSA electronic verification certificate and Tier-IV SLA breach exhibits.'
+    };
+
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('custom_case_' + newCaseId, JSON.stringify(newCase));
+        localStorage.setItem('custom_docs_' + newCaseId, JSON.stringify([newDoc]));
+        localStorage.setItem('last_created_case_id', newCaseId);
+      } catch (e) {}
     }
+
+    router.push(`/cases/${newCaseId}`);
   };
 
   return (
