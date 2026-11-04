@@ -13,6 +13,12 @@
 
 <br/>
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMohamedHaarishSherieff%2FAi_Judge)
+[![Live Courtroom Demo](https://img.shields.io/badge/Live_Web_Demo-Online_Courtroom-brightgreen?style=for-the-badge&logo=vercel)](https://ai-judge-bharat-bench.vercel.app)
+[![Demo Video Walkthrough](https://img.shields.io/badge/Demo_Video-Watch_Walkthrough-red?style=for-the-badge&logo=youtube)](DEMO_SCRIPT.md)
+
+<br/>
+
 **Author:** Mohamed Haarish Sherieff  
 **Platform Target:** Ministry of Law & Justice, Government of India • National e-Courts Phase IV  
 **Hackathon Event:** Meta Global AI Developer Hackathon 2026 (Hosted by Meta & Cerebral Valley)  
@@ -22,6 +28,22 @@
 ---
 
 </div>
+
+## 🌐 Live Interactive Demo & 1-Click Deployment
+
+> **Try the Live Digital Courtroom in your browser right now:**
+> - 🚀 **Instant 1-Click Vercel Deploy**: Click the **[Deploy with Vercel](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMohamedHaarishSherieff%2FAi_Judge)** button above to instantly launch your own sovereign digital bench.
+> - 🏛️ **Live Demo URL**: Open the application directly to experience an active judicial session under Indian law.
+> - 🎬 **3-Minute Video Walkthrough Script**: See [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) for the structured pitch and trial demonstration sequence.
+
+### Quick 60-Second Evaluator Walkthrough:
+1. **Open the Cause List**: Navigate to **Cases** and click into Item No. 1: *Verma Technologies Pvt. Ltd. v. Bharat Cloud Infrastructure Ltd.*
+2. **Select Representation Mode**: Choose between **AI vs AI**, **Human Advocate vs AI Counsel**, or **Human vs Human**.
+3. **Start the Trial**: Click **"▶ Start Live Courtroom Trial"** to initiate the multi-stage adversarial argument.
+4. **Inspect Section 63 BSA Evidence**: Switch to the **Evidence Vault** to examine the SAM 3.1 segmented server logs, hardware security module timestamps, and SHA-256 tamper verification.
+5. **Generate Order XX CPC Decree**: Click **"Synthesize Decree (Muse Wonder)"** to view the deterministic judicial decree sheet with 6% statutory interest and official High Court seal.
+
+---
 
 ## 📌 Executive Summary & The Problem
 
