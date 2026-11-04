@@ -4,18 +4,18 @@
 ### **Autonomous Multimodal Digital Courtroom & Sovereign Judicial Infrastructure**
 *Department of Justice • e-Courts Mission Mode Project Architecture*
 
-[![Meta Muse Spark Open](https://img.shields.io/badge/Meta_Model-Muse_Spark_Open_1026-blue.svg?style=for-the-badge&logo=meta)](https://baseten.co)
-[![Meta SAM 3.1](https://img.shields.io/badge/Computer_Vision-Segment_Anything_SAM_3.1-black.svg?style=for-the-badge&logo=meta)](https://segment-anything.com)
-[![Baseten Inference](https://img.shields.io/badge/Baseten-2M_Tokens%2FMin_Active-green.svg?style=for-the-badge)](https://baseten.co)
-[![Modal Serverless](https://img.shields.io/badge/Modal_Labs-Deterministic_Python_Sandbox-orange.svg?style=for-the-badge)](https://modal.com)
-[![Statutory Framework](https://img.shields.io/badge/Statutes-BSA_2023_%7C_CPC_1908_%7C_ICA_1872-white.svg?style=for-the-badge)](https://indiacode.nic.in)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+<br/>
+
+[![Live Courtroom Demo](https://img.shields.io/badge/🌐_Live_Courtroom_Demo-ai--judge--gamma.vercel.app-10b981?style=for-the-badge&logo=vercel&logoColor=white)](https://ai-judge-gamma.vercel.app)
+[![Meta Muse Spark Open](https://img.shields.io/badge/Meta_Model-Muse_Spark_Open_1026-0668E1?style=for-the-badge&logo=meta&logoColor=white)](https://baseten.co)
+[![Meta SAM 3.1](https://img.shields.io/badge/Computer_Vision-SAM_3.1-000000?style=for-the-badge&logo=meta&logoColor=white)](https://segment-anything.com)
+[![Statutory Framework](https://img.shields.io/badge/Statutes-BSA_2023_%7C_CPC_1908_%7C_ICA_1872-4B5563?style=for-the-badge)](https://indiacode.nic.in)
+[![License: MIT](https://img.shields.io/badge/License-MIT-EAB308?style=for-the-badge)](LICENSE)
 
 <br/>
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMohamedHaarishSherieff%2FAi_Judge)
-[![Live Courtroom Demo](https://img.shields.io/badge/Live_Web_Demo-ai--judge--gamma.vercel.app-brightgreen?style=for-the-badge&logo=vercel)](https://ai-judge-gamma.vercel.app)
-[![Demo Video Walkthrough](https://img.shields.io/badge/Demo_Video-Watch_Walkthrough-red?style=for-the-badge&logo=youtube)](DEMO_SCRIPT.md)
+### 🏛️ **Live Public Application: [https://ai-judge-gamma.vercel.app](https://ai-judge-gamma.vercel.app)**
+*Direct interactive courtroom access across desktop, tablet, and mobile.*
 
 <br/>
 
@@ -29,19 +29,19 @@
 
 </div>
 
-## 🌐 Live Interactive Demo & 1-Click Deployment
+## 🌐 Live Courtroom Demonstration
 
-> **Try the Live Digital Courtroom in your browser right now:**
-> - 🏛️ **Official Live Demo URL**: **[https://ai-judge-gamma.vercel.app](https://ai-judge-gamma.vercel.app)**
-> - 🚀 **Instant 1-Click Vercel Deploy**: Click the **[Deploy with Vercel](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMohamedHaarishSherieff%2FAi_Judge)** button above to instantly launch your own sovereign digital bench.
-> - 🎬 **3-Minute Video Walkthrough Script**: See [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) for the structured pitch and trial demonstration sequence.
+The live digital courtroom platform is globally accessible at **[https://ai-judge-gamma.vercel.app](https://ai-judge-gamma.vercel.app)**.
 
-### Quick 60-Second Evaluator Walkthrough:
-1. **Open the Cause List**: Navigate to **Cases** and click into Item No. 1: *Verma Technologies Pvt. Ltd. v. Bharat Cloud Infrastructure Ltd.*
-2. **Select Representation Mode**: Choose between **AI vs AI**, **Human Advocate vs AI Counsel**, or **Human vs Human**.
-3. **Start the Trial**: Click **"▶ Start Live Courtroom Trial"** to initiate the multi-stage adversarial argument.
-4. **Inspect Section 63 BSA Evidence**: Switch to the **Evidence Vault** to examine the SAM 3.1 segmented server logs, hardware security module timestamps, and SHA-256 tamper verification.
-5. **Generate Order XX CPC Decree**: Click **"Synthesize Decree (Muse Wonder)"** to view the deterministic judicial decree sheet with 6% statutory interest and official High Court seal.
+### Interactive Adjudication Sequence
+1. **Cause List Access**: Navigate to **Cases** and open Item No. 1 (*Commercial Summary Suit No. 908 of 2026*).
+2. **Representation Modes**: Experience adversarial arguments under three configurations:
+   - **🤖 AI vs AI**: Fully autonomous legal counsel litigation with judicial interjections.
+   - **👤 Human Advocate vs 🤖 AI Counsel**: Argue as counsel on record while AI represents the opposing party.
+   - **👤 Human vs 👤 Human**: Real advocate pair litigation moderated by the autonomous AI Presiding Judge.
+3. **Oral Trial Progression**: Observe formal court call, statutory opening pleas under Order XXXVII CPC, interlocutory objections (*Kailash Nath* standard), and judicial questioning.
+4. **Evidentiary Inspection**: In the **Evidence Vault**, examine sub-pixel SAM 3.1 segmentation for signature stroke authenticity and SHA-256 digital record certification under Section 63 BSA, 2023.
+5. **Judicial Decree Formalization**: Review the enforceable decree sheet generated under Order XX Rule 6 CPC with statutory interest calculations and verifiable court seals.
 
 ---
 
