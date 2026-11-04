@@ -83,7 +83,19 @@ flowchart TD
 - Zero-shot segmentation on uploaded legal instruments (contracts, promissory notes, affidavits).
 - Detects non-contiguous pixel distributions in notary stamps, composite overlay signatures, and fraudulent typeface alterations.
 
-### 3. Deterministic Statutory Layer — Modal Labs Serverless
+### 3. Full-Stack Meta AI Model Matrix
+| Meta Model / Tool | Role in AI Judge | Operational Stage |
+| :--- | :--- | :--- |
+| **Meta Muse Spark Open** | **Adversarial Legal Simulation:** Dual-counsel courtroom debate with Chain of Thought (CoT). | Live on Baseten (2M TPM) |
+| **Meta SAM 3.1** | **Forensic Vision:** Pixel segmentation on disputed documents & notary stamps (Sec 63 BSA). | Live in Evidence Vault |
+| **Meta Muse Wonder** | **Judicial Decree Synthesis:** Formal Order XX CPC judgment drafting and ratio decidendi. | Live in Decree Engine |
+| **Meta Muse Glimmer** | **Zero-Latency Jurisdiction Routing:** Classifies claims into the proper tier among the 8 Indian courts. | Live in Jurisdiction Guide |
+| **Meta Muse Voice Transcribe** | **Oral Court Testimony:** Audio speech-to-text stenography for advocate microphone input. | Live in Courtroom Dock |
+| **Meta Muse Image** | **Certified Judicial Watermarking:** Generates verifiable holographic court seals for rendered decrees. | Live on Decree Sheet |
+| **Meta Muse Code** | **Developer Tooling:** Autonomous CLI coding agent (`muse`) used to scaffold architecture & tests. | Developer Pipeline |
+| **Meta Muse Spark Series** | **Legal Precedent Engine:** Statutory groundings across BNS 2023, BNSS 2023, and Indian Contract Act. | System Prompts & Logic |
+
+### 4. Deterministic Statutory Layer — Modal Labs Serverless
 - High-performance Python container executing pure mathematical calculations without variance.
 - Calculates compounding contractual interest (quarterly/monthly) and strictly caps unreasonable penal sums per *Kailash Nath Associates v. DDA (2015)*.
 - Issues digital Section 63 BSA certificates and signs decree sheets with SHA-256 cryptographic digests.

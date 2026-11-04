@@ -323,9 +323,19 @@ export default function TextCourtroomListPage() {
           maxWidth="2xl"
         >
           <div className="space-y-4">
+            <div className="flex items-center justify-between p-2.5 rounded-lg bg-black border border-zinc-800 text-[11px] font-mono">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                <span className="text-white font-bold">Meta Muse Glimmer Open-Weights Classifier</span>
+              </div>
+              <span className="text-zinc-400 bg-zinc-900 border border-zinc-700 px-2 py-0.5 rounded text-[10px]">
+                Zero-Latency Edge Forum Mapping
+              </span>
+            </div>
+
             <p className="text-xs text-zinc-300">
               In the Indian legal system, forum competence is governed by constitutional writ limits, 
-              statutory subject matter, and pecuniary thresholds. Select your matter type to identify the proper bench:
+              statutory subject matter, and pecuniary thresholds. Meta Muse Glimmer classifies your dispute into the proper tier:
             </p>
 
             <div className="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">

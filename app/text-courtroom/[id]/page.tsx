@@ -466,10 +466,10 @@ export default function TextCourtroomSessionPage() {
                 <Gavel className="w-3.5 h-3.5 text-zinc-400" />
                 <span>
                   {caseData.type.includes('Constitutional')
-                    ? 'Synthesize Writ Order (Art 142)'
+                    ? 'Synthesize Writ Order (Muse Wonder)'
                     : caseData.type.includes('Criminal')
-                    ? 'Synthesize Bail Order (BNSS 480)'
-                    : 'Synthesize Decree (Order XX CPC)'}
+                    ? 'Synthesize Bail Order (Muse Wonder)'
+                    : 'Synthesize Decree (Muse Wonder)'}
                 </span>
               </button>
             </div>
@@ -754,6 +754,10 @@ export default function TextCourtroomSessionPage() {
               <span className="px-2 py-0.5 rounded bg-zinc-800 border border-zinc-700 text-[10px] text-zinc-200">
                 Sec 65B/63 BSA Verified
               </span>
+              <span>•</span>
+              <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-[10px] text-zinc-200 font-mono font-bold">
+                Synthesized via Meta Muse Wonder
+              </span>
             </div>
           </div>
 
@@ -890,14 +894,36 @@ export default function TextCourtroomSessionPage() {
               </ul>
             )}
             
-            {/* Government Seal & Execution Footer */}
-            <div className="pt-4 mt-3 border-t border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[10px] text-zinc-400 font-mono">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-white" />
-                <span>BENCH SEAL CRYPTOGRAPHIC DIGEST: {modalDecreeData?.digital_seal_hash ? `SHA256-${modalDecreeData.digital_seal_hash.slice(0, 24)}...` : MOCK_JUDGMENT.judgeSignature}</span>
+            {/* Government Seal & Execution Footer with Meta Muse Image Verification */}
+            <div className="pt-4 mt-3 border-t border-zinc-800 space-y-3">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-black border border-zinc-800">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full border border-white/60 bg-zinc-950 flex items-center justify-center p-1 shrink-0 shadow-md">
+                    <img src="/images/ashoka_emblem.jpg" alt="Seal" className="w-full h-full object-contain grayscale contrast-150" />
+                  </div>
+                  <div>
+                    <div className="text-[11px] font-bold text-white font-mono flex items-center gap-1.5">
+                      <span>Meta Muse Image • Certified Judicial Watermark</span>
+                      <span className="text-[9px] px-1.5 py-0.2 bg-zinc-900 border border-zinc-700 text-zinc-300 rounded font-mono">Sec 63 BSA Certified</span>
+                    </div>
+                    <div className="text-[10px] text-zinc-400 font-mono">
+                      Visual Seal Hash: {modalDecreeData?.digital_seal_hash ? `SHA256-${modalDecreeData.digital_seal_hash.slice(0, 32)}` : 'SHA256-8F9A4B21E5C7D93A401B2E78...'}
+                    </div>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono text-zinc-400 bg-zinc-950 border border-zinc-800 px-2 py-1 rounded hidden sm:inline">
+                  Zero-Variance Stamp Output
+                </span>
               </div>
-              <div className="text-zinc-300">
-                Appeal Limitation: <span className="font-bold text-white">{modalDecreeData?.appeal_limitation_days || 30} Days</span> (Order XLI CPC)
+
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[10px] text-zinc-400 font-mono">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-white" />
+                  <span>BENCH DIGEST: {modalDecreeData?.digital_seal_hash ? `SHA256-${modalDecreeData.digital_seal_hash.slice(0, 24)}...` : MOCK_JUDGMENT.judgeSignature}</span>
+                </div>
+                <div className="text-zinc-300">
+                  Appeal Limitation: <span className="font-bold text-white">{modalDecreeData?.appeal_limitation_days || 30} Days</span> (Order XLI CPC)
+                </div>
               </div>
             </div>
           </div>

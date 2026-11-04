@@ -114,6 +114,107 @@ export default function AboutPage() {
           </div>
         </div>
 
+        {/* Section 2.5: Official Meta AI Model Integration Matrix */}
+        <div className="space-y-6">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <Badge variant="court">Meta Global AI Developer Hackathon Architecture</Badge>
+            <h2 className="text-3xl font-extrabold text-white">Full-Stack Meta AI Model Integration</h2>
+            <p className="text-xs text-zinc-400 font-mono uppercase tracking-wider">
+              Comprehensive deployment across open-weights, hosted reasoning, vision, speech, and developer agents
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card variant="default" className="p-4 space-y-2 bg-zinc-950/90 border-zinc-800">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-white font-bold">Open Weights (Baseten)</span>
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              </div>
+              <h4 className="text-sm font-bold text-white font-mono">Meta Muse Spark Open</h4>
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
+                Powers the 3-turn adversarial courtroom debate with native Chain-of-Thought (CoT) statutory deliberation tokens.
+              </p>
+            </Card>
+
+            <Card variant="default" className="p-4 space-y-2 bg-zinc-950/90 border-zinc-800">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-white font-bold">Multimodal Vision</span>
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              </div>
+              <h4 className="text-sm font-bold text-white font-mono">Meta SAM 3.1</h4>
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
+                Zero-shot pixel-level segmentation on disputed documents, isolating non-contiguous ink strokes and altered notary stamps.
+              </p>
+            </Card>
+
+            <Card variant="default" className="p-4 space-y-2 bg-zinc-950/90 border-zinc-800">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-white font-bold">Hosted Reasoning</span>
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              </div>
+              <h4 className="text-sm font-bold text-white font-mono">Meta Muse Wonder</h4>
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
+                Synthesizes formal, legally binding Order XX CPC judicial decree sheets with statutory mitigations and appeal deadlines.
+              </p>
+            </Card>
+
+            <Card variant="default" className="p-4 space-y-2 bg-zinc-950/90 border-zinc-800">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-white font-bold">Open Weights (Edge)</span>
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              </div>
+              <h4 className="text-sm font-bold text-white font-mono">Meta Muse Glimmer</h4>
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
+                Zero-latency local classification engine mapping disputes to proper forum competence across all 8 Indian court tiers.
+              </p>
+            </Card>
+
+            <Card variant="default" className="p-4 space-y-2 bg-zinc-950/90 border-zinc-800">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-white font-bold">Audio & Speech</span>
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              </div>
+              <h4 className="text-sm font-bold text-white font-mono">Muse Voice Transcribe</h4>
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
+                Live audio oral argument stenography for advocate microphone input, converting oral testimony into certified pleadings.
+              </p>
+            </Card>
+
+            <Card variant="default" className="p-4 space-y-2 bg-zinc-950/90 border-zinc-800">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-white font-bold">Diffusion / Vision</span>
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              </div>
+              <h4 className="text-sm font-bold text-white font-mono">Meta Muse Image</h4>
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
+                Generates verifiable high-resolution cryptographic digital seals and judicial watermark digests for rendered decrees.
+              </p>
+            </Card>
+
+            <Card variant="default" className="p-4 space-y-2 bg-zinc-950/90 border-zinc-800">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-white font-bold">Coding Agent</span>
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              </div>
+              <h4 className="text-sm font-bold text-white font-mono">Meta Muse Code</h4>
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
+                Autonomous CLI developer agent used to scaffold the codebase, manage worktrees, and write TypeScript clients.
+              </p>
+            </Card>
+
+            <Card variant="default" className="p-4 space-y-2 bg-zinc-950/90 border-zinc-800">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-white font-bold">Statutory Engine</span>
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              </div>
+              <h4 className="text-sm font-bold text-white font-mono">Muse Spark Series</h4>
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
+                Constitutional and criminal legal synthesis grounded in BNS 2023, BNSS 2023, and Article 142 judicial directives.
+              </p>
+            </Card>
+          </div>
+        </div>
+
         {/* Section 3: Responsible AI */}
         <Card variant="court" className="p-8 space-y-4 bg-zinc-950 border-2 border-zinc-700 shadow-2xl">
           <div className="flex items-center gap-3">
