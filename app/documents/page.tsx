@@ -61,7 +61,7 @@ export default function DocumentManagementPage() {
             caseId: 'AJ-2026-001',
             name: newDocName,
             type: newDocType,
-            uploadedBy: 'Adv. Rajesh Sharma',
+            uploadedBy: 'Senior Advocate (Chambers)',
             uploadedRole: 'Petitioner Counsel',
             uploadedDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
             fileSize: '3.4 MB',

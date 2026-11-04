@@ -79,13 +79,11 @@ export const VideoPanel: React.FC<VideoPanelProps> = ({ caseTitle, caseNumber })
           </div>
 
           <div className="flex flex-col items-center justify-center p-6 text-center space-y-3">
-            <img 
-              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&auto=format&fit=crop&q=80" 
-              alt="Adv. Rajesh Sharma"
-              className="w-20 h-20 rounded-full object-cover border-2 border-blue-500/50 shadow-md"
-            />
+            <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-zinc-950 via-zinc-900 to-zinc-800 border-2 border-blue-500/50 flex items-center justify-center shadow-md">
+              <Scale className="w-9 h-9 text-blue-400" />
+            </div>
             <div>
-              <div className="text-sm font-bold text-slate-100">Adv. Rajesh Sharma</div>
+              <div className="text-sm font-bold text-slate-100">Petitioner Counsel (AI)</div>
               <div className="text-xs text-slate-400 font-mono">Bar Council No. D/4829/2012</div>
             </div>
           </div>
@@ -112,13 +110,11 @@ export const VideoPanel: React.FC<VideoPanelProps> = ({ caseTitle, caseNumber })
           </div>
 
           <div className="flex flex-col items-center justify-center p-6 text-center space-y-3">
-            <img 
-              src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80" 
-              alt="Adv. Meera Sen"
-              className="w-20 h-20 rounded-full object-cover border-2 border-emerald-500/50 shadow-md"
-            />
+            <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-zinc-950 via-zinc-900 to-zinc-800 border-2 border-emerald-500/50 flex items-center justify-center shadow-md">
+              <Gavel className="w-9 h-9 text-emerald-400" />
+            </div>
             <div>
-              <div className="text-sm font-bold text-slate-100">Adv. Meera Sen</div>
+              <div className="text-sm font-bold text-slate-100">Respondent Counsel (AI)</div>
               <div className="text-xs text-slate-400 font-mono">Bar Council No. MH/1920/2015</div>
             </div>
           </div>

@@ -52,3 +52,6 @@ __pycache__/
 public/documents/*.pdf
 
 
+demo_video/
+scripts/record_courtroom_demo.js
+scripts/test_*.js

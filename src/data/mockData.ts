@@ -101,12 +101,12 @@ export const INDIAN_COURT_FORUMS: CourtForumMetadata[] = [
 
 export const CURRENT_USER: User = {
   id: 'usr-101',
-  name: 'Advocate Rajesh Sharma',
-  email: 'advocate.sharma@sci.gov.in',
+  name: 'Senior Advocate (Chambers)',
+  email: 'advocate.chambers@sci.gov.in',
   role: 'Lawyer',
   organization: 'Supreme Court & High Court Bar Association',
   barId: 'D/1482/2012',
-  avatarUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&auto=format&fit=crop&q=80',
+  avatarUrl: '',
 };
 
 export const MOCK_CASES: Case[] = [
@@ -383,7 +383,7 @@ export const MOCK_HEARINGS: Hearing[] = [
     time: '11:30 AM',
     status: 'Scheduled',
     mode: 'Text',
-    presidingJudge: 'Hon\'ble Justice K. G. Balakrishnan',
+    presidingJudge: 'Hon\'ble Presiding Judge, High Court Criminal Bench',
     summaryNote: 'State prosecution and defense counsel to argue bail conditions and witness protection.'
   },
   {

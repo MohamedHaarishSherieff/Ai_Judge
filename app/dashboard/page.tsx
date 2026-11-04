@@ -23,7 +23,8 @@ import {
   ArrowRight,
   TrendingUp,
   ShieldAlert,
-  Activity
+  Activity,
+  Scale
 } from 'lucide-react';
 
 export default function UserDashboardPage() {
@@ -45,14 +46,12 @@ export default function UserDashboardPage() {
         {/* Welcome Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 bg-zinc-950/90 backdrop-blur-md border border-zinc-800 rounded-2xl shadow-xl">
           <div className="flex items-center gap-4">
-            <img 
-              src={CURRENT_USER.avatarUrl} 
-              alt={CURRENT_USER.name}
-              className="w-14 h-14 rounded-full object-cover border-2 border-zinc-600 shadow-md"
-            />
+            <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-zinc-950 via-zinc-900 to-zinc-800 border-2 border-zinc-700 flex items-center justify-center text-white shadow-md flex-shrink-0">
+              <Scale className="w-7 h-7 text-white" />
+            </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl font-bold text-white">Chambers of {CURRENT_USER.name}</h1>
+                <h1 className="text-2xl font-bold text-white">Chambers of Senior Advocate</h1>
                 <Badge variant="court">{CURRENT_USER.role}</Badge>
               </div>
               <p className="text-xs text-zinc-400 font-mono mt-0.5">
