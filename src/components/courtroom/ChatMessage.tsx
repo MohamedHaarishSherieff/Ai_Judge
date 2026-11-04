@@ -12,25 +12,24 @@ interface ChatMessageProps {
 export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   const [showReasoning, setShowReasoning] = useState(false);
   const isJudge = message.senderRole === 'AI Judge';
+  const isCourtClerk = message.senderRole === 'Court Clerk';
+  const isHuman = message.isHumanCounsel || 
+                  message.sender.toLowerCase().includes('(you)') || 
+                  message.sender.toLowerCase().includes('human advocate') ||
+                  message.sender.toLowerCase().includes('adv. [you]');
   const isPetitioner = message.senderRole === 'Petitioner Counsel';
   const isRespondent = message.senderRole === 'Respondent Counsel';
 
   // Role-specific border & background styles
   const cardContainerStyle = isJudge
     ? 'bg-[#0f0f0f] border-l-4 border-l-white border-y border-r border-zinc-800 shadow-xl shadow-black/80'
+    : isHuman
+    ? 'bg-[#0b0b0b] border-l-4 border-l-white border-y border-r border-zinc-700 shadow-lg shadow-black/60'
     : isPetitioner
-    ? 'bg-[#080808] border-l-4 border-l-zinc-300 border-y border-r border-zinc-850 border-zinc-800/90 shadow-md shadow-black/50'
+    ? 'bg-[#080808] border-l-4 border-l-zinc-400 border-y border-r border-zinc-850 border-zinc-800/90 shadow-md shadow-black/50'
     : isRespondent
     ? 'bg-[#060606] border-l-4 border-l-zinc-500 border-y border-r border-zinc-850 border-zinc-800/90 shadow-md shadow-black/50'
     : 'bg-[#080808] border border-zinc-800 shadow-sm';
-
-  const badgeVariant = isJudge
-    ? 'court'
-    : isPetitioner
-    ? 'court'
-    : isRespondent
-    ? 'slate'
-    : 'slate';
 
   return (
     <div className={`p-4 sm:p-5 rounded-xl ${cardContainerStyle} space-y-3 transition-all`}>
@@ -41,11 +40,19 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
             <div className="w-8 h-8 rounded-lg bg-white text-black flex items-center justify-center font-bold shadow-md">
               <Gavel className="w-4 h-4" />
             </div>
+          ) : isCourtClerk ? (
+            <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-700 flex items-center justify-center text-zinc-300">
+              <FileText className="w-4 h-4" />
+            </div>
+          ) : isHuman ? (
+            <div className="w-8 h-8 rounded-lg bg-white border border-white text-black flex items-center justify-center font-bold shadow-md">
+              <User className="w-4 h-4 text-black" />
+            </div>
           ) : (
             <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${
               isPetitioner ? 'bg-zinc-800 text-white border border-zinc-500' : 'bg-zinc-900 text-zinc-300 border border-zinc-700'
             }`}>
-              <User className="w-4 h-4" />
+              <Cpu className="w-4 h-4" />
             </div>
           )}
 
@@ -53,13 +60,20 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-sm font-bold text-white font-serif">{message.sender}</span>
               {isJudge ? (
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white text-black font-extrabold flex items-center gap-1">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white text-black font-extrabold flex items-center gap-1 shadow-sm">
                   <Gavel className="w-3 h-3 text-black" /> Bench Adjudication
+                </span>
+              ) : isCourtClerk ? (
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-zinc-300 font-medium flex items-center gap-1">
+                  <FileText className="w-3 h-3 text-zinc-300" /> Court Registry
+                </span>
+              ) : isHuman ? (
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white text-black font-extrabold flex items-center gap-1 shadow-sm">
+                  <User className="w-3 h-3 text-black" /> Human Advocate
                 </span>
               ) : (
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-zinc-300 font-medium flex items-center gap-1">
-                  {message.isHumanCounsel ? <User className="w-3 h-3 text-zinc-300" /> : <Cpu className="w-3 h-3 text-zinc-400" />}
-                  {message.isHumanCounsel ? 'Human Advocate' : 'AI Legal Counsel'}
+                  <Cpu className="w-3 h-3 text-zinc-400" /> AI Legal Counsel
                 </span>
               )}
             </div>

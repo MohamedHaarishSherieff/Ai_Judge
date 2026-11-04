@@ -110,7 +110,7 @@ export default function CreateCasePage() {
           name: petitionerName.trim() || 'Verma Technologies Pvt. Ltd.', 
           role: 'Petitioner', 
           advocateName: (representationMode === 'human_vs_ai' || representationMode === 'human_vs_human')
-            ? `Learned Counsel (You) [${humanBarId || 'Bar Council of India'}]`
+            ? `Adv. [You] (${humanBarId || 'Bar Council of India'})`
             : (petitionerAdvocate.trim() || 'Senior Adv. Rajesh Sharma'), 
           barCouncilNo: humanBarId || 'D/4829/2012' 
         },
@@ -119,7 +119,7 @@ export default function CreateCasePage() {
           name: respondentName.trim() || 'Bharat Cloud Infrastructure Ltd.', 
           role: 'Respondent', 
           advocateName: (representationMode === 'ai_vs_human' || representationMode === 'human_vs_human')
-            ? `Learned Counsel (You) [${humanBarId || 'Bar Council of India'}]`
+            ? `Adv. [You] (${humanBarId || 'Bar Council of India'})`
             : (respondentAdvocate.trim() || 'Adv. Meera Sen'), 
           barCouncilNo: 'MH/1920/2015' 
         },

@@ -16,22 +16,51 @@ interface ChatInputProps {
   ) => void;
   onOpenDocumentModal: () => void;
   onOpenEvidenceModal: () => void;
+  initialRole?: 'Petitioner Counsel' | 'Respondent Counsel';
+  initialIsHuman?: boolean;
+  petitionerMode?: 'ai' | 'real';
+  respondentMode?: 'ai' | 'real';
 }
 
 export const ChatInput: React.FC<ChatInputProps> = ({
   onSendMessage,
   onOpenDocumentModal,
   onOpenEvidenceModal,
+  initialRole = 'Petitioner Counsel',
+  initialIsHuman = true,
+  petitionerMode = 'ai',
+  respondentMode = 'ai',
 }) => {
   const [text, setText] = useState('');
-  const [activeRole, setActiveRole] = useState<'Petitioner Counsel' | 'Respondent Counsel'>('Petitioner Counsel');
-  const [isHumanAdvocate, setIsHumanAdvocate] = useState(true);
+  const [activeRole, setActiveRole] = useState<'Petitioner Counsel' | 'Respondent Counsel'>(initialRole);
+  const [isHumanAdvocate, setIsHumanAdvocate] = useState(initialIsHuman);
   const [advocateName, setAdvocateName] = useState('Adv. Rajesh Sharma');
   const [barNumber, setBarNumber] = useState('D/1482/2012');
   const [clientName, setClientName] = useState('');
   const [category, setCategory] = useState<'Argument' | 'Citation' | 'Question'>('Argument');
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (initialRole) {
+      setActiveRole(initialRole);
+    }
+  }, [initialRole]);
+
+  useEffect(() => {
+    if (initialIsHuman !== undefined) {
+      setIsHumanAdvocate(initialIsHuman);
+    }
+  }, [initialIsHuman]);
+
+  const handleRoleChange = (role: 'Petitioner Counsel' | 'Respondent Counsel') => {
+    setActiveRole(role);
+    if (role === 'Petitioner Counsel') {
+      setIsHumanAdvocate(petitionerMode === 'real');
+    } else {
+      setIsHumanAdvocate(respondentMode === 'real');
+    }
+  };
 
   const handleToggleVoiceRecording = () => {
     if (isRecording) {
@@ -163,11 +192,15 @@ export const ChatInput: React.FC<ChatInputProps> = ({
               <span className="text-zinc-500 text-[11px] font-mono">Pleading As:</span>
               <select
                 value={activeRole}
-                onChange={(e) => setActiveRole(e.target.value as any)}
+                onChange={(e) => handleRoleChange(e.target.value as any)}
                 className="bg-black text-white text-xs font-semibold border border-zinc-800 rounded-lg px-2.5 py-1 focus:outline-none focus:border-zinc-600 cursor-pointer"
               >
-                <option value="Petitioner Counsel">Advocate 1 (Petitioner)</option>
-                <option value="Respondent Counsel">Advocate 2 (Respondent)</option>
+                <option value="Petitioner Counsel">
+                  Advocate 1 (Petitioner) {petitionerMode === 'real' ? '• You (Human)' : '• AI Counsel'}
+                </option>
+                <option value="Respondent Counsel">
+                  Advocate 2 (Respondent) {respondentMode === 'real' ? '• You (Human)' : '• AI Counsel'}
+                </option>
               </select>
 
               <div className="flex items-center gap-1 bg-black p-0.5 rounded-lg border border-zinc-800">
