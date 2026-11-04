@@ -53,6 +53,7 @@ export default function CreateCasePage() {
   // Bench Representation Mode (User Chooses Before Starting the Trial)
   const [representationMode, setRepresentationMode] = useState<'ai_vs_ai' | 'human_vs_ai' | 'ai_vs_human' | 'human_vs_human'>('ai_vs_ai');
   const [humanBarId, setHumanBarId] = useState('D/4829/2026');
+  const [isLaunching, setIsLaunching] = useState(false);
 
   // Autofill helper
   const handleAutofillExample = () => {
@@ -75,20 +76,22 @@ export default function CreateCasePage() {
     setFileHash('sha256:' + Array.from(file.name).reduce((acc, char) => (acc + char.charCodeAt(0).toString(16)), '').padEnd(64, 'a').slice(0, 64));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLaunchCourtroom = () => {
+    if (isLaunching) return;
+    setIsLaunching(true);
+
     const uniqueCaseId = 'CASE-' + Math.floor(100000 + Math.random() * 900000);
 
     const newCase = {
       id: uniqueCaseId,
       caseNumber: `${courtLevel.includes('Supreme') ? 'Writ Petition (Civil)' : courtLevel.includes('District') ? 'Civil Suit' : 'Commercial Summary Suit'} No. ${Math.floor(100 + Math.random() * 899)} of 2026`,
-      title: title || 'Verma Technologies Pvt. Ltd. v. Bharat Cloud Infrastructure Ltd.',
+      title: title.trim() || 'Verma Technologies Pvt. Ltd. v. Bharat Cloud Infrastructure Ltd.',
       type: type || 'Corporate & Commercial',
       courtLevel: courtLevel,
       status: 'Hearing',
       filedDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
       nextHearing: 'Today (Live Bench In Session)',
-      summary: description || 'Commercial Summary Suit under Order XXXVII CPC for recovery of ₹14,82,00,000/- on account of persistent cloud outage, SLA default under Section 74 Indian Contract Act 1872, and damages under Section 43A IT Act.',
+      summary: description.trim() || 'Commercial Summary Suit under Order XXXVII CPC for recovery of ₹14,82,00,000/- on account of persistent cloud outage, SLA default under Section 74 Indian Contract Act 1872, and damages under Section 43A IT Act.',
       benchInfo: `Hon'ble ${courtLevel} Division Bench (Courtroom No. 1)`,
       statutoryActs: [
         'Order XXXVII Code of Civil Procedure, 1908 (Summary Suits)',
@@ -104,20 +107,20 @@ export default function CreateCasePage() {
       parties: [
         { 
           id: 'p1', 
-          name: petitionerName || 'Verma Technologies Pvt. Ltd.', 
+          name: petitionerName.trim() || 'Verma Technologies Pvt. Ltd.', 
           role: 'Petitioner', 
           advocateName: (representationMode === 'human_vs_ai' || representationMode === 'human_vs_human')
             ? `Learned Counsel (You) [${humanBarId || 'Bar Council of India'}]`
-            : (petitionerAdvocate || 'Senior Adv. Rajesh Sharma'), 
+            : (petitionerAdvocate.trim() || 'Senior Adv. Rajesh Sharma'), 
           barCouncilNo: humanBarId || 'D/4829/2012' 
         },
         { 
           id: 'p2', 
-          name: respondentName || 'Bharat Cloud Infrastructure Ltd.', 
+          name: respondentName.trim() || 'Bharat Cloud Infrastructure Ltd.', 
           role: 'Respondent', 
           advocateName: (representationMode === 'ai_vs_human' || representationMode === 'human_vs_human')
             ? `Learned Counsel (You) [${humanBarId || 'Bar Council of India'}]`
-            : (respondentAdvocate || 'Adv. Meera Sen'), 
+            : (respondentAdvocate.trim() || 'Adv. Meera Sen'), 
           barCouncilNo: 'MH/1920/2015' 
         },
       ],
@@ -126,9 +129,9 @@ export default function CreateCasePage() {
     const newDoc = {
       id: 'doc-' + uniqueCaseId,
       caseId: uniqueCaseId,
-      name: fileName || 'Verma_Technologies_v_Bharat_Cloud_Petition.pdf',
+      name: fileName.trim() || 'Petition_Pleadings_Document.pdf',
       type: 'Petition',
-      uploadedBy: petitionerName || 'Verma Technologies Pvt. Ltd.',
+      uploadedBy: petitionerName.trim() || 'Verma Technologies Pvt. Ltd.',
       uploadedRole: 'Petitioner Counsel',
       uploadedDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
       fileSize: fileSize || '1.84 MB',
@@ -198,7 +201,7 @@ export default function CreateCasePage() {
 
         {/* Form Body */}
         <Card variant="court" className="p-8 border-zinc-800">
-          <form onSubmit={handleSubmit} className="space-y-6 text-xs sm:text-sm">
+          <div className="space-y-6 text-xs sm:text-sm">
             
             {/* STEP 1: CASE INFO */}
             {currentStep === 1 && (
@@ -625,25 +628,54 @@ export default function CreateCasePage() {
             )}
 
             {/* Buttons Row */}
-            <div className="flex items-center justify-between pt-4 border-t border-zinc-800">
+            <div className="flex items-center justify-between pt-5 border-t border-zinc-800">
               {currentStep > 1 ? (
-                <Button type="button" variant="outline" onClick={() => setCurrentStep(currentStep - 1)} icon={<ArrowLeft className="w-4 h-4" />}>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setCurrentStep(prev => prev - 1);
+                  }} 
+                  icon={<ArrowLeft className="w-4 h-4" />}
+                >
                   Previous Step
                 </Button>
               ) : <div />}
 
               {currentStep < 4 ? (
-                <Button type="button" variant="primary" onClick={() => setCurrentStep(currentStep + 1)} icon={<ArrowRight className="w-4 h-4" />}>
+                <Button 
+                  type="button" 
+                  variant="primary" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setCurrentStep(prev => prev + 1);
+                  }} 
+                  icon={<ArrowRight className="w-4 h-4" />}
+                >
                   Next: {currentStep === 1 ? 'Litigating Parties' : currentStep === 2 ? 'Upload Documents' : 'Counsel & Bench Setup'}
                 </Button>
               ) : (
-                <Button type="submit" variant="primary" size="lg" icon={<Gavel className="w-5 h-5 text-black" />}>
-                  Enter Virtual Courtroom & Begin Trial →
+                <Button 
+                  type="button" 
+                  variant="primary" 
+                  size="lg" 
+                  loading={isLaunching}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleLaunchCourtroom();
+                  }} 
+                  icon={<Gavel className="w-5 h-5 text-black" />}
+                >
+                  {isLaunching ? 'Convening Bench & Initializing Chamber...' : 'Enter Virtual Courtroom & Begin Trial →'}
                 </Button>
               )}
             </div>
 
-          </form>
+          </div>
         </Card>
       </main>
 

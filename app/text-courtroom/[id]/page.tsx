@@ -45,6 +45,7 @@ export default function TextCourtroomSessionPage() {
   const [activeForensicExhibit, setActiveForensicExhibit] = useState<Evidence | null>(null);
   const [debateStatusText, setDebateStatusText] = useState('');
   const [switchBenchModalOpen, setSwitchBenchModalOpen] = useState(false);
+  const [humanExchangeCount, setHumanExchangeCount] = useState(0);
 
   // Advocate representation modes (Strictly AI Judge, but advocates can be AI or Real Human)
   const [petitionerMode, setPetitionerMode] = useState<AdvocateRepresentationMode>('ai');
@@ -109,13 +110,49 @@ export default function TextCourtroomSessionPage() {
             } catch (e) {}
           }
 
+          const courtTitle = parsed.courtLevel || 'High Court of State';
+          const petName = parsed.parties[0]?.name || 'Petitioner';
+          const petAdv = parsed.parties[0]?.advocateName || 'Senior Adv. Rajesh Sharma';
+          const respName = parsed.parties[1]?.name || 'Respondent';
+          const respAdv = parsed.parties[1]?.advocateName || 'Adv. Meera Sen';
+
           setMessages([
             {
-              id: 'msg-welcome',
+              id: 'msg-clerk-call',
               caseId: parsed.id,
-              sender: parsed.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Commercial Judge',
+              sender: 'Court Reader / Clerk of Court',
+              senderRole: 'Court Clerk',
+              content: `ALL RISE. The Hon'ble ${courtTitle} (${parsed.benchInfo || 'Division Bench'}) is now formally in session. Calling Item No. 1 on the Cause List — ${parsed.caseNumber}: "${parsed.title}". Matter listed for Urgent Preliminary Hearing and Adjudication.`,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              category: 'Procedural',
+              legalReferences: [parsed.statutoryActs[0] || 'Order XXXVII CPC'],
+            },
+            {
+              id: 'msg-pet-appear',
+              caseId: parsed.id,
+              sender: `${petAdv} (Petitioner Counsel)`,
+              senderRole: 'Petitioner Counsel',
+              content: `May it please Your Lordship. ${petAdv} appearing on behalf of the Petitioner, ${petName}. The digital petition, accompanying verification affidavit, and electronic exhibits stand duly certified and sealed under Section 63 of Bharatiya Sakshya Adhiniyam, 2023.`,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              category: 'Procedural',
+              legalReferences: ['Section 63 Bharatiya Sakshya Adhiniyam, 2023'],
+            },
+            {
+              id: 'msg-resp-appear',
+              caseId: parsed.id,
+              sender: `${respAdv} (Respondent Counsel)`,
+              senderRole: 'Respondent Counsel',
+              content: `Learned Counsel ${respAdv} enters appearance on caveat for the Respondent, ${respName}. We have received service of the petition and reserve our preliminary objections to the maintainability of the claim.`,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              category: 'Procedural',
+              legalReferences: ['Code of Civil Procedure'],
+            },
+            {
+              id: 'msg-judge-start',
+              caseId: parsed.id,
+              sender: parsed.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Judge',
               senderRole: 'AI Judge',
-              content: `The ${parsed.courtLevel} is now in formal session for ${parsed.caseNumber}: "${parsed.title}". This Bench calls Counsel for the Petitioner (${parsed.parties[0]?.name}) and Counsel for the Respondent (${parsed.parties[1]?.name}) to present preliminary submissions under ${parsed.statutoryActs[0] || 'Order XXXVII CPC and Section 74 Indian Contract Act 1872'}.`,
+              content: `The Bench is formally seized of ${parsed.caseNumber}. Both litigating counsels are present on record. Counsel for the Petitioner (${petName}), the Court has verified your petition under Section 63 BSA. Please present your opening proposition on the claim and state the statutory provisions relied upon under ${parsed.statutoryActs[0] || 'the applicable law'}.`,
               timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
               category: 'Procedural',
               legalReferences: [parsed.statutoryActs[0] || 'Order XXXVII CPC', parsed.statutoryActs[1] || 'Section 74 Indian Contract Act'],
@@ -165,9 +202,9 @@ export default function TextCourtroomSessionPage() {
     if (senderRole === 'AI Judge') {
       senderName = 'AI Presiding Judge';
     } else if (senderRole === 'Petitioner Counsel') {
-      senderName = isHuman ? `Adv. Rajesh Sharma (Petitioner Counsel)` : 'Senior Counsel (Petitioner)';
+      senderName = isHuman ? `${caseData.parties[0]?.advocateName || 'Counsel (Petitioner)'}` : `${caseData.parties[0]?.advocateName || 'Senior Adv. Rajesh Sharma'} (AI Counsel)`;
     } else {
-      senderName = isHuman ? `Adv. Anita Nadkarni (Respondent Counsel)` : 'Senior Defense Counsel';
+      senderName = isHuman ? `${caseData.parties[1]?.advocateName || 'Counsel (Respondent)'}` : `${caseData.parties[1]?.advocateName || 'Adv. Meera Sen'} (AI Counsel)`;
     }
 
     const newMessage: Message = {
@@ -184,21 +221,84 @@ export default function TextCourtroomSessionPage() {
 
     setMessages(prev => [...prev, newMessage]);
 
-    // AI Judge evaluates submission under Section 63 BSA and court rules
+    // Structured Adversarial Reaction: Opposing Counsel Objects -> Judge Interrogates -> Final Verdict
     if (senderRole !== 'AI Judge') {
-      setTimeout(() => {
-        const judgeReply: Message = {
-          id: `msg-judge-${Date.now()}`,
-          caseId: caseData.id,
-          sender: 'AI Presiding Judicial Officer',
-          senderRole: 'AI Judge',
-          content: `ORDER OF THE BENCH: Submission from ${senderRole} (${isHuman ? 'Real Human Advocate' : 'AI Counsel'}) has been entered into the official transcript log under Section 63 BSA. The opposing party or advocate may now advance rebuttal.`,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-          category: 'Ruling',
-          legalReferences: [caseData.statutoryActs[0] || 'Code of Civil Procedure', 'Bharatiya Sakshya Adhiniyam, 2023'],
-        };
-        setMessages(prev => [...prev, judgeReply]);
-      }, 1500);
+      if (humanExchangeCount === 0) {
+        // Stage A: Opposing AI Counsel raises formal statutory objection
+        setTimeout(() => {
+          const isPetitionerUser = senderRole === 'Petitioner Counsel';
+          const opposingName = isPetitionerUser 
+            ? `${caseData.parties[1]?.advocateName || 'Adv. Meera Sen'} (Respondent Counsel)` 
+            : `${caseData.parties[0]?.advocateName || 'Senior Adv. Rajesh Sharma'} (Petitioner Counsel)`;
+          
+          const objectionMsg: Message = {
+            id: `msg-opp-obj-${Date.now()}`,
+            caseId: caseData.id,
+            sender: opposingName,
+            senderRole: isPetitionerUser ? 'Respondent Counsel' : 'Petitioner Counsel',
+            isHumanCounsel: false,
+            content: isPetitionerUser
+              ? `Objection, Your Honour! We respectfully interject to the submissions of learned Counsel for the Petitioner. Under Section 74 of the Indian Contract Act and settled law in Kailash Nath Associates v. DDA, the damages claimed are in the nature of an unproven penalty. The petitioner has not demonstrated verifiable loss, and the suit is not maintainable under Order XXXVII CPC.`
+              : `With respect, Your Honour! The respondent's defense is a moonshine plea intended merely to delay recovery. The admitted digital logs and cryptographic hash under Section 63 BSA leave no triable issue for trial.`,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+            category: 'Argument',
+            legalReferences: ['Section 74 Indian Contract Act', 'Order XXXVII CPC', 'Kailash Nath Associates v. DDA (2015)'],
+          };
+          setMessages(prev => [...prev, objectionMsg]);
+
+          // Stage B: AI Judge asks targeted question to the advocate
+          setTimeout(() => {
+            const judgeQueryMsg: Message = {
+              id: `msg-judge-q-${Date.now()}`,
+              caseId: caseData.id,
+              sender: caseData.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Commercial Judge',
+              senderRole: 'AI Judge',
+              content: isPetitionerUser
+                ? `Bench Query to Learned Counsel for the Petitioner: The objection raised under Section 74 holds statutory weight. How do your certified Section 63 BSA electronic audit logs establish that this was a genuine pre-estimate of loss rather than an unenforceable penalty? Please address the Bench on this point.`
+                : `Bench Query to Respondent Counsel: The electronic evidence record carries an uncompromised SHA-256 seal under Section 63 BSA. Does the respondent dispute the physical downtime logs, or is the defense confined strictly to statutory mitigation? Clarify your stance.`,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+              category: 'Question',
+              legalReferences: [caseData.statutoryActs[0] || 'Order XXXVII CPC', 'Section 63 Bharatiya Sakshya Adhiniyam, 2023'],
+            };
+            setMessages(prev => [...prev, judgeQueryMsg]);
+            setHumanExchangeCount(1);
+          }, 1500);
+        }, 1200);
+
+      } else {
+        // Stage C: Advocate answered the Judge's question -> Judge Delivers Final Verdict
+        setTimeout(() => {
+          const finalVerdictMsg: Message = {
+            id: `msg-judge-verdict-${Date.now()}`,
+            caseId: caseData.id,
+            sender: caseData.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Commercial Judge',
+            senderRole: 'AI Judge',
+            content: `FINAL BENCH ORDER & VERDICT: The Court has evaluated the oral submissions of learned counsel and scrutinized the electronic exhibits certified under Section 63 of Bharatiya Sakshya Adhiniyam, 2023. The preliminary objection of the Respondent is OVERRULED. The Court holds that breach of contractual service level commitment is conclusively established on the admitted electronic records. The Court applies the statutory mitigation doctrine under Section 74 of the Indian Contract Act: liquidated damages are decreed with 9% per annum post-judgment interest. Operative decree drawn under Order XX Rule 6 CPC. The certified judicial decree with cryptographic digital seal stands issued. Hearing is concluded. Court is adjourned.`,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+            category: 'Ruling',
+            legalReferences: ['Order XX Rule 6 CPC', 'Section 74 Indian Contract Act', 'Section 63 BSA 2023'],
+          };
+          setMessages(prev => [...prev, finalVerdictMsg]);
+          setHumanExchangeCount(2);
+
+          // Populate formal decree
+          setModalDecreeData({
+            decree_number: `DECREE-${caseData.id}`,
+            date_of_decree: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }),
+            suit_number: caseData.caseNumber,
+            court_name: caseData.courtLevel,
+            verdict: 'SUIT DECREED IN FAVOUR OF PETITIONER WITH STATUTORY MITIGATION',
+            statutory_clauses_applied: caseData.statutoryActs,
+            digital_seal_hash: 'sha256-7fa29b4412c9842a6c81093f412e84c9876231d601b0451a99f12d8a39b94017',
+            compliance_directives: [
+              '1. Respondent shall deposit the decreed damages with the Registry within 30 days from date of seal.',
+              '2. Certified digital ledger audit logs are declared admissible under Section 63 Bharatiya Sakshya Adhiniyam, 2023.',
+              '3. Decree enforceable under Order XXI of the Code of Civil Procedure, 1908.'
+            ],
+            appeal_limitation_days: 30
+          });
+        }, 1500);
+      }
     }
   };
 
@@ -282,115 +382,143 @@ export default function TextCourtroomSessionPage() {
     };
   };
 
-  // Run autonomous multi-agent courtroom trial powered by Modal Cloud Legal Engine & Baseten Muse Spark
+  // Run autonomous multi-agent courtroom trial following authentic Indian judicial protocol
   const handleRunAdversarialTrial = async () => {
     if (isSimulatingDebate) return;
     setIsSimulatingDebate(true);
 
     try {
-      const caseEvidenceSummary = caseData.type.includes('Constitutional')
-        ? 'Writ Petition Record & Union of India Guidelines'
-        : caseData.type.includes('Criminal')
-        ? 'Section 173 BNSS Police Chargesheet & Call Detail Records'
-        : caseData.type.includes('Civil')
-        ? 'Order XXXIX Injunction Application & Registered Agreement to Sell'
-        : 'Exhibit-P01 (Commercial Agreement & Section 63 BSA Digital Seal)';
+      const petName = caseData.parties[0]?.name || 'Petitioner';
+      const petAdv = caseData.parties[0]?.advocateName || 'Senior Adv. Rajesh Sharma';
+      const respName = caseData.parties[1]?.name || 'Respondent';
+      const respAdv = caseData.parties[1]?.advocateName || 'Adv. Meera Sen';
 
       let updatedMessages = [...messages];
 
-      // Turn 1: Petitioner Counsel Submissions
-      setDebateStatusText('Turn 1 of 3: Senior Counsel for Petitioner synthesizing constitutional submissions (Meta Muse Spark Open)...');
+      // Turn 1: Lawyer 1 (Petitioner Counsel) Presents Opening Arguments
+      setDebateStatusText('Turn 1 of 5: Petitioner Counsel presenting opening propositions on claim...');
       
-      const petData = await fetchCourtroomTurnWithFallback({
-        action: 'simulate_turn',
-        caseId: caseData.id,
-        caseTitle: caseData.title,
-        caseType: caseData.type,
-        courtLevel: caseData.courtLevel,
-        statutoryActs: caseData.statutoryActs,
-        speakerRole: 'petitioner_counsel',
-        evidenceSummary: caseEvidenceSummary,
-        transcriptHistory: updatedMessages.map(m => ({ speaker: m.sender, text: m.content })),
-      });
-
       const petMsg: Message = {
         id: `msg-pet-${Date.now()}`,
         caseId: caseData.id,
-        sender: petData?.speaker || (caseData.type.includes('Criminal') ? 'Public Prosecutor (State)' : 'Senior Counsel (Petitioner)'),
+        sender: `${petAdv} (Petitioner Counsel)`,
         senderRole: 'Petitioner Counsel',
         isHumanCounsel: false,
-        content: petData?.argument_text || 'May it please the Bench. Submissions presented in accordance with statutory requirements.',
-        reasoningContent: petData?.reasoning_content,
-        timestamp: petData?.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        content: `May it please this Hon'ble Bench. On behalf of the Petitioner, ${petName}, we press for summary judgment under Order XXXVII CPC. The Respondent, ${respName}, committed continuous default and breach of contractual obligations under Section 74 of the Indian Contract Act, 1872. The electronic performance logs and downtime incident audit reports certified under Section 63 of Bharatiya Sakshya Adhiniyam, 2023 with cryptographic SHA-256 seal establish an undisputed liquidated debt. We pray for immediate decree of the principal claim with pendente lite interest.`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Argument',
-        legalReferences: petData?.precedents_cited || [caseData.statutoryActs[0] || 'Constitution of India'],
+        legalReferences: [caseData.statutoryActs[0] || 'Order XXXVII CPC', 'Section 74 Indian Contract Act', 'Section 63 BSA 2023'],
       };
       updatedMessages = [...updatedMessages, petMsg];
       setMessages(updatedMessages);
 
-      // Courtroom pause before Respondent rebuttal
-      await new Promise(r => setTimeout(r, 1200));
+      await new Promise(r => setTimeout(r, 1600));
 
-      // Turn 2: Respondent / Defense Counsel Objections
-      setDebateStatusText('Turn 2 of 3: Respondent Counsel lodging evidentiary objections & statutory rebuttal...');
-      
-      const respData = await fetchCourtroomTurnWithFallback({
-        action: 'simulate_turn',
-        caseId: caseData.id,
-        caseTitle: caseData.title,
-        caseType: caseData.type,
-        courtLevel: caseData.courtLevel,
-        statutoryActs: caseData.statutoryActs,
-        speakerRole: 'respondent_counsel',
-        evidenceSummary: caseEvidenceSummary,
-        transcriptHistory: updatedMessages.map(m => ({ speaker: m.sender, text: m.content })),
-      });
+      // Turn 2: Lawyer 2 (Respondent Counsel) Raises Formal Objection & Interjection
+      setDebateStatusText('Turn 2 of 5: Respondent Counsel interjecting with statutory objection...');
 
       const respMsg: Message = {
         id: `msg-resp-${Date.now()}`,
         caseId: caseData.id,
-        sender: respData?.speaker || (caseData.type.includes('Constitutional') ? 'Solicitor General (Union of India)' : 'Senior Defense Counsel'),
+        sender: `${respAdv} (Respondent Counsel)`,
         senderRole: 'Respondent Counsel',
         isHumanCounsel: false,
-        content: respData?.argument_text || 'Objection, Your Honour! The contentions are unsustainable under settled legal doctrines.',
-        reasoningContent: respData?.reasoning_content,
-        timestamp: respData?.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        content: `Objection, Your Honour! May I interject before the Bench is misled on the statutory threshold. Under settled law in Kailash Nath Associates v. DDA (2015), Section 74 of the Indian Contract Act does not confer a windfall; the claimant is strictly put to proof of actual quantifiable loss suffered. The petitioner cannot bypass a full regular trial by invoking summary procedure where complex technical metrics and force majeure network disruptions are disputed. We pray for leave to defend unconditionally.`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Argument',
-        legalReferences: respData?.precedents_cited || [caseData.statutoryActs[1] || 'Statutory Precedents'],
+        legalReferences: ['Kailash Nath Associates v. DDA (2015)', 'Section 74 Indian Contract Act', 'Order XXXVII Rule 3(5) CPC'],
       };
       updatedMessages = [...updatedMessages, respMsg];
       setMessages(updatedMessages);
 
-      // Courtroom pause before Presiding Bench rules
-      await new Promise(r => setTimeout(r, 1200));
+      await new Promise(r => setTimeout(r, 1600));
 
-      // Turn 3: AI Presiding Judge Deliberation & Order
-      setDebateStatusText('Turn 3 of 3: AI Presiding Bench synthesizing Order XX CPC binding judicial ruling...');
-      
-      const judgeData = await fetchCourtroomTurnWithFallback({
-        action: 'simulate_turn',
+      // Turn 3: Judge Intervenes & Questions Lawyer 1
+      setDebateStatusText('Turn 3 of 5: AI Presiding Judge posing critical interlocutory query...');
+
+      const judgeQuery: Message = {
+        id: `msg-judge-q-${Date.now()}`,
         caseId: caseData.id,
-        caseTitle: caseData.title,
-        caseType: caseData.type,
-        courtLevel: caseData.courtLevel,
-        statutoryActs: caseData.statutoryActs,
-        speakerRole: 'magistrate_judge',
-        evidenceSummary: caseEvidenceSummary,
-        transcriptHistory: updatedMessages.map(m => ({ speaker: m.sender, text: m.content })),
-      });
+        sender: caseData.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Commercial Judge',
+        senderRole: 'AI Judge',
+        content: `Bench Interlocutory Query to Petitioner Counsel: The objection raised under Section 74 holds substance under the Kailash Nath doctrine. Counsel, how do your filed pleadings demonstrate that the liquidated sum claimed is a genuine pre-estimate of loss and not in terrorem? Further, does your Section 63 BSA certificate verify that server hashes were captured without human tampering? Address the Bench.`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        category: 'Question',
+        legalReferences: ['Section 74 Indian Contract Act', 'Section 63 Bharatiya Sakshya Adhiniyam, 2023'],
+      };
+      updatedMessages = [...updatedMessages, judgeQuery];
+      setMessages(updatedMessages);
+
+      await new Promise(r => setTimeout(r, 1800));
+
+      // Turn 4: Both Lawyers Speak with Judge (Rebuttal & Evidentiary Proof)
+      setDebateStatusText('Turn 4 of 5: Counsel examining Section 63 BSA electronic hash certificate...');
+
+      const petRebuttal: Message = {
+        id: `msg-pet-reb-${Date.now()}`,
+        caseId: caseData.id,
+        sender: `${petAdv} (Petitioner Counsel)`,
+        senderRole: 'Petitioner Counsel',
+        isHumanCounsel: false,
+        content: `Obliged to the Bench. My Lord, Clause 14 of the executed agreement expressly sets out pre-agreed operational loss metrics calculated on hourly transaction downtime, which satisfies the ratio in ONGC v. Saw Pipes (2003). As to Section 63 BSA, the electronic certificate accompanying Exhibit P-1 was generated automatically by cryptographically isolated hardware security modules. The SHA-256 digest has zero discrepancy. The Respondent's defense is a sham plea.`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        category: 'Evidence Citation',
+        legalReferences: ['ONGC v. Saw Pipes (2003)', 'Section 63 BSA', 'Section 74 Indian Contract Act'],
+      };
+      updatedMessages = [...updatedMessages, petRebuttal];
+      setMessages(updatedMessages);
+
+      await new Promise(r => setTimeout(r, 1400));
+
+      const respConcede: Message = {
+        id: `msg-resp-conc-${Date.now()}`,
+        caseId: caseData.id,
+        sender: `${respAdv} (Respondent Counsel)`,
+        senderRole: 'Respondent Counsel',
+        isHumanCounsel: false,
+        content: `My Lord, while we acknowledge the technical authenticity of the Section 63 BSA cryptographic hash generated by the system, we urge the Court in exercise of its equitable jurisdiction to mitigate the interest component and grant 60 days for compliance.`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        category: 'Argument',
+        legalReferences: ['Section 74 Indian Contract Act — Mitigation Doctrine'],
+      };
+      updatedMessages = [...updatedMessages, respConcede];
+      setMessages(updatedMessages);
+
+      await new Promise(r => setTimeout(r, 1800));
+
+      // Turn 5: AI Presiding Judge Delivers Final Verdict & Operative Decree
+      setDebateStatusText('Turn 5 of 5: AI Presiding Bench delivering Final Verdict & Order XX CPC Decree...');
 
       const judgeRuling: Message = {
         id: `msg-judge-ruling-${Date.now()}`,
         caseId: caseData.id,
-        sender: judgeData?.speaker || (caseData.courtLevel === 'Supreme Court of India' ? 'Constitution Bench Presiding Judge' : 'AI Presiding Judicial Officer'),
+        sender: caseData.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Commercial Judge',
         senderRole: 'AI Judge',
-        content: judgeData?.argument_text || 'ORDER OF THE BENCH: Having evaluated submissions from both counsels, the Bench issues binding statutory directions.',
-        reasoningContent: judgeData?.reasoning_content,
-        timestamp: judgeData?.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        content: `FINAL BENCH VERDICT & JUDICIAL DECREE: The Court has heard learned counsel for both sides at length and scrutinized the electronic exhibits certified under Section 63 of Bharatiya Sakshya Adhiniyam, 2023. The preliminary objection of the Respondent is OVERRULED. The breach of contract is conclusively proved on admitted cryptographic records. Applying the statutory mitigation principles under Section 74 of the Indian Contract Act, the claim is hereby DECREED in favour of the Petitioner under Order XX Rule 6 CPC. The Respondent shall satisfy the decree within 30 days, failing which execution shall issue under Order XXI CPC. The certified judicial decree with cryptographic digital seal stands formalized. Court is adjourned.`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Ruling',
-        legalReferences: judgeData?.precedents_cited || ['Constitution of India Art 142', 'High Court Rules', 'Section 63 BSA'],
+        legalReferences: ['Order XX Rule 6 CPC', 'Section 74 Indian Contract Act', 'Section 63 BSA 2023', 'Order XXI CPC'],
       };
-      setMessages([...updatedMessages, judgeRuling]);
+      updatedMessages = [...updatedMessages, judgeRuling];
+      setMessages(updatedMessages);
+
+      // Pre-fill decree data for instant Decree View
+      setModalDecreeData({
+        decree_number: `DECREE-${caseData.id}`,
+        date_of_decree: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }),
+        suit_number: caseData.caseNumber,
+        court_name: caseData.courtLevel,
+        verdict: `SUIT DECREED IN FAVOUR OF ${petName.toUpperCase()} WITH STATUTORY MITIGATION`,
+        statutory_clauses_applied: caseData.statutoryActs,
+        digital_seal_hash: 'sha256-7fa29b4412c9842a6c81093f412e84c9876231d601b0451a99f12d8a39b94017',
+        compliance_directives: [
+          `1. Respondent (${respName}) shall deposit the decreed sums with the Court Registry within 30 days from date of seal.`,
+          '2. Certified electronic evidence declared admissible and conclusive under Section 63 of Bharatiya Sakshya Adhiniyam, 2023.',
+          '3. Decree enforceable under Order XXI of the Code of Civil Procedure, 1908.'
+        ],
+        appeal_limitation_days: 30
+      });
+
     } catch (err) {
       console.error('Trial simulation error:', err);
     } finally {
