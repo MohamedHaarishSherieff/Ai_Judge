@@ -524,82 +524,120 @@ export default function TextCourtroomSessionPage() {
       let updatedMessages = [clerkMsg];
       setMessages(updatedMessages);
 
-      await new Promise(r => setTimeout(r, 600));
+      await new Promise(r => setTimeout(r, 800));
 
-      // Turn 1: Lawyer 1 (Petitioner Counsel) Enters Appearance & Presents Opening Arguments
-      setDebateStatusText('Turn 1 of 5: Petitioner Counsel presenting opening propositions on claim...');
+      // Stage 1: Preliminary Plaint & Objection on Maintainability
+      setDebateStatusText('Stage 1: Petitioner Counsel placing plaint on record under Order XXXVII CPC...');
       
-      const petMsg: Message = {
-        id: `msg-pet-${Date.now()}`,
+      const petMsg1: Message = {
+        id: `msg-pet-1-${Date.now()}`,
         caseId: caseData.id,
         sender: `${petAdv} (Petitioner Counsel)`,
         senderRole: 'Petitioner Counsel',
         isHumanCounsel: false,
-        content: `May it please this Hon'ble Bench. ${petAdv} appearing on behalf of the Petitioner, ${petName}. The digital petition, accompanying verification affidavit, and electronic exhibits stand duly certified and sealed under Section 63 of Bharatiya Sakshya Adhiniyam, 2023.\n\nWe press for summary decree under Order XXXVII CPC for recovery of ₹14.82 Crores. The Respondent, ${respName}, committed continuous repudiatory breach of contractual SLA obligations under Section 74 of the Indian Contract Act, 1872. The cryptographically certified electronic audit logs leave no genuine triable defense. We pray for summary judgment with pendente lite interest.`,
+        content: `May it please this Hon'ble Bench. ${petAdv} appearing on behalf of the Petitioner, ${petName}. The digital plaint, verifying affidavit, and electronic exhibits stand duly certified under Section 63 of Bharatiya Sakshya Adhiniyam, 2023.\n\nWe press for summary decree under Order XXXVII CPC for recovery of ₹14,82,00,000/-. The Respondent, ${respName}, committed continuous repudiatory breach of contractual SLA obligations under Section 74 of the Indian Contract Act, 1872. The cryptographically certified electronic audit logs leave no genuine triable defense. We pray for summary judgment with pendente lite interest.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Argument',
         legalReferences: [caseData.statutoryActs[0] || 'Order XXXVII CPC', 'Section 74 Indian Contract Act', 'Section 63 BSA 2023'],
       };
-      updatedMessages = [...updatedMessages, petMsg];
+      updatedMessages = [...updatedMessages, petMsg1];
       setMessages(updatedMessages);
 
-      await new Promise(r => setTimeout(r, 1800));
+      await new Promise(r => setTimeout(r, 2200));
 
-      // Turn 2: Lawyer 2 (Respondent Counsel) Enters Caveat & Raises Formal Statutory Objection
-      setDebateStatusText('Turn 2 of 5: Respondent Counsel interjecting with statutory objection...');
+      setDebateStatusText('Stage 2: Respondent Counsel entering caveat & challenging maintainability...');
 
-      const respMsg: Message = {
-        id: `msg-resp-${Date.now()}`,
+      const respMsg1: Message = {
+        id: `msg-resp-1-${Date.now()}`,
         caseId: caseData.id,
         sender: `${respAdv} (Respondent Counsel)`,
         senderRole: 'Respondent Counsel',
         isHumanCounsel: false,
-        content: `Learned Counsel ${respAdv} enters appearance on caveat for the Respondent, ${respName}.\n\nObjection, Your Honour! May I interject before the Bench is misled on the statutory threshold. Under settled law in Kailash Nath Associates v. DDA (2015), Section 74 of the Indian Contract Act does not confer a windfall; the claimant is strictly put to proof of actual quantifiable loss suffered. The petitioner cannot bypass a full regular trial by invoking summary procedure where complex technical cloud metrics and force majeure network disruptions are disputed. We pray for unconditional leave to defend under Order XXXVII Rule 3(5) CPC.`,
+        content: `Learned Counsel ${respAdv} enters appearance on caveat for the Respondent, ${respName}.\n\nObjection, Your Honour! May I interject before the Bench is misled on the statutory threshold. Under settled law in Kailash Nath Associates v. DDA (2015), Section 74 of the Indian Contract Act does not confer an automatic penalty windfall; actual loss must be strictly proven. Complex cloud uptime metrics, technical telemetry, and force majeure network disruptions cannot be decided summarily without regular trial. We pray for unconditional leave to defend under Order XXXVII Rule 3(5) CPC.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Argument',
         legalReferences: ['Kailash Nath Associates v. DDA (2015)', 'Section 74 Indian Contract Act', 'Order XXXVII Rule 3(5) CPC'],
       };
-      updatedMessages = [...updatedMessages, respMsg];
+      updatedMessages = [...updatedMessages, respMsg1];
       setMessages(updatedMessages);
 
-      await new Promise(r => setTimeout(r, 1800));
+      await new Promise(r => setTimeout(r, 2200));
 
-      // Turn 3: Judge Intervenes & Questions Counsel on Evidence & Proof
-      setDebateStatusText('Turn 3 of 5: AI Presiding Judge posing critical interlocutory query...');
+      // Stage 3: Judicial Interlocutory Scrutiny & Evidentiary Challenge
+      setDebateStatusText('Stage 3: AI Presiding Judge probing electronic audit logs & evidentiary threshold...');
 
-      const judgeQuery: Message = {
-        id: `msg-judge-q-${Date.now()}`,
+      const judgeQuery1: Message = {
+        id: `msg-judge-q1-${Date.now()}`,
         caseId: caseData.id,
         sender: caseData.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Commercial Judge',
         senderRole: 'AI Judge',
-        content: `Bench Interlocutory Query to Both Counsels: The Bench is seized of ${caseData.caseNumber}. The objection raised under Section 74 holds substance under the Kailash Nath doctrine. Counsel for the Petitioner, how do your filed pleadings demonstrate that the liquidated sum claimed is a genuine pre-estimate of loss and not in terrorem? Further, does your Section 63 BSA certificate verify that server hashes were captured without human tampering? And Respondent Counsel, does the Respondent dispute the uncompromised SHA-256 seal? Address the Bench.`,
+        content: `Bench Interlocutory Query to Respondent Counsel: The Court notes your plea under Kailash Nath. However, Order XXXVII Rule 3(5) CPC requires the defendant to disclose facts that constitute a bona fide, substantial defense. Exhibit P-1 carries an uncompromised cryptographic SHA-256 seal under Section 63 BSA.\n\nDoes the Respondent specifically deny that the 48-hour continuous cloud outage occurred, or is this defense raised purely to stall liquidated recovery? Address the Bench directly.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Question',
-        legalReferences: ['Section 74 Indian Contract Act', 'Section 63 Bharatiya Sakshya Adhiniyam, 2023'],
+        legalReferences: ['Order XXXVII Rule 3(5) CPC', 'Section 63 Bharatiya Sakshya Adhiniyam, 2023'],
       };
-      updatedMessages = [...updatedMessages, judgeQuery];
+      updatedMessages = [...updatedMessages, judgeQuery1];
       setMessages(updatedMessages);
 
-      await new Promise(r => setTimeout(r, 1800));
+      await new Promise(r => setTimeout(r, 2200));
 
-      // Turn 4: Both Lawyers Speak with Judge (Rebuttal & Evidentiary Proof)
-      setDebateStatusText('Turn 4 of 5: Counsel examining Section 63 BSA electronic hash certificate...');
+      setDebateStatusText('Stage 4: Respondent Counsel challenging legal admissibility of Section 63 BSA certificate...');
 
-      const petRebuttal: Message = {
-        id: `msg-pet-reb-${Date.now()}`,
+      const respMsg2: Message = {
+        id: `msg-resp-2-${Date.now()}`,
+        caseId: caseData.id,
+        sender: `${respAdv} (Respondent Counsel)`,
+        senderRole: 'Respondent Counsel',
+        isHumanCounsel: false,
+        content: `Your Honour, we do not dispute that an outage occurred, but we vehemently challenge the legal admissibility of Exhibit P-1.\n\nUnder Section 63(4) of Bharatiya Sakshya Adhiniyam, 2023, an electronic evidence certificate must be signed by an authorized officer having lawful control of the computing device. The certificate filed by the Petitioner was generated by a third-party automated cloud monitoring daemon, not a natural person under oath. Without oral cross-examination of the server technicians, this electronic log cannot be relied upon to grant a summary decree!`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        category: 'Argument',
+        legalReferences: ['Section 63(4) Bharatiya Sakshya Adhiniyam, 2023', 'Arjun Panditrao Khotkar v. Kailash Kushanrao Gorantyal (2020)'],
+      };
+      updatedMessages = [...updatedMessages, respMsg2];
+      setMessages(updatedMessages);
+
+      await new Promise(r => setTimeout(r, 2200));
+
+      // Stage 5: Decisive Evidentiary Rebuttal & Admission of Breach
+      setDebateStatusText('Stage 5: Petitioner Counsel producing HSM digital certificate & Respondent written admissions...');
+
+      const petMsg2: Message = {
+        id: `msg-pet-2-${Date.now()}`,
         caseId: caseData.id,
         sender: `${petAdv} (Petitioner Counsel)`,
         senderRole: 'Petitioner Counsel',
         isHumanCounsel: false,
-        content: `Obliged to the Bench. My Lord, Clause 14 of the executed agreement expressly sets out pre-agreed operational loss metrics calculated on hourly transaction downtime, which satisfies the ratio in ONGC v. Saw Pipes (2003). As to Section 63 BSA, the electronic certificate accompanying Exhibit P-1 was generated automatically by cryptographically isolated hardware security modules. The SHA-256 digest has zero discrepancy. The Respondent's defense is a sham plea.`,
+        content: `My Lord, the objection raised by learned counsel is legally untenable and contrary to the express text of Section 63(2)(a) BSA.\n\nWe direct the Bench's attention to Exhibit P-2: the tamper-evident certificate generated by Cryptographic Hardware Security Modules (HSM) and countersigned with digital signature by our Chief Information Security Officer (CISO). Furthermore, direct your attention to Exhibit P-3: the Respondent's own written ticket response dated 15th January, wherein Respondent's VP of Engineering explicitly admitted: "We acknowledge core cluster failure resulting in 100% service interruption across the primary zone." Under Section 17 and Section 56 of Bharatiya Sakshya Adhiniyam, admitted facts need not be proved!`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Evidence Citation',
-        legalReferences: ['ONGC v. Saw Pipes (2003)', 'Section 63 BSA', 'Section 74 Indian Contract Act'],
+        legalReferences: ['Section 56 BSA 2023', 'Section 63(2)(a) BSA 2023', 'ONGC v. Saw Pipes (2003)'],
       };
-      updatedMessages = [...updatedMessages, petRebuttal];
+      updatedMessages = [...updatedMessages, petMsg2];
       setMessages(updatedMessages);
 
-      await new Promise(r => setTimeout(r, 1400));
+      await new Promise(r => setTimeout(r, 2200));
+
+      // Stage 6: Bench Cross-Examination on Force Majeure
+      setDebateStatusText('Stage 6: AI Presiding Judge questioning Respondent on written admissions & Force Majeure...');
+
+      const judgeQuery2: Message = {
+        id: `msg-judge-q2-${Date.now()}`,
+        caseId: caseData.id,
+        sender: caseData.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Commercial Judge',
+        senderRole: 'AI Judge',
+        content: `Bench Interlocutory Query to Respondent Counsel: Learned Counsel, Exhibit P-3 is a contemporaneous written admission from your client's own verified domain acknowledging total cluster failure. Under Section 56 BSA and the ratio in IDBI Trusteeship Services v. Hubtown Ltd. (2017), how does the Respondent overcome its own written admission of breach? Further, you invoked force majeure — did your client issue the mandatory 24-hour contractual notice under Clause 19.3 of the Master Services Agreement?`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        category: 'Question',
+        legalReferences: ['IDBI Trusteeship Services v. Hubtown Ltd. (2017)', 'Section 56 Bharatiya Sakshya Adhiniyam, 2023'],
+      };
+      updatedMessages = [...updatedMessages, judgeQuery2];
+      setMessages(updatedMessages);
+
+      await new Promise(r => setTimeout(r, 2200));
+
+      // Stage 7: Inability of Defense to Sustain Burden of Proof (Defense Collapse)
+      setDebateStatusText('Stage 7: Respondent Counsel unable to defend client on mandatory notice clause...');
 
       const respConcede: Message = {
         id: `msg-resp-conc-${Date.now()}`,
@@ -607,7 +645,7 @@ export default function TextCourtroomSessionPage() {
         sender: `${respAdv} (Respondent Counsel)`,
         senderRole: 'Respondent Counsel',
         isHumanCounsel: false,
-        content: `My Lord, while we acknowledge the technical authenticity of the Section 63 BSA cryptographic hash generated by the system, we urge the Court in exercise of its equitable jurisdiction to mitigate the interest component and grant 60 days for compliance.`,
+        content: `May it please Your Lordship...\n\nUpon taking immediate telephonic instructions from the technical directors of the Respondent in virtual chambers, we must candidly concede that no formal written Force Majeure notice was transmitted within the mandatory 24-hour contractual window stipulated in Clause 19.3.\n\nWe... we are unable to defend the omission of contractual notice on this record. We respectfully submit that the liquidated claim of ₹14.82 Crores is punitive in nature, and we throw ourselves upon the equitable discretion of this Bench to grant statutory mitigation on the quantum of interest and principal.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Argument',
         legalReferences: ['Section 74 Indian Contract Act — Mitigation Doctrine'],
@@ -615,20 +653,48 @@ export default function TextCourtroomSessionPage() {
       updatedMessages = [...updatedMessages, respConcede];
       setMessages(updatedMessages);
 
-      await new Promise(r => setTimeout(r, 1800));
+      await new Promise(r => setTimeout(r, 2000));
 
-      // Turn 5: AI Presiding Judge Delivers Final Verdict & Operative Decree
-      setDebateStatusText('Turn 5 of 5: AI Presiding Bench delivering Final Verdict & Order XX CPC Decree...');
+      // Stage 8: Petitioner Final Prayer for Immediate Summary Decree
+      setDebateStatusText('Stage 8: Petitioner Counsel moving for immediate summary decree under Order XXXVII CPC...');
+
+      const petFinalPlea: Message = {
+        id: `msg-pet-final-${Date.now()}`,
+        caseId: caseData.id,
+        sender: `${petAdv} (Petitioner Counsel)`,
+        senderRole: 'Petitioner Counsel',
+        isHumanCounsel: false,
+        content: `My Lord! The defense has completely collapsed on the judicial record. The agreement is admitted, the 48-hour outage is admitted under Exhibit P-3, the Section 63 BSA certificate is unimpeached, and the defense has conceded inability to substantiate Force Majeure.\n\nUnder Order XXXVII Rule 3(6)(a) CPC and the binding law in IDBI Trusteeship Services v. Hubtown Ltd. (2017), where the defendant has no defense and the plea is moonshine, the Plaintiff is entitled to immediate final judgment. We pray that the suit be decreed forthwith!`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        category: 'Argument',
+        legalReferences: ['Order XXXVII Rule 3(6)(a) CPC', 'IDBI Trusteeship Services v. Hubtown Ltd. (2017)'],
+      };
+      updatedMessages = [...updatedMessages, petFinalPlea];
+      setMessages(updatedMessages);
+
+      await new Promise(r => setTimeout(r, 2200));
+
+      // Stage 9: AI Presiding Judge Delivers Final Verdict & Operative Decree
+      setDebateStatusText('Final Stage: AI Presiding Judge delivering Operative Decree under Order XX Rule 6 CPC...');
 
       const judgeRuling: Message = {
         id: `msg-judge-ruling-${Date.now()}`,
         caseId: caseData.id,
         sender: caseData.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Commercial Judge',
         senderRole: 'AI Judge',
-        content: `FINAL BENCH VERDICT & JUDICIAL DECREE: The Court has heard learned counsel for both sides at length and scrutinized the electronic exhibits certified under Section 63 of Bharatiya Sakshya Adhiniyam, 2023. The preliminary objection of the Respondent is OVERRULED. The breach of contract is conclusively proved on admitted cryptographic records. Applying the statutory mitigation principles under Section 74 of the Indian Contract Act, the claim is hereby DECREED in favour of the Petitioner under Order XX Rule 6 CPC. The Respondent shall satisfy the decree within 30 days, failing which execution shall issue under Order XXI CPC. The certified judicial decree with cryptographic digital seal stands formalized. Court is adjourned.`,
+        content: `FINAL BENCH VERDICT & OPERATIVE JUDICIAL DECREE (Order XX Rule 6 CPC):
+
+The Court has heard learned counsel for both sides at length and scrutinized the certified electronic record under Section 63 of Bharatiya Sakshya Adhiniyam, 2023.
+
+1. ADMISSIBILITY OF ELECTRONIC EVIDENCE: The Hardware Security Module SHA-256 cryptographic certificate (Exhibit P-2) satisfies all requirements under Section 63(2)(a) BSA. The electronic logs of 48-hour server failure stand conclusively proved.
+2. ADMISSION OF BREACH: The Respondent's own written communication (Exhibit P-3) admits complete zone outage. Under Section 56 BSA, admitted facts require no further proof.
+3. INABILITY TO SUSTAIN DEFENSE: Learned Counsel for the Respondent has candidly conceded inability to defend the omission of the mandatory 24-hour notice required to invoke Force Majeure under Clause 19.3. The defense of Force Majeure stands waived. Under Order XXXVII Rule 3(6) CPC and IDBI Trusteeship (2017), the defense disclosed is illusory and sham.
+4. STATUTORY MITIGATION APPLIED: Applying Section 74 of the Indian Contract Act and the doctrine in ONGC v. Saw Pipes (2003), the Court scales down the punitive component to an adjudicated principal recovery of ₹12,50,00,000/- together with statutory interest at 9% per annum from date of default until realization, plus ₹15,00,000/- taxed costs.
+
+OPERATIVE ORDER: The Suit is hereby DECREED in favour of the Petitioner against the Respondent. Decree sheet stands formalized with digital judicial seal. Respondent shall satisfy this decree within 30 days, failing which execution shall issue under Order XXI CPC. Hearing is concluded. Court is adjourned.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Ruling',
-        legalReferences: ['Order XX Rule 6 CPC', 'Section 74 Indian Contract Act', 'Section 63 BSA 2023', 'Order XXI CPC'],
+        legalReferences: ['Order XX Rule 6 CPC', 'Order XXXVII Rule 3(6) CPC', 'Section 74 Indian Contract Act', 'Section 63 BSA 2023', 'Order XXI CPC'],
       };
       updatedMessages = [...updatedMessages, judgeRuling];
       setMessages(updatedMessages);
@@ -640,12 +706,23 @@ export default function TextCourtroomSessionPage() {
         suit_number: caseData.caseNumber,
         court_name: caseData.courtLevel,
         verdict: `SUIT DECREED IN FAVOUR OF ${petName.toUpperCase()} WITH STATUTORY MITIGATION`,
-        statutory_clauses_applied: caseData.statutoryActs,
+        statutory_clauses_applied: [
+          'Order XX Rule 6 Code of Civil Procedure, 1908 (Form of Decree)',
+          'Order XXXVII Rule 3(6) CPC (Summary Judgment on Refusal of Leave)',
+          'Section 74 Indian Contract Act, 1872 (Liquidated Damages Mitigation)',
+          'Section 63 Bharatiya Sakshya Adhiniyam, 2023 (Admissibility of Electronic Records)'
+        ],
+        adjudicated_amounts: {
+          principal_inr: 125000000,
+          statutory_interest_awarded_inr: 11250000,
+          legal_costs_inr: 1500000,
+          total_enforceable_sum_inr: 137750000
+        },
         digital_seal_hash: 'sha256-7fa29b4412c9842a6c81093f412e84c9876231d601b0451a99f12d8a39b94017',
         compliance_directives: [
-          `1. Respondent (${respName}) shall deposit the decreed sums with the Court Registry within 30 days from date of seal.`,
+          `1. Respondent (${respName}) shall deposit ₹13,77,50,000/- with the Court Registry within 30 days from date of seal.`,
           '2. Certified electronic evidence declared admissible and conclusive under Section 63 of Bharatiya Sakshya Adhiniyam, 2023.',
-          '3. Decree enforceable under Order XXI of the Code of Civil Procedure, 1908.'
+          '3. Decree enforceable under Order XXI of the Code of Civil Procedure, 1908 upon expiry of limitation period.'
         ],
         appeal_limitation_days: 30
       });
