@@ -127,9 +127,9 @@ export default function TextCourtroomSessionPage() {
 
       const courtTitle = parsedCase.courtLevel || 'High Court of State';
       const petName = parsedCase.parties[0]?.name || 'Petitioner';
-      const petAdv = parsedCase.parties[0]?.advocateName || 'Senior Adv. Rajesh Sharma';
+      const petAdv = parsedCase.parties[0]?.advocateName || 'Senior Advocate Counsel';
       const respName = parsedCase.parties[1]?.name || 'Respondent';
-      const respAdv = parsedCase.parties[1]?.advocateName || 'Adv. Meera Sen';
+      const respAdv = parsedCase.parties[1]?.advocateName || 'Senior Defense Counsel';
 
       const initialMsgs: Message[] = [];
 
@@ -287,9 +287,9 @@ export default function TextCourtroomSessionPage() {
     if (senderRole === 'AI Judge') {
       senderName = 'AI Presiding Judge';
     } else if (senderRole === 'Petitioner Counsel') {
-      senderName = isHuman ? `${caseData.parties[0]?.advocateName || 'Adv. [You] (Petitioner Counsel)'}` : `${caseData.parties[0]?.advocateName || 'Senior Adv. Rajesh Sharma'}`;
+      senderName = isHuman ? `${caseData.parties[0]?.advocateName || 'Adv. [You] (Petitioner Counsel)'}` : `${caseData.parties[0]?.advocateName || 'Senior Advocate Counsel'}`;
     } else {
-      senderName = isHuman ? `${caseData.parties[1]?.advocateName || 'Adv. [You] (Respondent Counsel)'}` : `${caseData.parties[1]?.advocateName || 'Adv. Meera Sen'}`;
+      senderName = isHuman ? `${caseData.parties[1]?.advocateName || 'Adv. [You] (Respondent Counsel)'}` : `${caseData.parties[1]?.advocateName || 'Senior Defense Counsel'}`;
     }
 
     const newMessage: Message = {
@@ -358,8 +358,8 @@ export default function TextCourtroomSessionPage() {
           // Step 1: Opposing AI Counsel raises formal statutory objection
           setTimeout(() => {
             const opposingName = isPetitionerUser 
-              ? `${caseData.parties[1]?.advocateName || 'Adv. Meera Sen'} (Respondent Counsel)` 
-              : `${caseData.parties[0]?.advocateName || 'Senior Adv. Rajesh Sharma'} (Petitioner Counsel)`;
+              ? `${caseData.parties[1]?.advocateName || 'Senior Defense Counsel'} (Respondent Counsel)` 
+              : `${caseData.parties[0]?.advocateName || 'Senior Advocate Counsel'} (Petitioner Counsel)`;
             
             const objectionMsg: Message = {
               id: `msg-opp-obj-${Date.now()}`,
@@ -433,7 +433,7 @@ export default function TextCourtroomSessionPage() {
 
     if (payload.speakerRole === 'petitioner_counsel') {
       return {
-        speaker: isConst ? 'Senior Adv. Kapil Salve (Petitioner)' : isCrim ? 'Public Prosecutor (State CID)' : 'Senior Counsel (Petitioner)',
+        speaker: isConst ? 'Senior Constitutional Counsel (Petitioner)' : isCrim ? 'Public Prosecutor (State CID)' : 'Senior Counsel (Petitioner)',
         argument_text: isConst
           ? 'May it please this Hon\'ble Constitution Bench: Under Article 32 of the Constitution, we impugn the contested surveillance directives. The foundational doctrine in K.S. Puttaswamy v. Union of India (2017) establishes privacy as an essential fundamental right under Article 21. The executive scraping mechanism lacks prior judicial authorization and squarely fails the four-fold proportionality test.'
           : isCrim
@@ -451,7 +451,7 @@ export default function TextCourtroomSessionPage() {
 
     if (payload.speakerRole === 'respondent_counsel') {
       return {
-        speaker: isConst ? 'Solicitor General Tushar Mehta (Union of India)' : 'Senior Defense Counsel',
+        speaker: isConst ? 'Solicitor General of India (Union of India)' : 'Senior Defense Counsel',
         argument_text: isConst
           ? 'Objection, Your Honour! The Union submits that the petitioner has misconstrued the security protocols. Under Article 19(2) and Section 69 of the Information Technology Act, the State is duty-bound to protect national cybersecurity and sovereignty. The guidelines prescribe strict tiered administrative oversight satisfying due process of law.'
           : isCrim
@@ -505,9 +505,9 @@ export default function TextCourtroomSessionPage() {
 
     try {
       const petName = caseData.parties[0]?.name || 'Petitioner';
-      const petAdv = caseData.parties[0]?.advocateName || 'Senior Adv. Rajesh Sharma';
+      const petAdv = caseData.parties[0]?.advocateName || 'Senior Advocate Counsel';
       const respName = caseData.parties[1]?.name || 'Respondent';
-      const respAdv = caseData.parties[1]?.advocateName || 'Adv. Meera Sen';
+      const respAdv = caseData.parties[1]?.advocateName || 'Senior Defense Counsel';
 
       // Always anchor onto the official Clerk announcement
       const clerkMsg = messages.find(m => m.id === 'msg-clerk-call') || {
@@ -913,11 +913,11 @@ OPERATIVE ORDER: The Suit is hereby DECREED in favour of the Petitioner against 
 
                 <div className="flex items-center justify-center gap-3 text-xs font-mono py-1 flex-wrap">
                   <span className="px-2.5 py-1 rounded bg-zinc-900 border border-zinc-800 text-zinc-300">
-                    Petitioner: Adv. Rajesh Sharma (AI)
+                    Petitioner: Senior Advocate Counsel (AI)
                   </span>
                   <span className="text-zinc-500 font-bold">vs</span>
                   <span className="px-2.5 py-1 rounded bg-zinc-900 border border-zinc-800 text-zinc-300">
-                    Respondent: Adv. Meera Sen (AI)
+                    Respondent: Senior Defense Counsel (AI)
                   </span>
                 </div>
 
@@ -1257,12 +1257,12 @@ OPERATIVE ORDER: The Suit is hereby DECREED in favour of the Petitioner against 
             <div>
               <div className="text-[10px] uppercase tracking-wider font-mono text-zinc-400">Petitioner / Decree Holder</div>
               <div className="text-sm font-bold text-white mt-0.5">{caseData.parties[0]?.name}</div>
-              <div className="text-[11px] text-zinc-400 font-mono">Rep. by: Adv. Rajesh Sharma, Senior Advocate</div>
+              <div className="text-[11px] text-zinc-400 font-mono">Rep. by: Senior Advocate Counsel</div>
             </div>
             <div className="sm:border-l sm:border-zinc-800 sm:pl-4">
               <div className="text-[10px] uppercase tracking-wider font-mono text-zinc-400">Respondent / Judgment Debtor</div>
               <div className="text-sm font-bold text-white mt-0.5">{caseData.parties[1]?.name}</div>
-              <div className="text-[11px] text-zinc-400 font-mono">Rep. by: Adv. Meenakshi Sundaram, Advocate</div>
+              <div className="text-[11px] text-zinc-400 font-mono">Rep. by: Senior Defense Counsel</div>
             </div>
           </div>
 

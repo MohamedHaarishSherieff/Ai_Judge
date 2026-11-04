@@ -62,9 +62,9 @@ export default function CreateCasePage() {
     setCourtLevel('High Court of State');
     setDescription('Commercial Summary Suit under Order XXXVII CPC for recovery of Rs. 14,82,00,000/- on account of persistent cloud outage, SLA default under Section 74 Indian Contract Act 1872, and damages under Section 43A IT Act.');
     setPetitionerName('Verma Technologies Pvt. Ltd.');
-    setPetitionerAdvocate('Adv. Rajesh Sharma (D/4829/2012)');
+    setPetitionerAdvocate('Advocate on Record (D/4829/2012)');
     setRespondentName('Bharat Cloud Infrastructure Ltd.');
-    setRespondentAdvocate('Adv. Meera Sen (MH/1920/2015)');
+    setRespondentAdvocate('Senior Defense Counsel (MH/1920/2015)');
     setFileName('Verma_Technologies_v_Bharat_Cloud_Petition.pdf');
     setFileSize('1.84 MB');
     setFileHash('e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
@@ -111,7 +111,7 @@ export default function CreateCasePage() {
           role: 'Petitioner', 
           advocateName: (representationMode === 'human_vs_ai' || representationMode === 'human_vs_human')
             ? `Adv. [You] (${humanBarId || 'Bar Council of India'})`
-            : (petitionerAdvocate.trim() || 'Senior Adv. Rajesh Sharma'), 
+            : (petitionerAdvocate.trim() || 'Senior Advocate Counsel'), 
           barCouncilNo: humanBarId || 'D/4829/2012' 
         },
         { 
@@ -120,7 +120,7 @@ export default function CreateCasePage() {
           role: 'Respondent', 
           advocateName: (representationMode === 'ai_vs_human' || representationMode === 'human_vs_human')
             ? `Adv. [You] (${humanBarId || 'Bar Council of India'})`
-            : (respondentAdvocate.trim() || 'Adv. Meera Sen'), 
+            : (respondentAdvocate.trim() || 'Senior Defense Counsel'), 
           barCouncilNo: 'MH/1920/2015' 
         },
       ],
@@ -301,7 +301,7 @@ export default function CreateCasePage() {
                         type="text"
                         value={petitionerAdvocate}
                         onChange={(e) => setPetitionerAdvocate(e.target.value)}
-                        placeholder="Adv. Rajesh Sharma (D/4829/2012)"
+                        placeholder="Advocate on Record (D/4829/2012)"
                         className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 focus:border-white focus:outline-none"
                       />
                     </div>
@@ -325,7 +325,7 @@ export default function CreateCasePage() {
                         type="text"
                         value={respondentAdvocate}
                         onChange={(e) => setRespondentAdvocate(e.target.value)}
-                        placeholder="Adv. Meera Sen (MH/1920/2015)"
+                        placeholder="Senior Defense Counsel (MH/1920/2015)"
                         className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 focus:border-white focus:outline-none"
                       />
                     </div>

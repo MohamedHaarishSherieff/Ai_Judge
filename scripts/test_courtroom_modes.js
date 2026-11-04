@@ -12,9 +12,9 @@ const assert = require('assert');
 function simulateInitialMessages(caseData, petMode, respMode) {
   const courtTitle = caseData.courtLevel || 'High Court of State';
   const petName = caseData.parties[0]?.name || 'Petitioner';
-  const petAdv = caseData.parties[0]?.advocateName || 'Senior Adv. Rajesh Sharma';
+  const petAdv = caseData.parties[0]?.advocateName || 'Senior Advocate Counsel';
   const respName = caseData.parties[1]?.name || 'Respondent';
-  const respAdv = caseData.parties[1]?.advocateName || 'Adv. Meera Sen';
+  const respAdv = caseData.parties[1]?.advocateName || 'Senior Defense Counsel';
 
   const initialMsgs = [];
 
@@ -89,7 +89,7 @@ function runModeTests() {
     courtLevel: 'High Court of State',
     parties: [
       { id: 'p1', name: 'Verma Technologies Pvt. Ltd.', advocateName: 'Adv. [You] (D/4829/2026)' },
-      { id: 'p2', name: 'Bharat Cloud Infrastructure Ltd.', advocateName: 'Adv. Meera Sen' }
+      { id: 'p2', name: 'Bharat Cloud Infrastructure Ltd.', advocateName: 'Senior Defense Counsel' }
     ]
   };
 
@@ -107,7 +107,7 @@ function runModeTests() {
   assert.strictEqual(humanVsAiMsgs.length, 3, 'Human vs AI must have Clerk, AI Resp appearance, and Judge invite');
   assert.strictEqual(humanVsAiMsgs.some(m => m.senderRole === 'Petitioner Counsel'), false, 'AI must NEVER speak for Human Petitioner');
   assert.strictEqual(verifyBadge('Petitioner Counsel', 'Adv. [You] (D/4829/2026)', true), 'Human Advocate');
-  assert.strictEqual(verifyBadge('Respondent Counsel', 'Adv. Meera Sen', false), 'AI Legal Counsel');
+  assert.strictEqual(verifyBadge('Respondent Counsel', 'Senior Defense Counsel', false), 'AI Legal Counsel');
   console.log('  ✓ AI never pre-generates speech for Human Petitioner.');
   console.log('  ✓ Badging renders "Human Advocate" for Petitioner and "AI Legal Counsel" for Respondent.');
 
@@ -117,7 +117,7 @@ function runModeTests() {
   assert.strictEqual(aiVsHumanMsgs.length, 3, 'AI vs Human must have Clerk, AI Pet appearance, and Judge invite to Respondent');
   assert.strictEqual(aiVsHumanMsgs.some(m => m.senderRole === 'Respondent Counsel'), false, 'AI must NEVER speak for Human Respondent');
   assert.strictEqual(verifyBadge('Respondent Counsel', 'Adv. [You] (D/4829/2026)', true), 'Human Advocate');
-  assert.strictEqual(verifyBadge('Petitioner Counsel', 'Senior Adv. Rajesh Sharma', false), 'AI Legal Counsel');
+  assert.strictEqual(verifyBadge('Petitioner Counsel', 'Senior Advocate Counsel', false), 'AI Legal Counsel');
   console.log('  ✓ AI never pre-generates speech for Human Respondent.');
   console.log('  ✓ Badging correctly isolates Human Respondent from AI Petitioner.');
 
