@@ -21,17 +21,17 @@ export default function TextCourtroomSessionPage() {
   const selectedCase = MOCK_CASES.find((c) => c.id === caseId) || MOCK_CASES[0];
   const [caseData, setCaseData] = useState<Case>(selectedCase);
 
-  // Messages start clean with initial AI Judge opening prompt
+  // Messages start clean with initial Clerk of Court calling the case
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: 'msg-welcome',
-      caseId: caseData.id,
-      sender: caseData.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Judge',
-      senderRole: 'AI Judge',
-      content: `The ${caseData.courtLevel} is now in formal session for ${caseData.caseNumber}: "${caseData.title}". This Bench calls Senior Counsel for the Petitioner (${caseData.parties[0]?.name}) and Learned Counsel for the Respondent (${caseData.parties[1]?.name}) to present their preliminary submissions under ${caseData.statutoryActs[0] || 'the applicable statutes'}.`,
+      id: 'msg-clerk-call',
+      caseId: selectedCase.id,
+      sender: 'Court Reader / Clerk of Court',
+      senderRole: 'Court Clerk',
+      content: `ALL RISE. The Hon'ble ${selectedCase.courtLevel || 'High Court of State'} (${selectedCase.benchInfo || 'Division Bench'}) is now formally in session. Calling Item No. 1 on the Cause List — ${selectedCase.caseNumber}: "${selectedCase.title}". Matter listed for Urgent Preliminary Hearing and Adjudication.`,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       category: 'Procedural',
-      legalReferences: [caseData.statutoryActs[0] || 'Constitution of India', caseData.statutoryActs[1] || 'Bharatiya Sakshya Adhiniyam'],
+      legalReferences: [selectedCase.statutoryActs[0] || 'Order XXXVII CPC'],
     }
   ]);
 
@@ -40,6 +40,8 @@ export default function TextCourtroomSessionPage() {
   const [evidenceModalOpen, setEvidenceModalOpen] = useState(false);
   const [judgmentModalOpen, setJudgmentModalOpen] = useState(false);
   const [isSimulatingDebate, setIsSimulatingDebate] = useState(false);
+  const [aiTrialStarted, setAiTrialStarted] = useState(false);
+  const [aiTrialFinished, setAiTrialFinished] = useState(false);
   const [isSynthesizingDecree, setIsSynthesizingDecree] = useState(false);
   const [modalDecreeData, setModalDecreeData] = useState<any>(null);
   const [activeForensicExhibit, setActiveForensicExhibit] = useState<Evidence | null>(null);
@@ -207,38 +209,8 @@ export default function TextCourtroomSessionPage() {
         });
       } else {
         // CASE: AI VS AI (Both are AI)
-        initialMsgs.push({
-          id: 'msg-pet-appear',
-          caseId: parsedCase.id,
-          sender: `${petAdv} (Petitioner Counsel)`,
-          senderRole: 'Petitioner Counsel',
-          isHumanCounsel: false,
-          content: `May it please Your Lordship. ${petAdv} appearing on behalf of the Petitioner, ${petName}. The digital petition, accompanying verification affidavit, and electronic exhibits stand duly certified and sealed under Section 63 of Bharatiya Sakshya Adhiniyam, 2023.`,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          category: 'Procedural',
-          legalReferences: ['Section 63 Bharatiya Sakshya Adhiniyam, 2023'],
-        });
-        initialMsgs.push({
-          id: 'msg-resp-appear',
-          caseId: parsedCase.id,
-          sender: `${respAdv} (Respondent Counsel)`,
-          senderRole: 'Respondent Counsel',
-          isHumanCounsel: false,
-          content: `Learned Counsel ${respAdv} enters appearance on caveat for the Respondent, ${respName}. We have received service of the petition and reserve our preliminary objections to the maintainability of the claim.`,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          category: 'Procedural',
-          legalReferences: ['Code of Civil Procedure'],
-        });
-        initialMsgs.push({
-          id: 'msg-judge-start',
-          caseId: parsedCase.id,
-          sender: parsedCase.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Judge',
-          senderRole: 'AI Judge',
-          content: `The Bench is formally seized of ${parsedCase.caseNumber}. Both litigating counsels are present on record. Counsel for the Petitioner (${petName}), the Court has verified your petition under Section 63 BSA. Please present your opening proposition on the claim and state the statutory provisions relied upon under ${parsedCase.statutoryActs[0] || 'the applicable law'}.`,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          category: 'Procedural',
-          legalReferences: [parsedCase.statutoryActs[0] || 'Order XXXVII CPC', parsedCase.statutoryActs[1] || 'Section 74 Indian Contract Act'],
-        });
+        // Clean start: Only the Registry / Clerk cause-list call is shown on initial load.
+        // The user clicks "Start Live Courtroom Trial" to watch the adversarial debate and final verdict unfold live in front of them!
       }
 
       setMessages(initialMsgs);
@@ -528,6 +500,7 @@ export default function TextCourtroomSessionPage() {
       alert("You are representing the Respondent as Human Counsel. Please enter your defense or preliminary objections using the chat input or microphone below.");
       return;
     }
+    setAiTrialStarted(true);
     setIsSimulatingDebate(true);
 
     try {
@@ -536,9 +509,24 @@ export default function TextCourtroomSessionPage() {
       const respName = caseData.parties[1]?.name || 'Respondent';
       const respAdv = caseData.parties[1]?.advocateName || 'Adv. Meera Sen';
 
-      let updatedMessages = [...messages];
+      // Always anchor onto the official Clerk announcement
+      const clerkMsg = messages.find(m => m.id === 'msg-clerk-call') || {
+        id: 'msg-clerk-call',
+        caseId: caseData.id,
+        sender: 'Court Reader / Clerk of Court',
+        senderRole: 'Court Clerk' as SenderRole,
+        content: `ALL RISE. The Hon'ble ${caseData.courtLevel || 'High Court of State'} (${caseData.benchInfo || 'Division Bench'}) is now formally in session. Calling Item No. 1 on the Cause List — ${caseData.caseNumber}: "${caseData.title}". Matter listed for Urgent Preliminary Hearing and Adjudication.`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        category: 'Procedural',
+        legalReferences: [caseData.statutoryActs[0] || 'Order XXXVII CPC'],
+      };
 
-      // Turn 1: Lawyer 1 (Petitioner Counsel) Presents Opening Arguments
+      let updatedMessages = [clerkMsg];
+      setMessages(updatedMessages);
+
+      await new Promise(r => setTimeout(r, 600));
+
+      // Turn 1: Lawyer 1 (Petitioner Counsel) Enters Appearance & Presents Opening Arguments
       setDebateStatusText('Turn 1 of 5: Petitioner Counsel presenting opening propositions on claim...');
       
       const petMsg: Message = {
@@ -547,7 +535,7 @@ export default function TextCourtroomSessionPage() {
         sender: `${petAdv} (Petitioner Counsel)`,
         senderRole: 'Petitioner Counsel',
         isHumanCounsel: false,
-        content: `May it please this Hon'ble Bench. On behalf of the Petitioner, ${petName}, we press for summary judgment under Order XXXVII CPC. The Respondent, ${respName}, committed continuous default and breach of contractual obligations under Section 74 of the Indian Contract Act, 1872. The electronic performance logs and downtime incident audit reports certified under Section 63 of Bharatiya Sakshya Adhiniyam, 2023 with cryptographic SHA-256 seal establish an undisputed liquidated debt. We pray for immediate decree of the principal claim with pendente lite interest.`,
+        content: `May it please this Hon'ble Bench. ${petAdv} appearing on behalf of the Petitioner, ${petName}. The digital petition, accompanying verification affidavit, and electronic exhibits stand duly certified and sealed under Section 63 of Bharatiya Sakshya Adhiniyam, 2023.\n\nWe press for summary decree under Order XXXVII CPC for recovery of ₹14.82 Crores. The Respondent, ${respName}, committed continuous repudiatory breach of contractual SLA obligations under Section 74 of the Indian Contract Act, 1872. The cryptographically certified electronic audit logs leave no genuine triable defense. We pray for summary judgment with pendente lite interest.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Argument',
         legalReferences: [caseData.statutoryActs[0] || 'Order XXXVII CPC', 'Section 74 Indian Contract Act', 'Section 63 BSA 2023'],
@@ -555,9 +543,9 @@ export default function TextCourtroomSessionPage() {
       updatedMessages = [...updatedMessages, petMsg];
       setMessages(updatedMessages);
 
-      await new Promise(r => setTimeout(r, 1600));
+      await new Promise(r => setTimeout(r, 1800));
 
-      // Turn 2: Lawyer 2 (Respondent Counsel) Raises Formal Objection & Interjection
+      // Turn 2: Lawyer 2 (Respondent Counsel) Enters Caveat & Raises Formal Statutory Objection
       setDebateStatusText('Turn 2 of 5: Respondent Counsel interjecting with statutory objection...');
 
       const respMsg: Message = {
@@ -566,7 +554,7 @@ export default function TextCourtroomSessionPage() {
         sender: `${respAdv} (Respondent Counsel)`,
         senderRole: 'Respondent Counsel',
         isHumanCounsel: false,
-        content: `Objection, Your Honour! May I interject before the Bench is misled on the statutory threshold. Under settled law in Kailash Nath Associates v. DDA (2015), Section 74 of the Indian Contract Act does not confer a windfall; the claimant is strictly put to proof of actual quantifiable loss suffered. The petitioner cannot bypass a full regular trial by invoking summary procedure where complex technical metrics and force majeure network disruptions are disputed. We pray for leave to defend unconditionally.`,
+        content: `Learned Counsel ${respAdv} enters appearance on caveat for the Respondent, ${respName}.\n\nObjection, Your Honour! May I interject before the Bench is misled on the statutory threshold. Under settled law in Kailash Nath Associates v. DDA (2015), Section 74 of the Indian Contract Act does not confer a windfall; the claimant is strictly put to proof of actual quantifiable loss suffered. The petitioner cannot bypass a full regular trial by invoking summary procedure where complex technical cloud metrics and force majeure network disruptions are disputed. We pray for unconditional leave to defend under Order XXXVII Rule 3(5) CPC.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Argument',
         legalReferences: ['Kailash Nath Associates v. DDA (2015)', 'Section 74 Indian Contract Act', 'Order XXXVII Rule 3(5) CPC'],
@@ -574,9 +562,9 @@ export default function TextCourtroomSessionPage() {
       updatedMessages = [...updatedMessages, respMsg];
       setMessages(updatedMessages);
 
-      await new Promise(r => setTimeout(r, 1600));
+      await new Promise(r => setTimeout(r, 1800));
 
-      // Turn 3: Judge Intervenes & Questions Lawyer 1
+      // Turn 3: Judge Intervenes & Questions Counsel on Evidence & Proof
       setDebateStatusText('Turn 3 of 5: AI Presiding Judge posing critical interlocutory query...');
 
       const judgeQuery: Message = {
@@ -584,7 +572,7 @@ export default function TextCourtroomSessionPage() {
         caseId: caseData.id,
         sender: caseData.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Commercial Judge',
         senderRole: 'AI Judge',
-        content: `Bench Interlocutory Query to Petitioner Counsel: The objection raised under Section 74 holds substance under the Kailash Nath doctrine. Counsel, how do your filed pleadings demonstrate that the liquidated sum claimed is a genuine pre-estimate of loss and not in terrorem? Further, does your Section 63 BSA certificate verify that server hashes were captured without human tampering? Address the Bench.`,
+        content: `Bench Interlocutory Query to Both Counsels: The Bench is seized of ${caseData.caseNumber}. The objection raised under Section 74 holds substance under the Kailash Nath doctrine. Counsel for the Petitioner, how do your filed pleadings demonstrate that the liquidated sum claimed is a genuine pre-estimate of loss and not in terrorem? Further, does your Section 63 BSA certificate verify that server hashes were captured without human tampering? And Respondent Counsel, does the Respondent dispute the uncompromised SHA-256 seal? Address the Bench.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         category: 'Question',
         legalReferences: ['Section 74 Indian Contract Act', 'Section 63 Bharatiya Sakshya Adhiniyam, 2023'],
@@ -661,6 +649,8 @@ export default function TextCourtroomSessionPage() {
         ],
         appeal_limitation_days: 30
       });
+
+      setAiTrialFinished(true);
 
     } catch (err) {
       console.error('Trial simulation error:', err);
@@ -750,7 +740,13 @@ export default function TextCourtroomSessionPage() {
                 className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-white hover:bg-zinc-200 text-black font-extrabold text-xs transition-all shadow-sm active:scale-95 disabled:opacity-50 cursor-pointer"
               >
                 {isSimulatingDebate ? <Square className="w-3.5 h-3.5 text-black" /> : <Play className="w-3.5 h-3.5 text-black fill-current" />}
-                <span>{isSimulatingDebate ? 'Litigating Debate (Muse Spark)...' : 'Simulate Adversarial Trial (Muse Spark)'}</span>
+                <span>
+                  {isSimulatingDebate 
+                    ? 'Litigating Adversarial Debate (Muse Spark)...' 
+                    : aiTrialFinished 
+                    ? 'Re-run AI Courtroom Trial' 
+                    : 'Start Live Courtroom Trial'}
+                </span>
               </button>
 
               <button
@@ -819,6 +815,89 @@ export default function TextCourtroomSessionPage() {
             {messages.map((msg) => (
               <ChatMessage key={msg.id} message={msg} />
             ))}
+
+            {/* Prominent Start Courtroom Trial Card for AI vs AI */}
+            {!aiTrialStarted && !isSimulatingDebate && petitionerMode === 'ai' && respondentMode === 'ai' && (
+              <div className="my-6 p-6 rounded-2xl bg-zinc-950 border-2 border-zinc-700 shadow-2xl text-center space-y-4 max-w-lg mx-auto">
+                <div className="w-12 h-12 rounded-xl bg-white text-black flex items-center justify-center mx-auto shadow-md">
+                  <Gavel className="w-6 h-6 text-black" />
+                </div>
+                <div className="space-y-1">
+                  <div className="text-[10px] font-mono uppercase tracking-widest text-zinc-400">
+                    Live Adversarial Bench In Session
+                  </div>
+                  <h3 className="text-base font-bold text-white font-serif">
+                    {caseData.caseNumber}
+                  </h3>
+                  <p className="text-xs text-zinc-400 line-clamp-2">
+                    {caseData.title}
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-center gap-3 text-xs font-mono py-1 flex-wrap">
+                  <span className="px-2.5 py-1 rounded bg-zinc-900 border border-zinc-800 text-zinc-300">
+                    Petitioner: Adv. Rajesh Sharma (AI)
+                  </span>
+                  <span className="text-zinc-500 font-bold">vs</span>
+                  <span className="px-2.5 py-1 rounded bg-zinc-900 border border-zinc-800 text-zinc-300">
+                    Respondent: Adv. Meera Sen (AI)
+                  </span>
+                </div>
+
+                <p className="text-xs text-zinc-300 leading-relaxed max-w-sm mx-auto">
+                  Click the button below to commence the trial. The two AI advocates will argue the statutory issues live before the AI Judge, who will deliver the binding final decree.
+                </p>
+
+                <button
+                  type="button"
+                  onClick={handleRunAdversarialTrial}
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-white hover:bg-zinc-200 text-black font-extrabold text-sm transition-all shadow-lg hover:scale-105 active:scale-95 cursor-pointer"
+                >
+                  <Play className="w-4 h-4 fill-current text-black" />
+                  <span>Start Live Courtroom Trial</span>
+                </button>
+              </div>
+            )}
+
+            {/* Hearing Concluded & Certified Decree Banner */}
+            {aiTrialFinished && (
+              <div className="my-6 p-5 rounded-2xl bg-zinc-950 border-2 border-white/40 shadow-2xl text-center space-y-3.5 max-w-lg mx-auto">
+                <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center mx-auto shadow-md">
+                  <Scale className="w-5 h-5 text-black" />
+                </div>
+                <div className="space-y-1">
+                  <div className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-bold flex items-center justify-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Adjudication Concluded • Operative Decree Sealed</span>
+                  </div>
+                  <h4 className="text-sm font-bold text-white font-serif">
+                    Order XX Rule 6 CPC Judicial Decree Issued
+                  </h4>
+                  <p className="text-xs text-zinc-300">
+                    Claim decreed in favour of Petitioner with statutory mitigation & 9% interest.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-center gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => setJudgmentModalOpen(true)}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-black font-extrabold text-xs hover:bg-zinc-200 transition-colors shadow-md cursor-pointer"
+                  >
+                    <FileText className="w-4 h-4 text-black" />
+                    <span>View Certified Decree Sheet</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleRunAdversarialTrial}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-zinc-300 hover:text-white text-xs transition-colors cursor-pointer"
+                  >
+                    <Play className="w-3.5 h-3.5" />
+                    <span>Re-run Trial</span>
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Active Deliberation Status Card */}
             {isSimulatingDebate && (
