@@ -1,5 +1,6 @@
 # AI Judge - Meta Muse Code CLI Launch Blueprint
 > **Kickoff Time**: Oct 26, 2026 @ 9:30 PM IST (12:00 PM ET)  
+> **Final Submission**: November 4, 2026 @ 9:00 PM EST  
 > **Target**: 1st Place Indie Developer ($150,000) + Open Weights ($10,000) + Agentic ($5,000)
 
 ---

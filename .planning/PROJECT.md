@@ -1,6 +1,7 @@
 # Project: AI Judge (न्याय-AI)
 
 ## Sovereign AI Judicial Bench & Virtual Courtroom Platform for the Indian Judiciary
+**Status:** Meta Global AI Developer Hackathon Submission • Verified November 4, 2026
 
 ### 1. Vision & Executive Summary
 **AI Judge** is an enterprise, institutional-grade judicial adjudication platform engineered for deployment across all tiers of the Indian judicial system:

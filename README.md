@@ -15,6 +15,8 @@
 
 **Author:** Mohamed Haarish Sherieff  
 **Platform Target:** Ministry of Law & Justice, Government of India • National e-Courts Phase IV  
+**Hackathon Event:** Meta Global AI Developer Hackathon 2026 (Hosted by Meta & Cerebral Valley)  
+**Submission Release:** November 4, 2026 • Verified Production Build  
 **Repository:** [https://github.com/MohamedHaarishSherieff/Ai_Judge](https://github.com/MohamedHaarishSherieff/Ai_Judge)
 
 ---

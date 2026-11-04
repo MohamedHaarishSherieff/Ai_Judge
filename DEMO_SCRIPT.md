@@ -1,7 +1,8 @@
 # AI Judge - 3-Minute Hackathon Demo Video Script
 > **Cerebral Valley x Meta Global AI Hackathon**  
 > **Duration**: Exactly 3 Minutes (180 Seconds)  
-> **Target Track**: 1st Place Indie Developer Track ($150,000)
+> **Target Track**: 1st Place Indie Developer Track ($150,000)  
+> **Date**: November 4, 2026 • Final Production Submission Build
 
 ---
 
