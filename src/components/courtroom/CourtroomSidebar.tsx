@@ -160,16 +160,27 @@ export const CourtroomSidebar: React.FC<CourtroomSidebarProps> = ({
               </Link>
             </div>
             {documents.map((doc) => (
-              <div key={doc.id} className="p-3 bg-slate-900 rounded-lg border border-slate-800 space-y-1.5 hover:border-slate-700 transition-colors">
+              <div key={doc.id} className="p-3 bg-slate-900 rounded-lg border border-slate-800 space-y-2 hover:border-slate-700 transition-colors">
                 <div className="flex items-start justify-between gap-2">
-                  <span className="font-semibold text-slate-200 line-clamp-1">{doc.name}</span>
+                  <span className="font-semibold text-slate-200 line-clamp-1 text-xs">{doc.name}</span>
                   <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 shrink-0">
                     {doc.type}
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-400 flex justify-between">
-                  <span>By {doc.uploadedRole}</span>
-                  <span>{doc.fileSize}</span>
+                <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                  <span>By {doc.uploadedRole || 'Counsel'}</span>
+                  <span>{doc.fileSize || '1.84 MB'}</span>
+                </div>
+                <div className="pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono">
+                  <span className="text-emerald-400">✓ Sec 63 BSA</span>
+                  <a
+                    href="/documents/Verma_Technologies_v_Bharat_Cloud_Petition.pdf"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-white hover:underline font-bold inline-flex items-center gap-1"
+                  >
+                    View File <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
                 </div>
               </div>
             ))}

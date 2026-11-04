@@ -50,13 +50,17 @@ export default function CaseDetailPage() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const savedCase = localStorage.getItem('custom_case_' + caseId);
+      const savedCase = localStorage.getItem('case_' + caseId) || 
+                        localStorage.getItem('custom_case_' + caseId) || 
+                        (caseId.startsWith('CASE-') ? localStorage.getItem('active_case') : null);
       if (savedCase) {
         try {
           const parsed = JSON.parse(savedCase);
           setCaseData(parsed);
 
-          const savedDocs = localStorage.getItem('custom_docs_' + caseId);
+          const savedDocs = localStorage.getItem('docs_' + caseId) || 
+                            localStorage.getItem('custom_docs_' + caseId) || 
+                            (caseId.startsWith('CASE-') ? localStorage.getItem('active_docs') : null);
           if (savedDocs) {
             setDocuments(JSON.parse(savedDocs));
           } else {

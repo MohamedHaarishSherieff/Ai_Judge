@@ -20,7 +20,11 @@ import {
   Check,
   Trash2,
   FileCheck,
-  Sparkles
+  Sparkles,
+  Bot,
+  User,
+  ShieldAlert,
+  Landmark
 } from 'lucide-react';
 
 export default function CreateCasePage() {
@@ -46,6 +50,10 @@ export default function CreateCasePage() {
   const [fileHash, setFileHash] = useState('');
   const [isDragging, setIsDragging] = useState(false);
 
+  // Bench Representation Mode (User Chooses Before Starting the Trial)
+  const [representationMode, setRepresentationMode] = useState<'ai_vs_ai' | 'human_vs_ai' | 'ai_vs_human' | 'human_vs_human'>('ai_vs_ai');
+  const [humanBarId, setHumanBarId] = useState('D/4829/2026');
+
   // Autofill helper
   const handleAutofillExample = () => {
     setTitle('Verma Technologies Pvt. Ltd. v. Bharat Cloud Infrastructure Ltd.');
@@ -64,67 +72,89 @@ export default function CreateCasePage() {
   const handleFileSelect = (file: File) => {
     setFileName(file.name);
     setFileSize((file.size / (1024 * 1024)).toFixed(2) + ' MB');
-    // Generate deterministic mock SHA-256 hash
     setFileHash('sha256:' + Array.from(file.name).reduce((acc, char) => (acc + char.charCodeAt(0).toString(16)), '').padEnd(64, 'a').slice(0, 64));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const newCaseId = courtLevel === 'Supreme Court of India' ? 'SC-WP-2026-104' : 'HC-COMM-2026-781';
+    const uniqueCaseId = 'CASE-' + Math.floor(100000 + Math.random() * 900000);
 
     const newCase = {
-      id: newCaseId,
-      caseNumber: courtLevel === 'Supreme Court of India' ? 'Writ Petition (Civil) No. 104 of 2026' : 'Commercial Summary Suit No. 418 of 2026',
+      id: uniqueCaseId,
+      caseNumber: `${courtLevel.includes('Supreme') ? 'Writ Petition (Civil)' : courtLevel.includes('District') ? 'Civil Suit' : 'Commercial Summary Suit'} No. ${Math.floor(100 + Math.random() * 899)} of 2026`,
       title: title || 'Verma Technologies Pvt. Ltd. v. Bharat Cloud Infrastructure Ltd.',
       type: type || 'Corporate & Commercial',
       courtLevel: courtLevel,
       status: 'Hearing',
       filedDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
-      nextHearing: 'Today (Live Bench)',
+      nextHearing: 'Today (Live Bench In Session)',
       summary: description || 'Commercial Summary Suit under Order XXXVII CPC for recovery of ₹14,82,00,000/- on account of persistent cloud outage, SLA default under Section 74 Indian Contract Act 1872, and damages under Section 43A IT Act.',
-      benchInfo: courtLevel === 'Supreme Court of India' 
-        ? "Chief Justice of India & 4-Judge Constitution Bench (Courtroom No. 1)" 
-        : "Hon'ble High Court Commercial Division Bench (Courtroom No. 4)",
+      benchInfo: `Hon'ble ${courtLevel} Division Bench (Courtroom No. 1)`,
       statutoryActs: [
         'Order XXXVII Code of Civil Procedure, 1908 (Summary Suits)',
         'Indian Contract Act, 1872 — Section 74 (Liquidated Damages)',
         'Bharatiya Sakshya Adhiniyam, 2023 — Section 63 (Electronic Evidence Certificate)',
-        'Information Technology Act, 2000 — Section 43A (Failure to Protect Data)'
+        'Information Technology Act, 2000 — Section 43A (Data & Cloud Liability)'
       ],
       issuesForDetermination: [
-        'Whether 96-hour continuous cloud server outage constitutes repudiatory breach of service level agreement under Section 74 ICA.',
-        'Whether electronic audit logs and Section 63 BSA certificate are admissible without oral examining of cloud engineers.',
-        'Whether the plaintiff is entitled to summary decree under Order XXXVII Rule 3 CPC for ₹14.82 Crores.'
+        'Whether persistent cloud infrastructure outage amounts to repudiatory breach of SLA under Section 74 ICA.',
+        'Whether electronic audit logs and Section 63 BSA certificate are admissible without summoning third-party technicians.',
+        'Whether plaintiff is entitled to summary decree under Order XXXVII Rule 3 CPC for ₹14.82 Crores.'
       ],
       parties: [
-        { id: 'p1', name: petitionerName || 'Verma Technologies Pvt. Ltd.', role: 'Petitioner', advocateName: petitionerAdvocate || 'Senior Adv. Rajesh Sharma', barCouncilNo: 'D/4829/2012' },
-        { id: 'p2', name: respondentName || 'Bharat Cloud Infrastructure Ltd.', role: 'Respondent', advocateName: respondentAdvocate || 'Adv. Meera Sen', barCouncilNo: 'MH/1920/2015' },
+        { 
+          id: 'p1', 
+          name: petitionerName || 'Verma Technologies Pvt. Ltd.', 
+          role: 'Petitioner', 
+          advocateName: (representationMode === 'human_vs_ai' || representationMode === 'human_vs_human')
+            ? `Learned Counsel (You) [${humanBarId || 'Bar Council of India'}]`
+            : (petitionerAdvocate || 'Senior Adv. Rajesh Sharma'), 
+          barCouncilNo: humanBarId || 'D/4829/2012' 
+        },
+        { 
+          id: 'p2', 
+          name: respondentName || 'Bharat Cloud Infrastructure Ltd.', 
+          role: 'Respondent', 
+          advocateName: (representationMode === 'ai_vs_human' || representationMode === 'human_vs_human')
+            ? `Learned Counsel (You) [${humanBarId || 'Bar Council of India'}]`
+            : (respondentAdvocate || 'Adv. Meera Sen'), 
+          barCouncilNo: 'MH/1920/2015' 
+        },
       ],
     };
 
     const newDoc = {
-      id: 'doc-uploaded-' + Date.now(),
-      caseId: newCaseId,
+      id: 'doc-' + uniqueCaseId,
+      caseId: uniqueCaseId,
       name: fileName || 'Verma_Technologies_v_Bharat_Cloud_Petition.pdf',
       type: 'Petition',
-      uploadedBy: petitionerAdvocate || 'Senior Adv. Rajesh Sharma',
+      uploadedBy: petitionerName || 'Verma Technologies Pvt. Ltd.',
       uploadedRole: 'Petitioner Counsel',
       uploadedDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
       fileSize: fileSize || '1.84 MB',
       fileFormat: 'PDF/A',
       status: 'Verified',
-      description: 'Original Commercial Summary Suit Plaint with Section 63 BSA electronic verification certificate and Tier-IV SLA breach exhibits.'
+      description: 'Original Plaint with Affidavit of Verification and Section 63 BSA Digital Signature Certificate.'
     };
+
+    const petitionerMode = (representationMode === 'human_vs_ai' || representationMode === 'human_vs_human') ? 'real' : 'ai';
+    const respondentMode = (representationMode === 'ai_vs_human' || representationMode === 'human_vs_human') ? 'real' : 'ai';
 
     if (typeof window !== 'undefined') {
       try {
-        localStorage.setItem('custom_case_' + newCaseId, JSON.stringify(newCase));
-        localStorage.setItem('custom_docs_' + newCaseId, JSON.stringify([newDoc]));
-        localStorage.setItem('last_created_case_id', newCaseId);
+        localStorage.setItem('case_' + uniqueCaseId, JSON.stringify(newCase));
+        localStorage.setItem('docs_' + uniqueCaseId, JSON.stringify([newDoc]));
+        localStorage.setItem('mode_' + uniqueCaseId, JSON.stringify({ representationMode, petitionerMode, respondentMode, humanBarId }));
+        
+        // Also save globally as active_case
+        localStorage.setItem('active_case', JSON.stringify(newCase));
+        localStorage.setItem('active_docs', JSON.stringify([newDoc]));
+        localStorage.setItem('active_mode', JSON.stringify({ representationMode, petitionerMode, respondentMode }));
       } catch (e) {}
     }
 
-    router.push(`/cases/${newCaseId}`);
+    // DIRECT REDIRECT STRAIGHT INTO THE COURTROOM
+    router.push(`/text-courtroom/${uniqueCaseId}`);
   };
 
   return (
@@ -148,7 +178,7 @@ export default function CreateCasePage() {
             { num: 1, label: 'Case Info' },
             { num: 2, label: 'Participants' },
             { num: 3, label: 'Documents' },
-            { num: 4, label: 'Review & Submit' }
+            { num: 4, label: 'Counsel & Bench' }
           ].map((s) => (
             <div
               key={s.num}
@@ -440,67 +470,154 @@ export default function CreateCasePage() {
               </div>
             )}
 
-            {/* STEP 4: REVIEW */}
+            {/* STEP 4: COUNSEL & BENCH SETUP */}
             {currentStep === 4 && (
-              <div className="space-y-4 animate-in fade-in duration-200">
-                <h3 className="text-base font-bold text-white flex items-center gap-2 border-b border-zinc-800 pb-3">
-                  <CheckCircle2 className="w-5 h-5 text-white" /> Step 4 — Review Case Summary Before Filing
-                </h3>
+              <div className="space-y-6 animate-in fade-in duration-200">
+                <div className="border-b border-zinc-800 pb-3">
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    <Gavel className="w-5 h-5 text-white" /> Step 4 — Bench & Legal Representation Mode
+                  </h3>
+                  <p className="text-xs text-zinc-400 mt-1">
+                    Select how the Petitioner and Respondent will be represented before the Autonomous Presiding AI Judge.
+                  </p>
+                </div>
 
+                {/* Representation Mode Selection Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                  {[
+                    {
+                      id: 'ai_vs_ai',
+                      title: 'AI Counsel vs. AI Counsel',
+                      badge: 'Autonomous Debate',
+                      badgeColor: 'border-white/30 text-white bg-zinc-900',
+                      icon: Bot,
+                      desc: 'Dual autonomous AI advocates (Meta Muse Spark) debate procedural motions, evidence, and statutes before the AI Presiding Judge.',
+                    },
+                    {
+                      id: 'human_vs_ai',
+                      title: 'Human Lawyer vs. AI Counsel',
+                      badge: 'You Argue as Petitioner',
+                      badgeColor: 'border-white text-white bg-black',
+                      icon: User,
+                      desc: 'You represent the Petitioner live from your terminal, lodging oral submissions and citations against Meta-powered Respondent Counsel.',
+                    },
+                    {
+                      id: 'ai_vs_human',
+                      title: 'AI Counsel vs. Human Lawyer',
+                      badge: 'You Defend as Respondent',
+                      badgeColor: 'border-white text-white bg-black',
+                      icon: User,
+                      desc: 'Meta-powered Petitioner Counsel presents claim grounds while you represent Respondent defending against summary judgment.',
+                    },
+                    {
+                      id: 'human_vs_human',
+                      title: 'Human Lawyer vs. Human Lawyer',
+                      badge: 'Dual Real Advocates',
+                      badgeColor: 'border-zinc-500 text-zinc-200 bg-zinc-900',
+                      icon: Users,
+                      desc: 'Two real human lawyers plead their case live before the Bench, while the AI Judge adjudicates and synthesizes the Order XX CPC decree.',
+                    },
+                  ].map((mode) => {
+                    const isSelected = representationMode === mode.id;
+                    const Icon = mode.icon;
+                    return (
+                      <div
+                        key={mode.id}
+                        onClick={() => setRepresentationMode(mode.id as any)}
+                        className={`p-4 rounded-xl border-2 transition-all cursor-pointer space-y-2 ${
+                          isSelected
+                            ? 'bg-zinc-900/90 border-white ring-2 ring-white/20 shadow-lg'
+                            : 'bg-zinc-950 border-zinc-800 hover:border-zinc-700 hover:bg-zinc-900/40'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isSelected ? 'bg-white text-black' : 'bg-zinc-900 text-zinc-300 border border-zinc-800'}`}>
+                              <Icon className="w-4 h-4" />
+                            </div>
+                            <span className="font-bold text-white text-xs sm:text-sm">{mode.title}</span>
+                          </div>
+                          <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded border ${mode.badgeColor}`}>
+                            {mode.badge}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-zinc-400 leading-relaxed pl-10">
+                          {mode.desc}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* If Human Mode is selected, allow Bar ID */}
+                {(representationMode === 'human_vs_ai' || representationMode === 'ai_vs_human' || representationMode === 'human_vs_human') && (
+                  <div className="p-4 bg-zinc-950 rounded-xl border border-zinc-800 space-y-2 text-xs">
+                    <label className="block text-zinc-200 font-semibold flex items-center gap-2">
+                      <Scale className="w-4 h-4 text-zinc-300" /> Human Advocate Bar Council Enrollment Number
+                    </label>
+                    <input
+                      type="text"
+                      value={humanBarId}
+                      onChange={(e) => setHumanBarId(e.target.value)}
+                      placeholder="e.g. D/4829/2026 (Bar Council of India / High Court Bar)"
+                      className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3.5 py-2 text-zinc-100 placeholder-zinc-500 focus:border-white focus:outline-none font-mono"
+                    />
+                    <span className="text-[11px] text-zinc-500 font-mono block">
+                      Enables human pleading controls, oral microphone transcription, and Section 63 BSA signed submissions.
+                    </span>
+                  </div>
+                )}
+
+                {/* Case Review Digest */}
                 <div className="p-5 bg-zinc-950 rounded-xl border border-zinc-800 space-y-4 text-xs">
+                  <div className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider font-mono">
+                    Case Filing Summary
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <span className="text-zinc-400 block font-mono text-[11px]">Case Title:</span>
+                      <span className="text-zinc-500 block font-mono text-[11px]">Cause Title:</span>
                       <span className="font-bold text-zinc-100 text-sm">
                         {title || 'Verma Technologies Pvt. Ltd. v. Bharat Cloud Infrastructure Ltd.'}
                       </span>
                     </div>
                     <div>
-                      <span className="text-zinc-400 block font-mono text-[11px]">Court Level & Forum:</span>
+                      <span className="text-zinc-500 block font-mono text-[11px]">Court Tier & Forum:</span>
                       <span className="font-bold text-white">{courtLevel} • {type}</span>
                     </div>
                   </div>
 
                   <div className="pt-3 border-t border-zinc-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="p-3 bg-zinc-900 rounded-lg border border-zinc-800">
-                      <span className="text-zinc-400 block text-[11px] font-semibold">Petitioner:</span>
+                      <span className="text-zinc-500 block text-[11px] font-semibold font-mono">Petitioner Side:</span>
                       <span className="text-zinc-200 font-medium block">
                         {petitionerName || 'Verma Technologies Pvt. Ltd.'}
                       </span>
                       <span className="text-zinc-400 text-[11px] block mt-0.5">
-                        Counsel: {petitionerAdvocate || 'Adv. Rajesh Sharma (D/4829/2012)'}
+                        Representation: {representationMode === 'human_vs_ai' || representationMode === 'human_vs_human' ? 'Real Human Advocate (You)' : 'AI Counsel (Meta Muse Spark)'}
                       </span>
                     </div>
                     <div className="p-3 bg-zinc-900 rounded-lg border border-zinc-800">
-                      <span className="text-zinc-400 block text-[11px] font-semibold">Respondent:</span>
+                      <span className="text-zinc-500 block text-[11px] font-semibold font-mono">Respondent Side:</span>
                       <span className="text-zinc-200 font-medium block">
                         {respondentName || 'Bharat Cloud Infrastructure Ltd.'}
                       </span>
                       <span className="text-zinc-400 text-[11px] block mt-0.5">
-                        Counsel: {respondentAdvocate || 'Adv. Meera Sen (MH/1920/2015)'}
+                        Representation: {representationMode === 'ai_vs_human' || representationMode === 'human_vs_human' ? 'Real Human Advocate (You)' : 'AI Counsel (Meta Muse Spark)'}
                       </span>
                     </div>
                   </div>
 
                   <div className="pt-3 border-t border-zinc-800">
-                    <span className="text-zinc-400 block text-[11px] font-mono mb-1">Attached Pleadings & Evidence:</span>
-                    <div className="flex items-center gap-2 p-2.5 bg-zinc-900 rounded-lg border border-zinc-800">
-                      <FileCheck className="w-4 h-4 text-emerald-400" />
-                      <span className="font-mono text-white text-xs font-semibold">
+                    <span className="text-zinc-500 block text-[11px] font-mono mb-1.5">Attached Pleadings & Evidence:</span>
+                    <div className="flex items-center gap-2.5 p-2.5 bg-zinc-900 rounded-lg border border-zinc-800">
+                      <FileCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <span className="font-mono text-white text-xs font-semibold truncate">
                         {fileName || 'Verma_Technologies_v_Bharat_Cloud_Petition.pdf'}
                       </span>
-                      <span className="text-[11px] text-zinc-400 ml-auto font-mono">
+                      <span className="text-[11px] text-zinc-400 ml-auto font-mono shrink-0">
                         {fileSize || '1.84 MB'} • Sec. 63 BSA Hash Verified
                       </span>
-                    </div>
-                  </div>
-
-                  <div className="p-3 bg-zinc-900/60 rounded-lg border border-zinc-800 text-[11px] text-zinc-400 space-y-1">
-                    <div className="text-zinc-200 font-semibold flex items-center gap-1.5">
-                      <Scale className="w-3.5 h-3.5 text-zinc-300" /> Statutory Filing Certification
-                    </div>
-                    <div>
-                      This electronic petition will be digitally indexed under the e-Courts Phase III standards. Upon submission, an autonomous presiding bench will convene virtual courtroom proceedings.
                     </div>
                   </div>
                 </div>
@@ -517,11 +634,11 @@ export default function CreateCasePage() {
 
               {currentStep < 4 ? (
                 <Button type="button" variant="primary" onClick={() => setCurrentStep(currentStep + 1)} icon={<ArrowRight className="w-4 h-4" />}>
-                  Next Step
+                  Next: {currentStep === 1 ? 'Litigating Parties' : currentStep === 2 ? 'Upload Documents' : 'Counsel & Bench Setup'}
                 </Button>
               ) : (
-                <Button type="submit" variant="primary" size="lg" icon={<Gavel className="w-5 h-5" />}>
-                  Create Case & Initiate Bench
+                <Button type="submit" variant="primary" size="lg" icon={<Gavel className="w-5 h-5 text-black" />}>
+                  Enter Virtual Courtroom & Begin Trial →
                 </Button>
               )}
             </div>

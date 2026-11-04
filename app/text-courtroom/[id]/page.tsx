@@ -8,7 +8,7 @@ import { ChatInput } from '@/components/courtroom/ChatInput';
 import { CourtroomSidebar } from '@/components/courtroom/CourtroomSidebar';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
-import { Message, SenderRole, Case, Evidence, IndianCourtForum, AdvocateRepresentationMode } from '@/types';
+import { Message, SenderRole, Case, Evidence, IndianCourtForum, AdvocateRepresentationMode, Document as CaseDocument, Hearing } from '@/types';
 import { ForensicEvidenceViewer } from '@/components/courtroom/ForensicEvidenceViewer';
 import { MOCK_CASES, MOCK_JUDGMENT, INDIAN_COURT_FORUMS, MOCK_DOCUMENTS, MOCK_EVIDENCE, MOCK_HEARINGS } from '@/data/mockData';
 import { PanelRightOpen, Shield, FileText, Upload, Sparkles, Gavel, CheckCircle2, Users, Play, Square, Scale, Eye, Landmark } from 'lucide-react';
@@ -46,16 +46,26 @@ export default function TextCourtroomSessionPage() {
   const [debateStatusText, setDebateStatusText] = useState('');
   const [switchBenchModalOpen, setSwitchBenchModalOpen] = useState(false);
 
+  // Advocate representation modes (Strictly AI Judge, but advocates can be AI or Real Human)
+  const [petitionerMode, setPetitionerMode] = useState<AdvocateRepresentationMode>('ai');
+  const [respondentMode, setRespondentMode] = useState<AdvocateRepresentationMode>('ai');
+
   // Relevant documents and evidence for sidebar
-  const caseDocuments = MOCK_DOCUMENTS.filter(d => d.caseId === caseData.id).length > 0
-    ? MOCK_DOCUMENTS.filter(d => d.caseId === caseData.id)
-    : MOCK_DOCUMENTS;
-  const caseEvidence = MOCK_EVIDENCE.filter(e => e.caseId === caseData.id).length > 0
-    ? MOCK_EVIDENCE.filter(e => e.caseId === caseData.id)
-    : MOCK_EVIDENCE;
-  const caseHearings = MOCK_HEARINGS.filter(h => h.caseId === caseData.id).length > 0
-    ? MOCK_HEARINGS.filter(h => h.caseId === caseData.id)
-    : MOCK_HEARINGS;
+  const [caseDocuments, setCaseDocuments] = useState<CaseDocument[]>(() => {
+    return MOCK_DOCUMENTS.filter(d => d.caseId === caseData.id).length > 0
+      ? MOCK_DOCUMENTS.filter(d => d.caseId === caseData.id)
+      : MOCK_DOCUMENTS;
+  });
+  const [caseEvidence, setCaseEvidence] = useState<Evidence[]>(() => {
+    return MOCK_EVIDENCE.filter(e => e.caseId === caseData.id).length > 0
+      ? MOCK_EVIDENCE.filter(e => e.caseId === caseData.id)
+      : MOCK_EVIDENCE;
+  });
+  const [caseHearings, setCaseHearings] = useState<Hearing[]>(() => {
+    return MOCK_HEARINGS.filter(h => h.caseId === caseData.id).length > 0
+      ? MOCK_HEARINGS.filter(h => h.caseId === caseData.id)
+      : MOCK_HEARINGS;
+  });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -66,31 +76,56 @@ export default function TextCourtroomSessionPage() {
   // Load custom case data from localStorage if available
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const savedCase = localStorage.getItem('custom_case_' + caseId);
+      const savedCase = localStorage.getItem('case_' + caseId) || 
+                        localStorage.getItem('custom_case_' + caseId) || 
+                        localStorage.getItem('active_case');
       if (savedCase) {
         try {
           const parsed: Case = JSON.parse(savedCase);
           setCaseData(parsed);
+
+          // Representation modes
+          const savedMode = localStorage.getItem('mode_' + caseId) || 
+                            localStorage.getItem('court_mode_' + caseId) || 
+                            localStorage.getItem('active_mode');
+          if (savedMode) {
+            try {
+              const parsedMode = JSON.parse(savedMode);
+              if (parsedMode.petitionerMode) setPetitionerMode(parsedMode.petitionerMode);
+              if (parsedMode.respondentMode) setRespondentMode(parsedMode.respondentMode);
+            } catch (e) {}
+          }
+
+          // Documents
+          const savedDocs = localStorage.getItem('docs_' + caseId) || 
+                            localStorage.getItem('custom_docs_' + caseId) || 
+                            localStorage.getItem('active_docs');
+          if (savedDocs) {
+            try {
+              const parsedDocs = JSON.parse(savedDocs);
+              if (Array.isArray(parsedDocs) && parsedDocs.length > 0) {
+                setCaseDocuments(parsedDocs);
+              }
+            } catch (e) {}
+          }
+
           setMessages([
             {
               id: 'msg-welcome',
               caseId: parsed.id,
               sender: parsed.courtLevel === 'Supreme Court of India' ? 'Chief Presiding Judicial Officer' : 'AI Presiding Commercial Judge',
               senderRole: 'AI Judge',
-              content: `The ${parsed.courtLevel} is now in formal session for ${parsed.caseNumber}: "${parsed.title}". This Bench calls Senior Counsel for the Petitioner (${parsed.parties[0]?.name}) and Learned Counsel for the Respondent (${parsed.parties[1]?.name}) to present preliminary submissions under ${parsed.statutoryActs[0] || 'Order XXXVII CPC and Section 74 Indian Contract Act 1872'}.`,
+              content: `The ${parsed.courtLevel} is now in formal session for ${parsed.caseNumber}: "${parsed.title}". This Bench calls Counsel for the Petitioner (${parsed.parties[0]?.name}) and Counsel for the Respondent (${parsed.parties[1]?.name}) to present preliminary submissions under ${parsed.statutoryActs[0] || 'Order XXXVII CPC and Section 74 Indian Contract Act 1872'}.`,
               timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
               category: 'Procedural',
               legalReferences: [parsed.statutoryActs[0] || 'Order XXXVII CPC', parsed.statutoryActs[1] || 'Section 74 Indian Contract Act'],
             }
           ]);
+          return;
         } catch (e) {}
       }
     }
   }, [caseId]);
-
-  // Advocate representation modes (Strictly AI Judge, but advocates can be AI or Real Human)
-  const [petitionerMode, setPetitionerMode] = useState<AdvocateRepresentationMode>('ai');
-  const [respondentMode, setRespondentMode] = useState<AdvocateRepresentationMode>('ai');
 
   // New Document Modal Form State
   const [newDocName, setNewDocName] = useState('');
