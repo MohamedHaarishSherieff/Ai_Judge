@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -16,11 +16,16 @@ import {
   ArrowLeft, 
   Upload, 
   Gavel,
-  Scale
+  Scale,
+  Check,
+  Trash2,
+  FileCheck,
+  Sparkles
 } from 'lucide-react';
 
 export default function CreateCasePage() {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentStep, setCurrentStep] = useState(1);
 
   // Form State
@@ -37,11 +42,40 @@ export default function CreateCasePage() {
 
   // Documents
   const [fileName, setFileName] = useState('');
+  const [fileSize, setFileSize] = useState('');
+  const [fileHash, setFileHash] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Autofill helper
+  const handleAutofillExample = () => {
+    setTitle('Verma Technologies Pvt. Ltd. v. Bharat Cloud Infrastructure Ltd.');
+    setType('Corporate & Commercial');
+    setCourtLevel('High Court of State');
+    setDescription('Commercial Summary Suit under Order XXXVII CPC for recovery of Rs. 14,82,00,000/- on account of persistent cloud outage, SLA default under Section 74 Indian Contract Act 1872, and damages under Section 43A IT Act.');
+    setPetitionerName('Verma Technologies Pvt. Ltd.');
+    setPetitionerAdvocate('Adv. Rajesh Sharma (D/4829/2012)');
+    setRespondentName('Bharat Cloud Infrastructure Ltd.');
+    setRespondentAdvocate('Adv. Meera Sen (MH/1920/2015)');
+    setFileName('Verma_Technologies_v_Bharat_Cloud_Petition.pdf');
+    setFileSize('1.84 MB');
+    setFileHash('e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
+  };
+
+  const handleFileSelect = (file: File) => {
+    setFileName(file.name);
+    setFileSize((file.size / (1024 * 1024)).toFixed(2) + ' MB');
+    // Generate deterministic mock SHA-256 hash
+    setFileHash('sha256:' + Array.from(file.name).reduce((acc, char) => (acc + char.charCodeAt(0).toString(16)), '').padEnd(64, 'a').slice(0, 64));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Navigate to newly created mock case details page!
-    router.push('/cases/AJ-2026-001');
+    // Route to appropriate High Court or Supreme Court case details page
+    if (courtLevel === 'Supreme Court of India') {
+      router.push('/cases/SC-WP-2026-104');
+    } else {
+      router.push('/cases/HC-WRIT-2026-512');
+    }
   };
 
   return (
@@ -90,9 +124,19 @@ export default function CreateCasePage() {
             {/* STEP 1: CASE INFO */}
             {currentStep === 1 && (
               <div className="space-y-4 animate-in fade-in duration-200">
-                <h3 className="text-base font-bold text-white flex items-center gap-2 border-b border-zinc-800 pb-3">
-                  <FolderPlus className="w-5 h-5 text-white" /> Step 1 — Case & Forum Details
-                </h3>
+                <div className="flex items-center justify-between border-b border-zinc-800 pb-3 flex-wrap gap-2">
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    <FolderPlus className="w-5 h-5 text-white" /> Step 1 — Case & Forum Details
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={handleAutofillExample}
+                    className="flex items-center gap-1.5 text-xs text-zinc-300 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 px-3 py-1.5 rounded-lg transition-colors font-mono"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                    Fill Example Case Data (Verma Tech v. Bharat Cloud)
+                  </button>
+                </div>
 
                 <div>
                   <label className="block text-zinc-200 font-semibold mb-1.5">Case Title / Cause Title</label>
@@ -101,7 +145,7 @@ export default function CreateCasePage() {
                     required
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="e.g. State Financial Corp. v. Apex Logistics Ltd."
+                    placeholder="e.g. Verma Technologies Pvt. Ltd. v. Bharat Cloud Infrastructure Ltd."
                     className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:border-white focus:outline-none"
                   />
                 </div>
@@ -129,9 +173,9 @@ export default function CreateCasePage() {
                       onChange={(e) => setCourtLevel(e.target.value)}
                       className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 focus:border-white focus:outline-none"
                     >
-                      <option value="District Court">District Court</option>
                       <option value="High Court of State">High Court of State</option>
                       <option value="Supreme Court of India">Supreme Court of India</option>
+                      <option value="District Court">District Court</option>
                     </select>
                   </div>
                 </div>
@@ -215,25 +259,132 @@ export default function CreateCasePage() {
                   <FileText className="w-5 h-5 text-white" /> Step 3 — Initial Pleadings & Evidence Attachment
                 </h3>
 
-                <div className="p-8 border-2 border-dashed border-zinc-700 rounded-2xl bg-zinc-950 text-center space-y-3">
-                  <Upload className="w-10 h-10 text-white mx-auto animate-bounce" />
-                  <div className="text-zinc-200 font-bold text-base">Drag & Drop Petition PDF/A Here</div>
-                  <p className="text-xs text-zinc-400 max-w-sm mx-auto">
-                    Includes automatic SHA-256 hash calculation and Section 63 Bharatiya Sakshya Adhiniyam compliance verification.
-                  </p>
-                  <input
-                    type="file"
-                    className="hidden"
-                    id="petition-file-input"
-                    onChange={(e) => setFileName(e.target.files?.[0]?.name || 'Writ_Petition_Original_Filing.pdf')}
-                  />
-                  <label htmlFor="petition-file-input" className="inline-block">
-                    <Button type="button" variant="outline" size="sm">Select File from Computer</Button>
-                  </label>
+                {/* Hidden File Input referenced by fileInputRef */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".pdf,.png,.jpg,.jpeg,.docx,.doc"
+                  className="hidden"
+                  id="petition-file-input"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleFileSelect(file);
+                  }}
+                />
+
+                <div 
+                  onClick={() => fileInputRef.current?.click()}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsDragging(true);
+                  }}
+                  onDragLeave={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsDragging(false);
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsDragging(false);
+                    const file = e.dataTransfer.files?.[0];
+                    if (file) handleFileSelect(file);
+                  }}
+                  className={`p-8 border-2 border-dashed rounded-2xl bg-zinc-950 text-center space-y-4 cursor-pointer transition-all ${
+                    isDragging 
+                      ? 'border-white bg-zinc-900 ring-2 ring-white/20' 
+                      : 'border-zinc-700 hover:border-zinc-500 hover:bg-zinc-900/50'
+                  }`}
+                >
+                  <div className="w-14 h-14 mx-auto rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center">
+                    <Upload className="w-6 h-6 text-white" />
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="text-zinc-100 font-bold text-base">Drag & Drop Petition PDF/A Here</div>
+                    <p className="text-xs text-zinc-400 max-w-md mx-auto">
+                      Supports PDF, DOCX, JPG, PNG. Automatic SHA-256 hash calculation and Section 63 Bharatiya Sakshya Adhiniyam compliance verification.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        fileInputRef.current?.click();
+                      }}
+                    >
+                      Select File from Computer
+                    </Button>
+                    <Button 
+                      type="button" 
+                      variant="secondary" 
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFileName('Verma_Technologies_v_Bharat_Cloud_Petition.pdf');
+                        setFileSize('1.84 MB');
+                        setFileHash('sha256:7fa29b4412c9842a6c81093f412e84c9876231d601b0451a99f12d8a39b94017');
+                      }}
+                    >
+                      Attach Generated Case Petition PDF
+                    </Button>
+                  </div>
 
                   {fileName && (
-                    <div className="mt-3 p-3 bg-zinc-900 rounded-lg border border-zinc-700 text-zinc-100 text-xs font-mono inline-block">
-                      Selected: {fileName} (4.8 MB • Hash OK)
+                    <div 
+                      onClick={(e) => e.stopPropagation()} 
+                      className="mt-4 p-4 bg-zinc-900/90 rounded-xl border border-zinc-700 text-left max-w-lg mx-auto flex items-start justify-between gap-3 shadow-lg"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-600/50 flex items-center justify-center shrink-0 mt-0.5">
+                          <FileCheck className="w-5 h-5 text-emerald-400" />
+                        </div>
+                        <div className="space-y-1">
+                          <div className="text-zinc-100 font-mono font-bold text-xs truncate max-w-xs sm:max-w-sm">
+                            {fileName}
+                          </div>
+                          <div className="text-[11px] text-zinc-400 flex items-center gap-2 flex-wrap">
+                            <span>{fileSize || '1.84 MB'}</span>
+                            <span>•</span>
+                            <span className="text-emerald-400 font-medium flex items-center gap-1">
+                              <Check className="w-3 h-3" /> Sec. 63 BSA Compliant
+                            </span>
+                          </div>
+                          {fileHash && (
+                            <div className="text-[10px] font-mono text-zinc-500 truncate max-w-xs sm:max-w-sm">
+                              Hash: {fileHash}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => fileInputRef.current?.click()}
+                          className="text-xs text-zinc-300 hover:text-white px-2 py-1 rounded bg-zinc-800 hover:bg-zinc-700 transition-colors font-mono"
+                          title="Choose different file"
+                        >
+                          Change
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFileName('');
+                            setFileSize('');
+                            setFileHash('');
+                          }}
+                          className="text-xs text-red-400 hover:text-red-300 p-1 rounded hover:bg-zinc-800 transition-colors"
+                          title="Remove file"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -247,32 +398,61 @@ export default function CreateCasePage() {
                   <CheckCircle2 className="w-5 h-5 text-white" /> Step 4 — Review Case Summary Before Filing
                 </h3>
 
-                <div className="p-5 bg-zinc-950 rounded-xl border border-zinc-800 space-y-3 text-xs">
-                  <div className="grid grid-cols-2 gap-4">
+                <div className="p-5 bg-zinc-950 rounded-xl border border-zinc-800 space-y-4 text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <span className="text-zinc-400 block font-mono">Case Title:</span>
-                      <span className="font-bold text-zinc-100 text-sm">{title || 'State Financial Corp. v. Apex Logistics Solutions Ltd.'}</span>
+                      <span className="text-zinc-400 block font-mono text-[11px]">Case Title:</span>
+                      <span className="font-bold text-zinc-100 text-sm">
+                        {title || 'Verma Technologies Pvt. Ltd. v. Bharat Cloud Infrastructure Ltd.'}
+                      </span>
                     </div>
                     <div>
-                      <span className="text-zinc-400 block font-mono">Court Level & Type:</span>
+                      <span className="text-zinc-400 block font-mono text-[11px]">Court Level & Forum:</span>
                       <span className="font-bold text-white">{courtLevel} • {type}</span>
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-zinc-800 grid grid-cols-2 gap-4">
-                    <div>
-                      <span className="text-zinc-400 block">Petitioner:</span>
-                      <span className="text-zinc-200">{petitionerName || 'State Financial Corporation'}</span>
+                  <div className="pt-3 border-t border-zinc-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="p-3 bg-zinc-900 rounded-lg border border-zinc-800">
+                      <span className="text-zinc-400 block text-[11px] font-semibold">Petitioner:</span>
+                      <span className="text-zinc-200 font-medium block">
+                        {petitionerName || 'Verma Technologies Pvt. Ltd.'}
+                      </span>
+                      <span className="text-zinc-400 text-[11px] block mt-0.5">
+                        Counsel: {petitionerAdvocate || 'Adv. Rajesh Sharma (D/4829/2012)'}
+                      </span>
                     </div>
-                    <div>
-                      <span className="text-zinc-400 block">Respondent:</span>
-                      <span className="text-zinc-200">{respondentName || 'Apex Logistics Solutions Ltd.'}</span>
+                    <div className="p-3 bg-zinc-900 rounded-lg border border-zinc-800">
+                      <span className="text-zinc-400 block text-[11px] font-semibold">Respondent:</span>
+                      <span className="text-zinc-200 font-medium block">
+                        {respondentName || 'Bharat Cloud Infrastructure Ltd.'}
+                      </span>
+                      <span className="text-zinc-400 text-[11px] block mt-0.5">
+                        Counsel: {respondentAdvocate || 'Adv. Meera Sen (MH/1920/2015)'}
+                      </span>
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-zinc-800">
-                    <span className="text-zinc-400 block">Attached Pleadings:</span>
-                    <span className="font-mono text-white">{fileName || 'Writ_Petition_Original_Filing.pdf'} (Sec 63 BSA Compliant)</span>
+                  <div className="pt-3 border-t border-zinc-800">
+                    <span className="text-zinc-400 block text-[11px] font-mono mb-1">Attached Pleadings & Evidence:</span>
+                    <div className="flex items-center gap-2 p-2.5 bg-zinc-900 rounded-lg border border-zinc-800">
+                      <FileCheck className="w-4 h-4 text-emerald-400" />
+                      <span className="font-mono text-white text-xs font-semibold">
+                        {fileName || 'Verma_Technologies_v_Bharat_Cloud_Petition.pdf'}
+                      </span>
+                      <span className="text-[11px] text-zinc-400 ml-auto font-mono">
+                        {fileSize || '1.84 MB'} • Sec. 63 BSA Hash Verified
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-3 bg-zinc-900/60 rounded-lg border border-zinc-800 text-[11px] text-zinc-400 space-y-1">
+                    <div className="text-zinc-200 font-semibold flex items-center gap-1.5">
+                      <Scale className="w-3.5 h-3.5 text-zinc-300" /> Statutory Filing Certification
+                    </div>
+                    <div>
+                      This electronic petition will be digitally indexed under the e-Courts Phase III standards. Upon submission, an autonomous presiding bench will convene virtual courtroom proceedings.
+                    </div>
                   </div>
                 </div>
               </div>
