@@ -14,7 +14,7 @@
 <br/>
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMohamedHaarishSherieff%2FAi_Judge)
-[![Live Courtroom Demo](https://img.shields.io/badge/Live_Web_Demo-Online_Courtroom-brightgreen?style=for-the-badge&logo=vercel)](https://ai-judge-bharat-bench.vercel.app)
+[![Live Courtroom Demo](https://img.shields.io/badge/Live_Web_Demo-ai--judge--gamma.vercel.app-brightgreen?style=for-the-badge&logo=vercel)](https://ai-judge-gamma.vercel.app)
 [![Demo Video Walkthrough](https://img.shields.io/badge/Demo_Video-Watch_Walkthrough-red?style=for-the-badge&logo=youtube)](DEMO_SCRIPT.md)
 
 <br/>
@@ -32,8 +32,8 @@
 ## 🌐 Live Interactive Demo & 1-Click Deployment
 
 > **Try the Live Digital Courtroom in your browser right now:**
+> - 🏛️ **Official Live Demo URL**: **[https://ai-judge-gamma.vercel.app](https://ai-judge-gamma.vercel.app)**
 > - 🚀 **Instant 1-Click Vercel Deploy**: Click the **[Deploy with Vercel](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMohamedHaarishSherieff%2FAi_Judge)** button above to instantly launch your own sovereign digital bench.
-> - 🏛️ **Live Demo URL**: Open the application directly to experience an active judicial session under Indian law.
 > - 🎬 **3-Minute Video Walkthrough Script**: See [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) for the structured pitch and trial demonstration sequence.
 
 ### Quick 60-Second Evaluator Walkthrough:
